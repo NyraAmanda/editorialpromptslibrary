@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e8d8f2">
+  <meta name="description" content="Editorial Prompt Library by NyraAmanda – kuratierte Editorial-Prompts für kreative Bildwelten.">
+  <title>Editorial Prompt Library | NyraAmanda</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --lavender: #e8d8f2;
+      --lilac: #d6bde9;
+      --ivory: #faf7fc;
+      --plum: #603b7d;
+      --violet: #775095;
+      --muted: #705a82;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--plum);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    a { color: inherit; }
+
+    .serif {
+      font-family: "Cormorant Garamond", Georgia, serif;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      background: linear-gradient(
+        140deg,
+        #eee1f7,
+        #dac4ec 65%,
+        #c5a7df
+      );
+      padding: 24px 6% 75px;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      max-width: 1250px;
+      margin: auto;
+    }
+
+    .brand {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover { text-decoration: underline; }
+
+    .hero-image {
+      position: relative;
+      max-width: 1250px;
+      height: clamp(290px, 49vw, 620px);
+      margin: 35px auto 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #c6a6db, #8c66aa);
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: imageReveal 2s ease both;
+    }
+
+    .hero-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        rgba(96,59,125,.16),
+        transparent 55%
+      );
+    }
+
+    .hero-content {
+      max-width: 850px;
+      margin: 0 auto;
+      padding-top: 55px;
+      text-align: center;
+    }
+
+    h1, h2, h3 { font-family: "Cormorant Garamond", Georgia, serif; }
+
+    h1 {
+      font-size: clamp(58px, 9vw, 112px);
+      font-weight: 500;
+      line-height: .9;
+      letter-spacing: -1.5px;
+      margin: 20px 0;
+      color: #55316e;
+    }
+
+    h1 em {
+      color: #81529f;
+      font-weight: 400;
+    }
+
+    .byline {
+      font-size: 32px;
+      color: #765092;
+    }
+
+    .intro {
+      max-width: 510px;
+      margin: 26px auto 32px;
+      font-size: 14px;
+      line-height: 2;
+      color: #604379;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 16px 27px;
+      background: var(--violet);
+      color: white;
+      border: 1px solid var(--violet);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      transition: background .25s, transform .25s;
+    }
+
+    .button:hover {
+      background: #593474;
+      transform: translateY(-2px);
+    }
+
+    .ribbon {
+      background: #f1e7f8;
+      padding: 22px 5%;
+      text-align: center;
+      color: #775394;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      line-height: 2;
+    }
+
+    .section {
+      max-width: 1300px;
+      margin: auto;
+      padding: 80px 7%;
+    }
+
+    .section-heading {
+      font-size: clamp(48px, 7vw, 78px);
+      font-weight: 500;
+      line-height: 1;
+      margin: 15px 0;
+    }
+
+    .section-description {
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .search {
+      width: 100%;
+      max-width: 480px;
+      margin: 28px 0 38px;
+      padding: 17px;
+      background: white;
+      border: 1px solid #cbb4db;
+      color: var(--plum);
+      font: inherit;
+      font-size: 13px;
+      outline-color: #a580bd;
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 30px 24px;
+    }
+
+    .collection-card { min-width: 0; }
+
+    .collection-art {
+      aspect-ratio: 4 / 5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .collection-art span {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(30px, 4vw, 48px);
+      font-style: italic;
+      line-height: 1;
+      color: white;
+      text-shadow: 0 2px 16px rgba(76,42,99,.35);
+    }
+
+    .collection-card h3 {
+      font-size: 35px;
+      font-weight: 500;
+      margin: 17px 0 4px;
+    }
+
+    .collection-card p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .collection-note {
+      display: block;
+      margin-top: 13px;
+      color: #8154a0;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .philosophy {
+      padding: 85px 7%;
+      background: #e9d9f4;
+      text-align: center;
+    }
+
+    .philosophy h2 {
+      max-width: 850px;
+      margin: 25px auto;
+      font-size: clamp(38px, 5vw, 67px);
+      font-weight: 500;
+      line-height: 1.12;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .tools-art {
+      min-height: 370px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #d8c0e9, #aa85c8, #7d599e);
+    }
+
+    .tools-art span {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(45px, 6vw, 75px);
+      font-style: italic;
+      line-height: .95;
+      color: white;
+    }
+
+    .about {
+      padding: 90px 7%;
+      text-align: center;
+      color: white;
+      background: linear-gradient(140deg, #bc9ad5, #9470b6);
+    }
+
+    .about h2 {
+      font-size: clamp(55px, 8vw, 90px);
+      font-weight: 500;
+      line-height: .95;
+      margin: 25px auto;
+    }
+
+    .about p {
+      max-width: 550px;
+      margin: auto;
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    footer {
+      background: #efe4f7;
+      padding: 55px 6%;
+      text-align: center;
+      color: #684481;
+    }
+
+    footer strong {
+      font-size: 15px;
+      letter-spacing: 4px;
+    }
+
+    footer p {
+      font-size: 12px;
+      line-height: 2;
+    }
+
+    .fade {
+      animation: fadeUp 1.3s ease both;
+    }
+
+    .delay-1 { animation-delay: .2s; }
+    .delay-2 { animation-delay: .45s; }
+    .delay-3 { animation-delay: .7s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes imageReveal {
+      from { opacity: 0; transform: scale(1.045); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 700px) {
+      .navbar { flex-direction: column; gap: 18px; }
+      .nav-links { justify-content: center; gap: 16px; }
+      .hero { padding: 20px 5% 55px; }
+      .hero-image { margin-top: 25px; }
+      .hero-content { padding-top: 40px; }
+      .section { padding: 55px 5%; }
+      .collection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 15px; }
+      .collection-card h3 { font-size: 27px; }
+      .tools { grid-template-columns: 1fr; }
+      .tools-art { min-height: 260px; }
+    }
+
+    @media (max-width: 390px) {
+      .collection-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero" id="top">
+    <header class="navbar">
+      <a class="brand" href="#top">NYRAAMANDA</a>
+      <nav class="nav-links" aria-label="Hauptnavigation">
+        <a href="#collections">COLLECTIONS</a>
+        <a href="#tools">AI TOOLS</a>
+        <a href="#about">ABOUT</a>
+      </nav>
+    </header>
+
+    <div class="hero-image">
+      <img src="hero-eye.png" alt="Editorial-Herobild mit Auge von NyraAmanda">
+    </div>
+
+    <div class="hero-content">
+      <div class="eyebrow fade">The Private Editorial Archive</div>
+      <h1 class="fade delay-1">
+        Editorial<br>
+        <em>Prompt Library</em>
+      </h1>
+      <div class="serif byline fade delay-2">by NyraAmanda</div>
+      <p class="intro fade delay-3">
+        Täglicher Content. Kein Nachdenken. Kein Aufwand.<br>
+        Eine kuratierte Welt aus hochwertigen Editorial-Prompts.
+      </p>
+      <a class="button fade delay-3" href="#collections">
+        Explore the Collections ↓
+      </a>
+    </div>
+  </section>
+
+  <div class="ribbon">
+    CURATED EDITORIALS ✦ TIMELESS AESTHETICS ✦ CREATIVE FREEDOM
+  </div>
+
+  <main>
+    <section class="section" id="collections">
+      <div class="eyebrow">Discover your aesthetic</div>
+      <h2 class="section-heading">The Collections</h2>
+      <p class="section-description">
+        Entdecke deine Bildwelt. Wähle den Editorial-Style,
+        der zu deiner Vision passt.
+      </p>
+
+      <input
+        class="search"
+        id="collection-search"
+        type="search"
+        placeholder="Kollektionen durchsuchen …"
+        aria-label="Kollektionen durchsuchen"
+      >
+
+      <div class="collection-grid" id="collection-grid">
+
+        <article class="collection-card" data-search="female editorial nature soft urban seasonal specials edgy">
+          <div class="collection-art" style="background:linear-gradient(140deg,#d9bfdf,#b38ec7,#84649f)">
+            <span>Soft<br>Elegance</span>
+          </div>
+          <h3>Female Editorial</h3>
+          <p>Nature · Soft · Urban · Seasonal · Bold</p>
+          <span class="collection-note">COLLECTION COMING SOON</span>
+        </article>
+
+        <article class="collection-card" data-search="male editorial urban nature bold attitude">
+          <div class="collection-art" style="background:linear-gradient(140deg,#aa8ac1,#755a99,#c5a9d8)">
+            <span>Modern<br>Masculinity</span>
+          </div>
+          <h3>Male Editorial</h3>
+          <p>Urban · Nature · Attitude</p>
+          <span class="collection-note">COLLECTION COMING SOON</span>
+        </article>
+
+        <article class="collection-card" data-search="business aesthetics professional">
+          <div class="collection-art" style="background:linear-gradient(140deg,#ebdced,#bfa2d5,#9674b1)">
+            <span>The<br>Power Edit</span>
+          </div>
+          <h3>Business Aesthetics</h3>
+          <p>Professional · Confident · Elevated</p>
+          <span class="collection-note">COLLECTION COMING SOON</span>
+        </article>
+
+        <article class="collection-card" data-search="couple specials romantic connection">
+          <div class="collection-art" style="background:linear-gradient(140deg,#e7cce8,#c5a2cf,#9676b2)">
+            <span>Shared<br>Moments</span>
+          </div>
+          <h3>Couple Specials</h3>
+          <p>Connection · Romantic · Timeless</p>
+          <span class="collection-note">COLLECTION COMING SOON</span>
+        </article>
+
+        <article class="collection-card" data-search="bff girls friendship lifestyle">
+          <div class="collection-art" style="background:linear-gradient(140deg,#e0c8ef,#bd9edc,#9c7ac3)">
+            <span>Better<br>Together</span>
+          </div>
+          <h3>BFF Girls</h3>
+          <p>Friendship · Lifestyle · Fun</p>
+          <span class="collection-note">COLLECTION COMING SOON</span>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="philosophy">
+      <div class="eyebrow">The NyraAmanda Philosophy</div>
+      <h2>
+        Gedacht für schnelle Entscheidungen.<br>
+        Für hochwertige Ergebnisse.<br>
+        <em>Für Tage, an denen es leicht sein darf.</em>
+      </h2>
+      <p>Mehr kreieren. Weniger überlegen.</p>
+    </section>
+
+    <section class="section tools" id="tools">
+      <div>
+        <div class="eyebrow">Beyond the Library</div>
+        <h2 class="section-heading">
+          Your Creative<br>
+          <em>AI Companions</em>
+        </h2>
+        <p class="section-description">
+          Entdecke deine kreativen AI-Assistenten und hilfreichen
+          Guides für deinen Editorial-Content.
+        </p>
+        <p class="section-description">
+          Die separate Seite für AI Tools & Bots folgt später.
+        </p>
+      </div>
+
+      <div class="tools-art">
+        <span>Create<br>without limits.</span>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="eyebrow">Curated by NyraAmanda</div>
+      <h2>
+        Your vision.<br>
+        <em>Your aesthetic.</em>
+      </h2>
+      <p>
+        Ich habe lange getestet, bis Bilder hochwertig wirken
+        und trotzdem natürlich bleiben.
+        Du kannst dir den Weg sparen.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <strong>NYRAAMANDA</strong>
+    <p>
+      Editorial Prompt Library · Private Creative Archive<br>
+      © NyraAmanda
+    </p>
+  </footer>
+
+  <script>
+    const search = document.getElementById("collection-search");
+    const cards = document.querySelectorAll(".collection-card");
+
+    search.addEventListener("input", function () {
+      const query = search.value.toLowerCase().trim();
+
+      cards.forEach(function (card) {
+        const text = (
+          card.dataset.search + " " + card.textContent
+        ).toLowerCase();
+
+        card.hidden = !text.includes(query);
+      });
+    });
+  </script>
+
+</body>
+</html>
