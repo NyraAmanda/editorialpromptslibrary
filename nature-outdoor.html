@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Natur & Outdoor | NyraAmanda</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --plum: #603b7d;
+      --violet: #765092;
+      --muted: #705a82;
+      --background: #faf7fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--plum);
+      font-family: "DM Sans", Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .top {
+      background: linear-gradient(
+        135deg,
+        #eee1f7,
+        #dbc7ed,
+        #c9aee2
+      );
+      padding: 25px 6% 85px;
+    }
+
+    .nav {
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-decoration: none;
+    }
+
+    .back {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+
+    .back:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      max-width: 900px;
+      margin: 90px auto 0;
+      text-align: center;
+      animation: fadeUp 1.2s ease both;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-size: clamp(62px, 10vw, 120px);
+      line-height: .92;
+      margin: 24px 0;
+    }
+
+    h1 em {
+      color: #875ba5;
+      font-weight: 400;
+    }
+
+    .hero p {
+      max-width: 560px;
+      margin: 25px auto 0;
+      font-size: 14px;
+      line-height: 2;
+      color: #62467b;
+    }
+
+    .section {
+      max-width: 1300px;
+      margin: auto;
+      padding: 85px 6%;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(46px, 7vw, 75px);
+      margin: 12px 0;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 550px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      isolation: isolate;
+      background: #d4bce4;
+      transition: transform .3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: var(--card-bg);
+      transition: transform .7s ease;
+    }
+
+    .card:hover::before {
+      transform: scale(1.05);
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        to top,
+        rgba(58, 35, 75, .72),
+        transparent 65%
+      );
+    }
+
+    .card-content {
+      padding: 38px;
+      color: white;
+    }
+
+    .card-number {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .card h2 {
+      font-size: clamp(45px, 5vw, 70px);
+      line-height: .95;
+      margin: 15px 0;
+    }
+
+    .card p {
+      max-width: 350px;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .card-action {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    .card-placeholder {
+      opacity: .82;
+    }
+
+    .closing {
+      background: #eadcf4;
+      text-align: center;
+      padding: 70px 7%;
+    }
+
+    .closing h2 {
+      font-size: clamp(42px, 6vw, 68px);
+      margin: 16px 0;
+    }
+
+    .closing p {
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 16px 28px;
+      background: var(--violet);
+      color: white;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+    }
+
+    footer {
+      background: #f2e8f8;
+      text-align: center;
+      padding: 40px 6%;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .top {
+        padding: 22px 5% 65px;
+      }
+
+      .hero {
+        margin-top: 75px;
+      }
+
+      .section {
+        padding: 60px 5%;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        min-height: 470px;
+      }
+
+      .card-content {
+        padding: 28px;
+      }
+
+      .card h2 {
+        font-size: 53px;
+      }
+
+      .back {
+        font-size: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="top">
+
+    <nav class="nav">
+      <a class="brand" href="index.html">NYRAAMANDA</a>
+      <a class="back" href="female-editorial.html">
+        ← ZURÜCK ZU FEMALE EDITORIAL
+      </a>
+    </nav>
+
+    <div class="hero">
+      <div class="eyebrow">
+        Female Editorial · Kollektion 01
+      </div>
+
+      <h1>
+        Nature &amp;<br>
+        <em>Outdoor Vibes</em>
+      </h1>
+
+      <p>
+        Sonnenverwöhnte Landschaften, natürliche Eleganz
+        und Editorial-Momente voller Leichtigkeit.
+        Entdecke die einzelnen Bildserien dieser Kollektion.
+      </p>
+    </div>
+
+  </header>
+
+  <main class="section">
+
+    <div class="section-heading">
+      <div class="eyebrow">Entdecke deine Editorials</div>
+      <h2>Die Bildserien</h2>
+      <p>
+        Wähle eine Serie und entdecke ihre Bildwelt.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <article class="card"
+        style="--card-bg:linear-gradient(145deg,#ead9ca,#c5a9b3,#8f80aa)">
+
+        <div class="card-content">
+          <div class="card-number">EDITORIAL 01</div>
+
+          <h2>
+            Mediteran<br>
+            <em>Dreams</em>
+          </h2>
+
+          <p>
+            Mediterrane Architektur, warme Sonnenstrahlen
+            und zeitlose Resort-Eleganz.
+          </p>
+
+          <span class="card-action">
+            GALERIE FOLGT
+          </span>
+        </div>
+      </article>
+
+      <article class="card card-placeholder"
+        style="--card-bg:linear-gradient(145deg,#b9c6b8,#a9a4c7,#8d76aa)">
+
+        <div class="card-content">
+          <div class="card-number">WEITERE EDITORIALS</div>
+
+          <h2>
+            More<br>
+            <em>to Explore</em>
+          </h2>
+
+          <p>
+            Hier ergänzen wir die weiteren Bildserien
+            aus deinem Notion-Export.
+          </p>
+
+          <span class="card-action">
+            IN VORBEREITUNG
+          </span>
+        </div>
+      </article>
+
+    </div>
+
+  </main>
+
+  <section class="closing">
+
+    <div class="eyebrow">Editorial Prompt Library</div>
+
+    <h2>
+      Jede Bildwelt<br>
+      <em>erzählt eine Geschichte.</em>
+    </h2>
+
+    <p>
+      Entdecke weitere Editorial-Stile
+      in der Female-Editorial-Kollektion.
+    </p>
+
+    <a class="button" href="female-editorial.html">
+      ZURÜCK ZU FEMALE EDITORIAL
+    </a>
+
+  </section>
+
+  <footer>
+    NYRAAMANDA · EDITORIAL PROMPT LIBRARY
+  </footer>
+
+</body>
+</html>
