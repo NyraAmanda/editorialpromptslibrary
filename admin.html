@@ -178,6 +178,77 @@ progress{width:100%;height:18px;accent-color:var(--purple)}
   }
 }
 
+  
+/* STARTSEITEN-AUSWAHL */
+
+.home-selected {
+  border-color: #9870b2;
+  background: #fbf6ff;
+}
+
+.home-button {
+  background: #e8d8f2;
+  color: #603b7d;
+}
+
+.home-button.active {
+  background: #684583;
+  color: white;
+}
+
+.home-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px;
+  margin: 16px 0;
+  background: #f4edf8;
+  border: 1px solid #e4d5ed;
+}
+
+.home-preview-bar strong {
+  font-size: 13px;
+}
+
+.home-preview-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.home-preview-card {
+  padding: 8px;
+  border: 1px solid #e4d5ed;
+  background: white;
+  min-width: 0;
+}
+
+.home-preview-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.home-preview-card p {
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.home-preview-card .actions {
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .home-preview-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
 </style>
 </head>
 <body>
@@ -313,6 +384,19 @@ Der bisherige Bildprompt bleibt unverändert.
 </select>
 </div>
 
+  
+<div class="home-preview-bar">
+  <strong id="home-count">
+    Startseite: Auswahl wird geladen …
+  </strong>
+  <span class="small">
+    Maximal 10 Bilder · Änderungen werden sofort gespeichert
+  </span>
+</div>
+
+<div id="home-selected-list" class="home-preview-list"></div>
+
+  
 <p class="small" id="count">Lade Editorials …</p>
 <div class="items" id="items"></div>
 
@@ -354,6 +438,10 @@ let importRunning = false;
 let stopRequested = false;
 let importVerified = false;
 
+  const HOME_BUCKET = "homepage-previews";
+let homePreviews = [];
+let homeBusy = false;
+  
 if (window.supabase) {
   db = window.supabase.createClient(URL_SUPABASE, KEY_SUPABASE);
 } else {
@@ -490,7 +578,8 @@ async function checkAdmin() {
     message("Admin-Zugang bestätigt.", "success");
 
     // Ladefehler werden getrennt von der Admin-Prüfung angezeigt.
-    await loadItems();
+   await loadHomePreviews();
+await loadItems();
 
   } catch (error) {
     message("Admin-Prüfung oder Laden fehlgeschlagen: " + errorText(error), "error");
@@ -615,12 +704,30 @@ function renderItems() {
     const actions = document.createElement("div");
     actions.className = "actions";
 
-    actions.append(
-      button("BEARBEITEN", "secondary", () => editItem(item.id)),
-      button("↑", "secondary", () => moveItem(item.id, -1)),
-      button("↓", "secondary", () => moveItem(item.id, 1)),
-      button("LÖSCHEN", "danger", () => deleteItem(item.id))
-    );
+  
+const isOnHomepage = homePreviews.some(
+  x => String(x.editorial_id) === String(item.id)
+);
+
+if (isOnHomepage) {
+  article.classList.add("home-selected");
+}
+
+actions.append(
+  button(
+    isOnHomepage
+      ? "✓ AUF STARTSEITE"
+      : "☆ AUF STARTSEITE",
+    isOnHomepage ? "home-button active" : "home-button",
+    () => isOnHomepage
+      ? removeHomePreview(item.id)
+      : addHomePreview(item.id)
+  ),
+  button("BEARBEITEN", "secondary", () => editItem(item.id)),
+  button("↑", "secondary", () => moveItem(item.id, -1)),
+  button("↓", "secondary", () => moveItem(item.id, 1)),
+  button("LÖSCHEN", "danger", () => deleteItem(item.id))
+);
 
     info.append(heading, detail, actions);
     article.appendChild(info);
@@ -629,6 +736,349 @@ function renderItems() {
 
   $("more").hidden = visible.length >= matches.length;
 }
+
+  
+/* ==========================================
+   STARTSEITEN-AUSWAHL
+   ========================================== */
+
+async function loadHomePreviews() {
+  const { data, error } = await db
+    .from("homepage_previews")
+    .select("id,editorial_id,title,image_url,sort_order")
+    .order("sort_order", { ascending: true });
+
+  if (error) throw error;
+
+  homePreviews = data || [];
+  renderHomePreviews();
+}
+
+function renderHomePreviews() {
+  const count = $("home-count");
+  const container = $("home-selected-list");
+
+  if (!count || !container) return;
+
+  count.textContent =
+    "Startseite: " + homePreviews.length +
+    " von 10 Bildern ausgewählt";
+
+  container.replaceChildren();
+
+  for (const preview of homePreviews) {
+    const card = document.createElement("div");
+    card.className = "home-preview-card";
+
+    const img = document.createElement("img");
+    img.src = preview.image_url;
+    img.alt = preview.title || "Startseitenbild";
+    img.loading = "lazy";
+
+    const title = document.createElement("p");
+    title.textContent = preview.title || "Editorial";
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    actions.append(
+      button("↑", "secondary", () =>
+        moveHomePreview(preview.editorial_id, -1)
+      ),
+      button("↓", "secondary", () =>
+        moveHomePreview(preview.editorial_id, 1)
+      ),
+      button("ENTFERNEN", "danger", () =>
+        removeHomePreview(preview.editorial_id)
+      )
+    );
+
+    card.append(img, title, actions);
+    container.appendChild(card);
+  }
+}
+
+async function makePublicPreview(imagePath) {
+  if (!imagePath) {
+    throw new Error("Dieses Editorial hat kein Bild.");
+  }
+
+  const { data, error } = await db.storage
+    .from(BUCKET)
+    .download(imagePath);
+
+  if (error) throw error;
+
+  const bitmap = await createImageBitmap(data);
+
+  try {
+    const scale = Math.min(
+      1,
+      640 / bitmap.width,
+      850 / bitmap.height
+    );
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = Math.max(
+      1,
+      Math.round(bitmap.width * scale)
+    );
+
+    canvas.height = Math.max(
+      1,
+      Math.round(bitmap.height * scale)
+    );
+
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+      throw new Error("Bildverarbeitung nicht verfügbar.");
+    }
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+      bitmap,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    return await new Promise((resolve, reject) => {
+      canvas.toBlob(
+        blob => blob
+          ? resolve(blob)
+          : reject(new Error("Vorschaubild konnte nicht erstellt werden.")),
+        "image/webp",
+        0.72
+      );
+    });
+
+  } finally {
+    bitmap.close();
+  }
+}
+
+async function addHomePreview(editorialId) {
+  if (homeBusy) return;
+
+  if (homePreviews.some(
+    x => String(x.editorial_id) === String(editorialId)
+  )) return;
+
+  if (homePreviews.length >= 10) {
+    message(
+      "Du kannst maximal 10 Startseitenbilder auswählen.",
+      "error"
+    );
+    return;
+  }
+
+  const item = allItems.find(
+    x => String(x.id) === String(editorialId)
+  );
+
+  if (!item) return;
+
+  const confirmed = confirm(
+    "Dieses Bild als öffentliche Startseiten-Vorschau freigeben?\n\n" +
+    (item.title || item.series) +
+    "\n\nDer Prompt wird nicht veröffentlicht."
+  );
+
+  if (!confirmed) return;
+
+  homeBusy = true;
+  message("Öffentliches Vorschaubild wird erstellt …");
+
+  let uploadedPath = null;
+
+  try {
+    const blob = await makePublicPreview(item.image_path);
+
+    uploadedPath =
+      "homepage/" + crypto.randomUUID() + ".webp";
+
+    const { error: uploadError } = await db.storage
+      .from(HOME_BUCKET)
+      .upload(uploadedPath, blob, {
+        contentType: "image/webp",
+        upsert: false
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { data: urlData } = db.storage
+      .from(HOME_BUCKET)
+      .getPublicUrl(uploadedPath);
+
+    const imageUrl = urlData.publicUrl;
+
+    const { error: insertError } = await db
+      .from("homepage_previews")
+      .insert({
+        editorial_id: item.id,
+        title: item.title || item.series || "Editorial",
+        image_url: imageUrl,
+        sort_order: homePreviews.length + 1
+      });
+
+    if (insertError) throw insertError;
+
+    uploadedPath = null;
+
+    await loadHomePreviews();
+    renderItems();
+
+    message(
+      "Bild wurde zur öffentlichen Startseite hinzugefügt. ✓",
+      "success"
+    );
+
+  } catch (error) {
+    if (uploadedPath) {
+      await db.storage
+        .from(HOME_BUCKET)
+        .remove([uploadedPath]);
+    }
+
+    message(
+      "Startseiten-Auswahl fehlgeschlagen: " +
+      errorText(error),
+      "error"
+    );
+
+  } finally {
+    homeBusy = false;
+  }
+}
+
+function previewStoragePath(url) {
+  try {
+    const parsed = new URL(url);
+
+    const prefix =
+      "/storage/v1/object/public/" +
+      HOME_BUCKET + "/";
+
+    const index = parsed.pathname.indexOf(prefix);
+
+    if (index === -1) return null;
+
+    return decodeURIComponent(
+      parsed.pathname.slice(index + prefix.length)
+    );
+
+  } catch {
+    return null;
+  }
+}
+
+async function removeHomePreview(editorialId) {
+  if (homeBusy) return;
+
+  const preview = homePreviews.find(
+    x => String(x.editorial_id) === String(editorialId)
+  );
+
+  if (!preview) return;
+
+  homeBusy = true;
+
+  try {
+    const { error } = await db
+      .from("homepage_previews")
+      .delete()
+      .eq("id", preview.id);
+
+    if (error) throw error;
+
+    const path = previewStoragePath(preview.image_url);
+
+    if (path) {
+      const { error: storageError } = await db.storage
+        .from(HOME_BUCKET)
+        .remove([path]);
+
+      if (storageError) {
+        console.warn(
+          "Vorschaudatei konnte nicht entfernt werden:",
+          storageError
+        );
+      }
+    }
+
+    await loadHomePreviews();
+    renderItems();
+
+    message(
+      "Bild von der Startseite entfernt. ✓",
+      "success"
+    );
+
+  } catch (error) {
+    message(
+      "Entfernen fehlgeschlagen: " + errorText(error),
+      "error"
+    );
+
+  } finally {
+    homeBusy = false;
+  }
+}
+
+async function moveHomePreview(editorialId, direction) {
+  if (homeBusy) return;
+
+  const currentIndex = homePreviews.findIndex(
+    x => String(x.editorial_id) === String(editorialId)
+  );
+
+  const targetIndex = currentIndex + direction;
+
+  if (
+    currentIndex < 0 ||
+    targetIndex < 0 ||
+    targetIndex >= homePreviews.length
+  ) return;
+
+  homeBusy = true;
+
+  const reordered = [...homePreviews];
+
+  [reordered[currentIndex], reordered[targetIndex]] =
+    [reordered[targetIndex], reordered[currentIndex]];
+
+  try {
+    for (let i = 0; i < reordered.length; i++) {
+      const { error } = await db
+        .from("homepage_previews")
+        .update({ sort_order: i + 1 })
+        .eq("id", reordered[i].id);
+
+      if (error) throw error;
+    }
+
+    await loadHomePreviews();
+    renderItems();
+
+    message("Startseiten-Reihenfolge gespeichert. ✓", "success");
+
+  } catch (error) {
+    message(
+      "Reihenfolge konnte nicht gespeichert werden: " +
+      errorText(error),
+      "error"
+    );
+
+  } finally {
+    homeBusy = false;
+  }
+}
+
 
 /* EINZELNE EDITORIALS */
 
@@ -1380,46 +1830,6 @@ $("logout").addEventListener("click", async () => {
 checkAdmin();
 </script>
 
-  
-<section id="homepage-manager" class="homepage-manager">
-  <div class="homepage-heading">
-    <span class="homepage-eyebrow">NYRAAMANDA · HOMEPAGE</span>
-    <h2>Homepage Manager</h2>
-    <p>
-      Wähle bis zu 10 Editorials aus deiner Library.
-      Diese Bilder erscheinen als Vorschau auf deiner
-      öffentlichen Startseite.
-    </p>
-  </div>
 
-  <div class="homepage-toolbar">
-    <input
-      id="homepage-search"
-      type="search"
-      placeholder="Editorial suchen …"
-      aria-label="Editorial suchen"
-    >
-    <span id="homepage-counter">0 / 10 ausgewählt</span>
-  </div>
-
-  <div id="homepage-editorials" class="homepage-grid">
-    <p>Editorials werden geladen …</p>
-  </div>
-
-  <h3>Deine Startseiten-Auswahl</h3>
-  <p class="homepage-hint">
-    Die Reihenfolge kannst du mit den Pfeilen ändern.
-  </p>
-
-  <div id="homepage-selected" class="homepage-grid"></div>
-
-  <button id="homepage-save" type="button" class="homepage-save">
-    STARTSEITE SPEICHERN →
-  </button>
-
-  <p id="homepage-message" role="status"></p>
-</section>
-
-  
 </body>
 </html>
