@@ -64,6 +64,120 @@ progress{width:100%;height:18px;accent-color:var(--purple)}
 .btn{padding:11px}
 .stats{grid-template-columns:repeat(2,1fr)}
 }
+
+  
+.homepage-manager {
+  margin:45px auto;
+  padding:35px;
+  max-width:1200px;
+  background:#f6effa;
+  color:#603b7d;
+  border:1px solid #e1d0eb;
+}
+
+.homepage-eyebrow {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+}
+
+.homepage-heading h2 {
+  margin:12px 0;
+  font-family:Georgia,serif;
+  font-size:44px;
+  font-weight:400;
+}
+
+.homepage-heading p,
+.homepage-hint {
+  font-size:13px;
+  line-height:1.8;
+}
+
+.homepage-toolbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:15px;
+  margin:25px 0;
+}
+
+#homepage-search {
+  width:100%;
+  max-width:420px;
+  padding:14px;
+  border:1px solid #cbb4db;
+  background:white;
+}
+
+#homepage-counter {
+  font-size:12px;
+  font-weight:700;
+}
+
+.homepage-grid {
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:15px;
+  margin:20px 0 35px;
+}
+
+.homepage-item {
+  min-width:0;
+  padding:8px;
+  background:white;
+  border:1px solid #e0d1e8;
+}
+
+.homepage-item img {
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:cover;
+  display:block;
+}
+
+.homepage-item p {
+  font-size:11px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+.homepage-item button {
+  padding:8px 10px;
+  margin:3px;
+  border:0;
+  background:#775095;
+  color:white;
+  cursor:pointer;
+}
+
+.homepage-save {
+  padding:16px 25px;
+  border:0;
+  background:#775095;
+  color:white;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+  cursor:pointer;
+}
+
+#homepage-message {
+  font-size:13px;
+  line-height:1.8;
+}
+
+@media(max-width:750px) {
+  .homepage-manager {
+    padding:20px;
+  }
+
+  .homepage-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1265,5 +1379,47 @@ $("logout").addEventListener("click", async () => {
 
 checkAdmin();
 </script>
+
+  
+<section id="homepage-manager" class="homepage-manager">
+  <div class="homepage-heading">
+    <span class="homepage-eyebrow">NYRAAMANDA · HOMEPAGE</span>
+    <h2>Homepage Manager</h2>
+    <p>
+      Wähle bis zu 10 Editorials aus deiner Library.
+      Diese Bilder erscheinen als Vorschau auf deiner
+      öffentlichen Startseite.
+    </p>
+  </div>
+
+  <div class="homepage-toolbar">
+    <input
+      id="homepage-search"
+      type="search"
+      placeholder="Editorial suchen …"
+      aria-label="Editorial suchen"
+    >
+    <span id="homepage-counter">0 / 10 ausgewählt</span>
+  </div>
+
+  <div id="homepage-editorials" class="homepage-grid">
+    <p>Editorials werden geladen …</p>
+  </div>
+
+  <h3>Deine Startseiten-Auswahl</h3>
+  <p class="homepage-hint">
+    Die Reihenfolge kannst du mit den Pfeilen ändern.
+  </p>
+
+  <div id="homepage-selected" class="homepage-grid"></div>
+
+  <button id="homepage-save" type="button" class="homepage-save">
+    STARTSEITE SPEICHERN →
+  </button>
+
+  <p id="homepage-message" role="status"></p>
+</section>
+
+  
 </body>
 </html>
