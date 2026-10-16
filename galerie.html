@@ -31,8 +31,8 @@
     }
 
     button, input { font: inherit; }
-
     button { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .6; }
 
     header {
       background: linear-gradient(135deg, #eee1f7, #d9c3eb, #c6a8dd);
@@ -173,8 +173,12 @@
 
     .preview {
       aspect-ratio: 3 / 4;
+      position: relative;
       overflow: hidden;
       background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .preview img {
@@ -182,6 +186,33 @@
       height: 100%;
       display: block;
       object-fit: cover;
+    }
+
+    .image-state {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
+      color: #56356d;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .image-state[hidden] { display: none; }
+
+    .retry-button {
+      padding: 12px 15px;
+      border: 1px solid #684583;
+      background: #fff;
+      color: #684583;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .card-body { padding: 20px; }
@@ -227,11 +258,6 @@
 
     .copy-button:hover { background: #593474; }
 
-    .copy-button:disabled {
-      opacity: .6;
-      cursor: default;
-    }
-
     footer {
       text-align: center;
       padding: 45px 15px;
@@ -255,11 +281,7 @@
     @media (max-width: 480px) {
       header { padding-bottom: 50px; }
       .hero { margin-top: 50px; }
-
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-
+      .gallery { grid-template-columns: 1fr; }
       .series-section { padding: 25px 4% 35px; }
     }
   </style>
@@ -268,7 +290,6 @@
 <body>
 
   <div id="private-app" hidden>
-
     <header>
       <nav>
         <a class="brand" href="index.html">NYRAAMANDA</a>
@@ -328,6 +349,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <script>
+    "use strict";
+
     const SUPABASE_URL =
       "https://pcakhkkvpmcmimybjlav.supabase.co";
 
@@ -344,6 +367,12 @@
 
     let client;
     let allItems = [];
+    let imageObserver = null;
+
+    const imageQueue = [];
+    const MAX_SIMULTANEOUS_IMAGES = 4;
+    const MAX_ATTEMPTS = 3;
+    let activeImages = 0;
 
     function redirectToLogin() {
       window.location.replace("index.html#login");
@@ -367,7 +396,6 @@
       );
 
       try {
-        // getUser prüft den Benutzer beim Auth-Server.
         const { data, error } = await client.auth.getUser();
 
         if (error || !data.user) {
@@ -382,6 +410,7 @@
 
       } catch (error) {
         console.error(error);
+        authStatus.hidden = false;
         authStatus.textContent =
           "Verbindung fehlgeschlagen. Bitte Seite neu laden.";
       }
@@ -391,8 +420,6 @@
       showError("Deine Editorials werden geladen …");
 
       try {
-        // Supabase liefert standardmäßig höchstens 1000 Zeilen.
-        // Deshalb laden wir alle Editorials in mehreren Paketen.
         const items = [];
         const pageSize = 500;
 
@@ -415,14 +442,12 @@
         allItems = items;
 
         if (allItems.length === 0) {
-          showError(
-            "Deine Library ist bereit. Die Editorial-Bilder und Prompts müssen jetzt noch importiert werden."
-          );
+          showError("Es sind noch keine Editorials vorhanden.");
           return;
         }
 
         status.hidden = true;
-        await renderLibrary(allItems);
+        renderLibrary(allItems);
 
       } catch (error) {
         console.error(error);
@@ -448,21 +473,193 @@
       return groups;
     }
 
-    async function getImageUrl(path) {
-      if (!path) return null;
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-      // Private Bilder erhalten nur angemeldete Nutzer
-      // über zeitlich begrenzte Links.
+    async function getImageUrl(path) {
+      if (!path) {
+        throw new Error("Kein Bildpfad gespeichert.");
+      }
+
       const { data, error } = await client.storage
         .from(BUCKET_NAME)
         .createSignedUrl(path, 3600);
 
-      if (error) {
-        console.warn("Bild konnte nicht geladen werden:", path, error);
-        return null;
+      if (error) throw error;
+      if (!data || !data.signedUrl) {
+        throw new Error("Kein Bildlink erhalten.");
       }
 
       return data.signedUrl;
+    }
+
+    function loadImageElement(img, url) {
+      return new Promise((resolve, reject) => {
+        img.onload = () => {
+          img.onload = null;
+          img.onerror = null;
+          resolve();
+        };
+
+        img.onerror = () => {
+          img.onload = null;
+          img.onerror = null;
+          reject(new Error("Bild konnte nicht angezeigt werden."));
+        };
+
+        img.src = url;
+      });
+    }
+
+    function createImageTask(item, preview) {
+      const img = document.createElement("img");
+      img.alt = item.title || item.series || "Editorial";
+      img.loading = "lazy";
+      img.hidden = true;
+
+      const state = document.createElement("div");
+      state.className = "image-state";
+      state.textContent = "Bild wird geladen …";
+
+      preview.append(img, state);
+
+      const task = {
+        item,
+        img,
+        state,
+        preview,
+        attempts: 0,
+        queued: false,
+        loading: false,
+        finished: false,
+        cancelled: false
+      };
+
+      return task;
+    }
+
+    function taskIsCurrent(task) {
+      return !task.cancelled && task.preview.isConnected;
+    }
+
+    function enqueueImage(task) {
+      if (
+        !taskIsCurrent(task) ||
+        task.finished ||
+        task.queued ||
+        task.loading
+      ) return;
+
+      task.queued = true;
+      imageQueue.push(task);
+      processImageQueue();
+    }
+
+    function processImageQueue() {
+      while (
+        activeImages < MAX_SIMULTANEOUS_IMAGES &&
+        imageQueue.length > 0
+      ) {
+        const task = imageQueue.shift();
+        task.queued = false;
+
+        if (!taskIsCurrent(task) || task.finished) continue;
+
+        activeImages++;
+        task.loading = true;
+
+        loadImageWithRetry(task).finally(() => {
+          task.loading = false;
+          activeImages--;
+          processImageQueue();
+        });
+      }
+    }
+
+    async function loadImageWithRetry(task) {
+      while (task.attempts < MAX_ATTEMPTS) {
+        if (!taskIsCurrent(task)) return;
+
+        task.attempts++;
+
+        try {
+          task.state.hidden = false;
+          task.state.textContent =
+            task.attempts === 1
+              ? "Bild wird geladen …"
+              : "Bild wird erneut geladen …";
+
+          const url = await getImageUrl(task.item.image_path);
+
+          if (!taskIsCurrent(task)) return;
+
+          await loadImageElement(task.img, url);
+
+          if (!taskIsCurrent(task)) return;
+
+          task.img.hidden = false;
+          task.state.hidden = true;
+          task.finished = true;
+          return;
+
+        } catch (error) {
+          console.warn(
+            "Bildladeversuch " + task.attempts,
+            task.item.title,
+            error
+          );
+
+          if (task.attempts < MAX_ATTEMPTS) {
+            await wait(700 * task.attempts);
+          }
+        }
+      }
+
+      if (!taskIsCurrent(task)) return;
+
+      task.state.replaceChildren();
+
+      const text = document.createElement("span");
+      text.textContent = "Bild konnte nicht geladen werden.";
+
+      const retry = document.createElement("button");
+      retry.type = "button";
+      retry.className = "retry-button";
+      retry.textContent = "BILD ERNEUT LADEN";
+
+      retry.addEventListener("click", () => {
+        task.attempts = 0;
+        task.finished = false;
+        task.state.textContent = "Bild wird erneut geladen …";
+        enqueueImage(task);
+      });
+
+      task.state.append(text, retry);
+    }
+
+    function setupImageObserver() {
+      if (imageObserver) imageObserver.disconnect();
+
+      imageObserver = new IntersectionObserver(
+        entries => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+
+            const task = entry.target._imageTask;
+
+            if (task) {
+              enqueueImage(task);
+              imageObserver.unobserve(entry.target);
+            }
+          }
+        },
+        {
+          root: null,
+          rootMargin: "600px 0px",
+          threshold: 0
+        }
+      );
     }
 
     function createCard(item, index) {
@@ -473,15 +670,14 @@
       preview.className = "preview";
 
       if (item.image_path) {
-        const img = document.createElement("img");
-        img.alt = item.title || item.series || "Editorial";
-        img.loading = "lazy";
-
-        getImageUrl(item.image_path).then(function(url) {
-          if (url) img.src = url;
-        });
-
-        preview.appendChild(img);
+        const task = createImageTask(item, preview);
+        preview._imageTask = task;
+        imageObserver.observe(preview);
+      } else {
+        const state = document.createElement("div");
+        state.className = "image-state";
+        state.textContent = "Für dieses Editorial ist kein Bild gespeichert.";
+        preview.appendChild(state);
       }
 
       const body = document.createElement("div");
@@ -490,7 +686,7 @@
       const number = document.createElement("div");
       number.className = "number";
       number.textContent =
-        "EDITORIAL " + String(index + 1).padStart(3, "0");
+        "EDITORIAL " + String(index).padStart(3, "0");
 
       const title = document.createElement("h3");
       title.textContent = item.title || item.series || "Editorial";
@@ -510,7 +706,7 @@
 
           copyButton.textContent = "COPIED ✓";
 
-          setTimeout(function() {
+          setTimeout(() => {
             copyButton.textContent = "COPY PROMPT →";
           }, 1800);
 
@@ -526,8 +722,16 @@
       return card;
     }
 
-    async function renderLibrary(items) {
+    function renderLibrary(items) {
+      if (imageObserver) imageObserver.disconnect();
+
+      for (const task of imageQueue) {
+        task.cancelled = true;
+      }
+      imageQueue.length = 0;
+
       content.replaceChildren();
+      setupImageObserver();
 
       const groups = groupBySeries(items);
       let overallIndex = 0;
@@ -542,8 +746,7 @@
 
         const count = document.createElement("div");
         count.className = "series-count";
-        count.textContent =
-          seriesItems.length + " EDITORIALS";
+        count.textContent = seriesItems.length + " EDITORIALS";
 
         const gallery = document.createElement("div");
         gallery.className = "gallery";
@@ -568,11 +771,10 @@
       const query = search.value.trim().toLowerCase();
 
       const filtered = allItems.filter(function(item) {
-        return [
-          item.series,
-          item.title
-        ].some(function(value) {
-          return String(value || "").toLowerCase().includes(query);
+        return [item.series, item.title].some(function(value) {
+          return String(value || "")
+            .toLowerCase()
+            .includes(query);
         });
       });
 
@@ -590,6 +792,5 @@
 
     verifyAccess();
   </script>
-
 </body>
 </html>
