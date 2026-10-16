@@ -16,6 +16,8 @@
       --purple: #684583;
       --muted: #826d91;
       --bg: #faf7fc;
+      --soft: #f0e5f7;
+      --border: #e5d5ed;
     }
 
     * { box-sizing: border-box; }
@@ -31,6 +33,7 @@
     button, input { font: inherit; }
     button { cursor: pointer; }
     button:disabled { opacity: .6; cursor: default; }
+    [hidden] { display: none !important; }
 
     header {
       background: linear-gradient(135deg, #eee1f7, #d9c3eb, #c6a8dd);
@@ -118,15 +121,68 @@
       line-height: 1.8;
     }
 
+    .category-label {
+      margin: 30px 0 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .category-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .category-button {
+      border: 1px solid #ccb5dc;
+      background: white;
+      color: var(--purple);
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .category-button:hover,
+    .category-button.active {
+      background: #775095;
+      color: white;
+      border-color: #775095;
+    }
+
+    .subcategory-panel {
+      padding: 18px;
+      background: #f3ebf8;
+      border: 1px solid var(--border);
+      margin-top: 15px;
+    }
+
     .search {
       width: 100%;
-      max-width: 550px;
-      margin-top: 22px;
+      max-width: 650px;
+      margin-top: 12px;
       padding: 16px;
       border: 1px solid #ccb5dc;
       background: white;
       color: var(--purple);
       font-size: 13px;
+    }
+
+    .search-hint {
+      font-size: 11px !important;
+      margin: 8px 0 0;
+    }
+
+    .active-filter {
+      margin-top: 22px;
+      padding: 14px 18px;
+      border-left: 3px solid #775095;
+      background: white;
+      color: #74538c;
+      font-size: 12px;
+      line-height: 1.6;
     }
 
     .status {
@@ -300,8 +356,6 @@
       letter-spacing: 1px;
     }
 
-    [hidden] { display: none !important; }
-
     @media (max-width: 800px) {
       .gallery {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -317,6 +371,7 @@
       .hero { margin-top: 50px; }
       .gallery { grid-template-columns: 1fr; }
       .series-section { padding: 25px 4% 35px; }
+      .category-button { padding: 11px 13px; }
     }
   </style>
 </head>
@@ -344,20 +399,35 @@
     <main>
       <section class="toolbar">
         <div class="eyebrow">YOUR CREATIVE ARCHIVE</div>
-        <h2>Explore the Editorials</h2>
-
+        <h2>Find Your Inspiration</h2>
         <p>
-          Suche nach einer Serie oder einem Editorial.
-          Alle vollständigen Prompts findest du direkt unter den Bildern.
+          Wähle deine Collection und anschließend dein Thema.
+          Oder suche direkt nach einem bestimmten Editorial.
         </p>
 
+        <div class="category-label">01 · CHOOSE YOUR COLLECTION</div>
+        <div id="collection-buttons" class="category-buttons"></div>
+
+        <div id="subcategory-panel" class="subcategory-panel" hidden>
+          <div class="category-label" style="margin-top:0">
+            02 · CHOOSE YOUR MOOD
+          </div>
+          <div id="subcategory-buttons" class="category-buttons"></div>
+        </div>
+
+        <div class="category-label">SEARCH THE ENTIRE LIBRARY</div>
         <input
           id="search"
           class="search"
           type="search"
-          placeholder="Editorials durchsuchen …"
-          aria-label="Editorials durchsuchen"
+          placeholder="z. B. Mediterranean Muse, Sunset, Coffee …"
+          aria-label="Alle Editorials durchsuchen"
         >
+        <p class="search-hint">
+          Die Suche funktioniert über alle Collections und Kategorien hinweg.
+        </p>
+
+        <div id="active-filter" class="active-filter" hidden></div>
       </section>
 
       <div id="status" class="status" role="status">
@@ -408,11 +478,214 @@
     const MAX_ATTEMPTS = 3;
     const IMAGE_TIMEOUT_MS = 12000;
 
+    const COLLECTIONS = {
+      all: {
+        label: "Alle Editorials",
+        moods: []
+      },
+      female: {
+        label: "Female",
+        moods: [
+          "Nature & Outdoor",
+          "Cute & Soft",
+          "Urban & Lifestyle",
+          "Seasonal",
+          "Specials",
+          "Edgy & Bold"
+        ]
+      },
+      male: {
+        label: "Male",
+        moods: [
+          "Urban & Lifestyle",
+          "Edgy & Bold",
+          "Nature & Outdoor",
+          "Specials"
+        ]
+      },
+      couple: {
+        label: "Couple",
+        moods: ["Couple Collection", "Cat & Dog"]
+      },
+      bff: {
+        label: "BFF Girls",
+        moods: ["BFF Collection"]
+      },
+      business: {
+        label: "Business",
+        moods: ["Business Aesthetics"]
+      }
+    };
+
+    /*
+      Diese Seriennamen stammen aus deiner Editorial-Übersicht.
+
+      Jeder Name wird einer Collection und einem Thema zugeordnet.
+      Der Abgleich ignoriert Groß-/Kleinschreibung, Emojis und
+      die Zusätze "(NEW)" oder "(New)".
+
+      Bei mehrfach verwendeten Namen entscheidet die vorhandene
+      Datenbank-Serie, soweit sie eine Collection erkennen lässt.
+    */
+
+    const CATEGORY_NAMES = {
+      female: {
+        "Nature & Outdoor": [
+          "Mediterranean Muse", "SUP Girl", "Bohemian Wind",
+          "Relax Garden", "Aqualume", "Soleil Series",
+          "Tropical Escape - NB", "Tidal Stillness",
+          "Golden Landscape", "Where the Music Lives",
+          "Feathers & Gaze", "Botanical Beauty",
+          "The Pineapple Statement", "Earth & Ember",
+          "Modern Bohemian", "Sunlit Reverie",
+          "Car Window", "Outdoor", "Nature", "Floral",
+          "Surfer", "Malibu Surfergirl", "Sunset"
+        ],
+        "Cute & Soft": [
+          "The Contemporary Muse", "The Quiet Courtyard",
+          "Riad by the Sea", "Sweet Lila/Mint",
+          "The Art of Simplicity", "Mediteran Dreams",
+          "Burnt Orange Dreams", "Rollergirl",
+          "Warm Grain", "Ivory & Olive",
+          "Carousel Nocturne", "Pastel World",
+          "Dark Velvet Portrait", "The Beauty Edit",
+          "Frozen Delight", "Micro Expressions",
+          "Quiet Mediterranean Moments",
+          "Dancing with the Last Sun", "Cherry Bloom",
+          "Lemon Love", "It’s Melone Love",
+          "Lunapark Love", "Color Against the Sky",
+          "Flora Aurea", "Chambre Bleue",
+          "Fruit Loops", "Blush in Motion",
+          "Ceramics Workshop", "Analog Escape",
+          "Cute", "Cozy", "Butterfly Model",
+          "Bubbles", "Glitter"
+        ],
+        "Urban & Lifestyle": [
+          "Hero Walk", "Statement Pose",
+          "Luminous Rebellion", "Liminal Summer",
+          "Urban Solitude", "Goldenhour Streetportrait",
+          "Rooftop", "Everyday, But Better",
+          "Retro Frequency", "Laundry & Thoughts",
+          "Peripheral Glance", "Café Brake",
+          "Industrial Gravel", "Night Subway",
+          "Cozy Office", "Cafe", "Streetshooting",
+          "Skaterpark", "Streetline", "Car Roof",
+          "Trench Coat", "Wild Grace", "Paris",
+          "Urban Drift"
+        ],
+        "Seasonal": [
+          "Halloween", "Halloween Prompts",
+          "Halloween Makeup", "Ephemeral Bloom",
+          "Between Amber and Light",
+          "Valentinsday Special"
+        ],
+        "Specials": [
+          "Floral portrait", "Red Thai Curry Special",
+          "Coachella Viral Video", "Ära der Frisuren"
+        ],
+        "Edgy & Bold": [
+          "Soda Pink Motel", "Sound of presence",
+          "Mono Pink", "Black Stripe Theory",
+          "The Forbidden Portrait", "Soda Pop",
+          "Soft Rebellion", "Green Juice Attitude",
+          "After Hours at the Diner", "Leo",
+          "Naughty", "Harley", "Colorfull",
+          "Underground", "Pink Hair", "Rocker Girl",
+          "Summer Retro", "Iconic Rock",
+          "Golden Nomads", "Rainbow Festival",
+          "Soft Chaos", "Miss Starshine",
+          "Sunbound Nomad", "Suspended Motion",
+          "Quiet Attitude", "Fresh Strawberry",
+          "Chilling Banana", "Lazy Orange",
+          "Studio Gold", "Gravity & Joy",
+          "Between Pattern and Line",
+          "Beach Pop", "Aqua Extravaganza"
+        ]
+      },
+      male: {
+        "Urban & Lifestyle": [
+          "Velvet Diner", "Urban Descent",
+          "Static Presence", "Before the Fight",
+          "Market Fragments", "Urban Coffee Break",
+          "Skyline Contemplation", "Refined Casual",
+          "Urban Silence", "Modern Calm",
+          "Street Perspective", "Stairway Perspective"
+        ],
+        "Edgy & Bold": [
+          "Grounded Power", "Choose Luck",
+          "News in a Box", "Veggie Vogue",
+          "Prismatic Motion", "Golden Frequency",
+          "Smoke & Swagger", "Chromatic Identity",
+          "Light Through Silence", "Midnight Steel",
+          "Iron Rebel", "Caught in the Moment"
+        ],
+        "Nature & Outdoor": [
+          "Nord Shore Sight", "Tropical Escape - NB",
+          "Edge of Stillness", "Dusty Landscape",
+          "Festival State of Mind",
+          "Feathered Sovereign", "Ocean Drift"
+        ],
+        "Specials": [
+          "Red Thai Curry Special (M)",
+          "Coachella Special Male",
+          "Ära der Männerfrisuren"
+        ]
+      },
+      couple: {
+        "Couple Collection": [
+          "Shared Mornings", "Sunday Morning Routine",
+          "Spa Movie Day", "Karusell Love",
+          "Quiet Intimacy in Motion", "Held in Descent",
+          "Window Kiss", "Refined Application",
+          "Sunset cudle",
+          "Tropical Escape just the two of us",
+          "Stillness with Intent", "Blue Hour Embrace",
+          "Cool Proximity", "Coachella Couple",
+          "Quiet Between Waves", "Unnoticed Intentions",
+          "Between Light and Sound",
+          "Caught in the Ordinary",
+          "Wrapped in Laughter",
+          "In Between the Leaves", "Aligned",
+          "Dual Attitude", "Where Art Meets Us",
+          "You & Me", "More Champagne",
+          "Festival Love", "Festival feeling",
+          "Filtered Intimacy", "Romantic Sunset",
+          "Evening Ritual", "Just Us, Here",
+          "Time, Held Still", "Held in Silence"
+        ],
+        "Cat & Dog": [
+          "Cat Lovers", "Dog Lovers"
+        ]
+      },
+      bff: {
+        "BFF Collection": [
+          "Sipping Into Summer", "Summer Besties",
+          "Pier Rebels", "Pineapple Roadtrip",
+          "Caught in the Moment", "Sunset Comfort",
+          "Carried by Laughter", "Mirror Sefie Duo"
+        ]
+      },
+      business: {
+        "Business Aesthetics": [
+          "Business Launch"
+        ]
+      }
+    };
+
     const privateApp = document.getElementById("private-app");
     const authStatus = document.getElementById("auth-status");
     const status = document.getElementById("status");
     const content = document.getElementById("library-content");
     const search = document.getElementById("search");
+
+    const collectionButtons =
+      document.getElementById("collection-buttons");
+    const subcategoryPanel =
+      document.getElementById("subcategory-panel");
+    const subcategoryButtons =
+      document.getElementById("subcategory-buttons");
+    const activeFilter =
+      document.getElementById("active-filter");
 
     const loadMoreArea = document.getElementById("load-more-area");
     const loadMoreButton = document.getElementById("load-more-button");
@@ -423,11 +696,114 @@
     let allItems = [];
     let filteredItems = [];
     let visibleCount = 0;
+
+    let selectedCollection = "all";
+    let selectedMood = "all";
+
     let imageObserver = null;
     let generation = 0;
 
     const imageQueue = [];
     let activeImages = 0;
+
+    function normalize(value) {
+      return String(value || "")
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\([^)]*\bnew\b[^)]*\)/gi, "")
+        .replace(/\bnew\b/gi, "")
+        .replace(/[^a-zA-Z0-9]+/g, " ")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+    }
+
+    const categoryIndex = new Map();
+
+    Object.entries(CATEGORY_NAMES).forEach(
+      ([collectionKey, moods]) => {
+        Object.entries(moods).forEach(([mood, names]) => {
+          names.forEach(name => {
+            const key = normalize(name);
+
+            if (!categoryIndex.has(key)) {
+              categoryIndex.set(key, []);
+            }
+
+            categoryIndex.get(key).push({
+              collection: collectionKey,
+              mood
+            });
+          });
+        });
+      }
+    );
+
+    function detectCollectionFromSeries(series) {
+      const value = normalize(series);
+
+      if (/\bmale\b|\bmen\b|\bman\b/.test(value) &&
+          !/\bfemale\b/.test(value)) {
+        return "male";
+      }
+
+      if (/\bfemale\b|\bwomen\b|\bwoman\b/.test(value)) {
+        return "female";
+      }
+
+      if (/\bcouple\b|\bduo\b|\blovers\b/.test(value)) {
+        return "couple";
+      }
+
+      if (/\bbff\b|\bbesties\b|\bfriends\b/.test(value)) {
+        return "bff";
+      }
+
+      if (/\bbusiness\b/.test(value)) {
+        return "business";
+      }
+
+      return null;
+    }
+
+    function classifyItem(item) {
+      const title = normalize(item.title);
+      const series = normalize(item.series);
+
+      const matches = [
+        ...(categoryIndex.get(title) || []),
+        ...(categoryIndex.get(series) || [])
+      ];
+
+      const seriesCollection =
+        detectCollectionFromSeries(item.series);
+
+      if (matches.length > 0) {
+        if (seriesCollection) {
+          const matchingCollection = matches.find(
+            entry => entry.collection === seriesCollection
+          );
+
+          if (matchingCollection) return matchingCollection;
+        }
+
+        // Bei doppelten Namen keine unsichere Zuordnung.
+        const unique = new Map(
+          matches.map(entry => [
+            entry.collection + "|" + entry.mood,
+            entry
+          ])
+        );
+
+        if (unique.size === 1) {
+          return [...unique.values()][0];
+        }
+
+        return null;
+      }
+
+      return null;
+    }
 
     function redirectToLogin() {
       window.location.replace("index.html#login");
@@ -528,15 +904,13 @@
           if (!data || data.length < databasePageSize) break;
         }
 
-        allItems = items;
-        filteredItems = [...allItems];
+        allItems = items.map(item => ({
+          ...item,
+          _category: classifyItem(item)
+        }));
 
-        if (allItems.length === 0) {
-          showStatus("Es sind noch keine Editorials vorhanden.");
-          return;
-        }
-
-        resetAndRender();
+        renderCategoryButtons();
+        applyFilters();
 
       } catch (error) {
         console.error(error);
@@ -544,6 +918,120 @@
           "Die Editorials konnten nicht geladen werden. Bitte prüfe die Supabase-Zugriffsrechte."
         );
       }
+    }
+
+    function createFilterButton(label, active, callback) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className =
+        "category-button" + (active ? " active" : "");
+      button.textContent = label;
+      button.setAttribute("aria-pressed", String(active));
+      button.addEventListener("click", callback);
+      return button;
+    }
+
+    function renderCategoryButtons() {
+      collectionButtons.replaceChildren();
+
+      Object.entries(COLLECTIONS).forEach(([key, config]) => {
+        collectionButtons.appendChild(
+          createFilterButton(
+            config.label,
+            selectedCollection === key,
+            () => {
+              selectedCollection = key;
+              selectedMood = "all";
+              renderCategoryButtons();
+              applyFilters();
+            }
+          )
+        );
+      });
+
+      subcategoryButtons.replaceChildren();
+
+      if (selectedCollection === "all") {
+        subcategoryPanel.hidden = true;
+        return;
+      }
+
+      subcategoryPanel.hidden = false;
+
+      subcategoryButtons.appendChild(
+        createFilterButton(
+          "Alle " + COLLECTIONS[selectedCollection].label,
+          selectedMood === "all",
+          () => {
+            selectedMood = "all";
+            renderCategoryButtons();
+            applyFilters();
+          }
+        )
+      );
+
+      COLLECTIONS[selectedCollection].moods.forEach(mood => {
+        subcategoryButtons.appendChild(
+          createFilterButton(
+            mood,
+            selectedMood === mood,
+            () => {
+              selectedMood = mood;
+              renderCategoryButtons();
+              applyFilters();
+            }
+          )
+        );
+      });
+    }
+
+    function applyFilters() {
+      const query = normalize(search.value);
+
+      filteredItems = allItems.filter(item => {
+        // Die Suche hat Vorrang und durchsucht alle Collections.
+        if (query) {
+          return [
+            item.title,
+            item.series,
+            item._category?.collection,
+            item._category?.mood
+          ].some(value => normalize(value).includes(query));
+        }
+
+        if (selectedCollection === "all") return true;
+
+        if (!item._category) return false;
+
+        if (item._category.collection !== selectedCollection) {
+          return false;
+        }
+
+        if (selectedMood !== "all" &&
+            item._category.mood !== selectedMood) {
+          return false;
+        }
+
+        return true;
+      });
+
+      if (query) {
+        activeFilter.hidden = false;
+        activeFilter.textContent =
+          'Suchergebnisse für „' + search.value.trim() +
+          '“ – alle Collections werden durchsucht.';
+      } else if (selectedCollection === "all") {
+        activeFilter.hidden = false;
+        activeFilter.textContent =
+          "Alle Editorials – inklusive noch nicht zugeordneter Serien.";
+      } else {
+        activeFilter.hidden = false;
+        activeFilter.textContent =
+          COLLECTIONS[selectedCollection].label +
+          (selectedMood === "all" ? "" : " · " + selectedMood);
+      }
+
+      resetAndRender();
     }
 
     async function getImageUrl(path) {
@@ -672,7 +1160,6 @@
 
           if (!taskIsCurrent(task)) return;
 
-          // Das bereits vollständig geladene Bild übernehmen.
           task.img.src = loadedImage.src;
           task.img.hidden = false;
           task.state.hidden = true;
@@ -914,17 +1401,7 @@
       showNextPage();
     }
 
-    search.addEventListener("input", () => {
-      const query = search.value.trim().toLowerCase();
-
-      filteredItems = allItems.filter(item => {
-        return [item.series, item.title].some(value =>
-          String(value || "").toLowerCase().includes(query)
-        );
-      });
-
-      resetAndRender();
-    });
+    search.addEventListener("input", applyFilters);
 
     loadMoreButton.addEventListener("click", showNextPage);
 
