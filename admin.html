@@ -518,16 +518,25 @@ function renderItems() {
 
 /* EINZELNE EDITORIALS */
 
+
 function resetForm() {
-  $("editor-form").reset();
+  const form = document.getElementById("editor-form");
+
+  if (form instanceof HTMLFormElement) {
+    HTMLFormElement.prototype.reset.call(form);
+  }
+
   $("item-id").value = "";
+  $("video-prompt").value = "";
   $("sort-order").value = "0";
   currentImagePath = null;
+
   $("form-heading").textContent = "Neues Editorial";
   $("save").textContent = "EDITORIAL SPEICHERN";
   $("image-note").textContent =
     "Für ein neues Editorial bitte ein Bild auswählen.";
 }
+
 
 function editItem(id) {
   const item = allItems.find(x => x.id === id);
