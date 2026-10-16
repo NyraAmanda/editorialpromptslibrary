@@ -5,21 +5,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#e8d8f2">
-<meta name="description" content="Editorial Prompt Library by NyraAmanda – kuratierte Editorial-Prompts für kreative Bildwelten.">
+<meta name="description" content="NyraAmanda Editorial Prompt Library – über 500 kuratierte Editorials, fertige Bildprompts und ausgewählte Videoprompts.">
 <title>Editorial Prompt Library | NyraAmanda</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@400;500;600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
+  --ivory:#faf7fc;
   --lavender:#e8d8f2;
   --lilac:#d6bde9;
-  --ivory:#faf7fc;
   --plum:#603b7d;
   --violet:#775095;
   --muted:#705a82;
+  --line:#e4d6ed;
 }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
@@ -30,24 +31,58 @@ body {
   font-family:"DM Sans",Arial,sans-serif;
 }
 a { color:inherit; }
-.serif { font-family:"Cormorant Garamond",Georgia,serif; }
+button,input { font:inherit; }
+[hidden] { display:none !important; }
+.serif,h1,h2,h3 {
+  font-family:"Cormorant Garamond",Georgia,serif;
+}
 .eyebrow {
   font-size:11px;
   font-weight:700;
-  letter-spacing:2.5px;
+  letter-spacing:2.6px;
   text-transform:uppercase;
+}
+.button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:50px;
+  padding:16px 27px;
+  border:1px solid var(--violet);
+  background:var(--violet);
+  color:white;
+  text-decoration:none;
+  text-transform:uppercase;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.3px;
+  cursor:pointer;
+  transition:background .25s,transform .25s;
+}
+.button:hover {
+  background:#593474;
+  transform:translateY(-2px);
+}
+.button-outline {
+  background:transparent;
+  color:var(--plum);
+  border-color:#9475ab;
+}
+.button-outline:hover {
+  background:#e8d8f2;
 }
 .hero {
   background:linear-gradient(140deg,#eee1f7,#dac4ec 65%,#c5a7df);
-  padding:24px 6% 75px;
+  padding:23px 6% 82px;
 }
 .navbar {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
   max-width:1250px;
   margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
 }
 .brand {
   font-size:14px;
@@ -57,8 +92,8 @@ a { color:inherit; }
 }
 .nav-links {
   display:flex;
-  gap:25px;
   flex-wrap:wrap;
+  gap:25px;
 }
 .nav-links a {
   font-size:11px;
@@ -68,75 +103,54 @@ a { color:inherit; }
 }
 .nav-links a:hover { text-decoration:underline; }
 .hero-image {
-  position:relative;
   max-width:1250px;
-  height:clamp(290px,42vw,520px);
+  height:clamp(280px,42vw,520px);
   margin:35px auto 0;
   overflow:hidden;
   background:#c6a6db;
 }
 .hero-image img {
+  display:block;
   width:100%;
   height:100%;
   object-fit:cover;
   object-position:center 30%;
-  display:block;
-  animation:imageReveal 2s ease both;
-}
-.hero-image::after {
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:linear-gradient(to top,rgba(96,59,125,.12),transparent 55%);
+  animation:imageReveal 1.8s ease both;
 }
 .hero-content {
-  max-width:850px;
-  margin:0 auto;
-  padding-top:55px;
+  max-width:860px;
+  margin:auto;
+  padding-top:60px;
   text-align:center;
 }
-h1,h2,h3 { font-family:"Cormorant Garamond",Georgia,serif; }
 h1 {
-  font-size:clamp(58px,9vw,112px);
-  font-weight:500;
-  line-height:.9;
-  letter-spacing:-1.5px;
   margin:20px 0;
-  color:#55316e;
+  font-size:clamp(57px,9vw,110px);
+  font-weight:500;
+  line-height:.91;
+  letter-spacing:-1.5px;
 }
-h1 em { color:#81529f; font-weight:400; }
-.byline { font-size:32px; color:#765092; }
+h1 em { color:#80519f; font-weight:400; }
+.byline {
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:31px;
+}
 .intro {
-  max-width:510px;
-  margin:26px auto 32px;
+  max-width:610px;
+  margin:27px auto 32px;
   font-size:14px;
-  line-height:2;
-  color:#604379;
+  line-height:1.95;
 }
-.button {
-  display:inline-block;
-  padding:16px 27px;
-  background:var(--violet);
-  color:white;
-  border:1px solid var(--violet);
-  text-decoration:none;
-  text-transform:uppercase;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1.5px;
-  transition:background .25s,transform .25s;
-  cursor:pointer;
-}
-.button:hover {
-  background:#593474;
-  transform:translateY(-2px);
+.hero-actions {
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
 }
 .ribbon {
+  padding:23px 5%;
   background:#f1e7f8;
-  padding:22px 5%;
   text-align:center;
-  color:#775394;
   font-size:11px;
   font-weight:600;
   letter-spacing:1.5px;
@@ -145,156 +159,170 @@ h1 em { color:#81529f; font-weight:400; }
 .section {
   max-width:1300px;
   margin:auto;
-  padding:80px 7%;
+  padding:90px 7%;
 }
 .section-heading {
-  font-size:clamp(48px,7vw,78px);
+  margin:15px 0;
+  font-size:clamp(47px,7vw,79px);
   font-weight:500;
   line-height:1;
-  margin:15px 0;
 }
 .section-description {
+  max-width:690px;
   font-size:14px;
-  line-height:1.9;
+  line-height:1.95;
   color:var(--muted);
 }
-.search {
-  width:100%;
-  max-width:480px;
-  margin:28px 0 38px;
-  padding:17px;
-  background:white;
-  border:1px solid #cbb4db;
-  color:var(--plum);
-  font:inherit;
-  font-size:13px;
-  outline-color:#a580bd;
-}
-.collection-grid {
+.center { text-align:center; }
+.center .section-description { margin:0 auto; }
+.preview-grid {
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:30px 24px;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  margin-top:40px;
 }
-.collection-card { min-width:0; }
-.collection-card[hidden] { display:none; }
-.collection-art {
-  aspect-ratio:4/5;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+.preview-card {
+  min-width:0;
+  margin:0;
+}
+.preview-art {
+  aspect-ratio:3/4;
   overflow:hidden;
+  background:linear-gradient(140deg,#e4d3ec,#c2a2d5,#9571b0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
 }
-.collection-art span {
+.preview-art img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .6s ease;
+}
+.preview-card:hover img { transform:scale(1.045); }
+.preview-placeholder {
+  padding:10px;
   font-family:"Cormorant Garamond",Georgia,serif;
-  font-size:clamp(30px,4vw,48px);
   font-style:italic;
-  line-height:1;
+  font-size:clamp(20px,2.5vw,34px);
   color:white;
-  text-shadow:0 2px 16px rgba(76,42,99,.35);
 }
-.collection-card h3 {
-  font-size:35px;
-  font-weight:500;
-  margin:17px 0 4px;
+.preview-card figcaption {
+  margin-top:10px;
+  font-size:11px;
+  line-height:1.5;
+  color:var(--muted);
+  overflow-wrap:anywhere;
 }
-.collection-card p {
+.preview-note {
+  margin:28px 0 0;
+  text-align:center;
   color:var(--muted);
   font-size:12px;
   line-height:1.8;
-  margin:0;
 }
-.collection-note {
-  display:block;
-  margin-top:13px;
-  color:#8154a0;
+.benefits {
+  background:#f0e6f7;
+}
+.benefit-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+  margin-top:40px;
+}
+.benefit {
+  padding:32px 27px;
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(119,80,149,.12);
+}
+.benefit-number {
   font-size:11px;
   font-weight:700;
-  letter-spacing:1px;
+  letter-spacing:2px;
 }
-.philosophy {
-  padding:85px 7%;
+.benefit h3 {
+  margin:16px 0 12px;
+  font-size:35px;
+  font-weight:500;
+  line-height:1.05;
+}
+.benefit p {
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.85;
+}
+.collections {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:30px;
+}
+.collection-tag {
+  padding:13px 18px;
+  border:1px solid #d4bfe2;
+  background:#f5edf9;
+  font-size:12px;
+  letter-spacing:.4px;
+}
+.statement {
+  padding:95px 7%;
   background:#e9d9f4;
   text-align:center;
 }
-.philosophy h2 {
-  max-width:850px;
-  margin:25px auto;
-  font-size:clamp(38px,5vw,67px);
+.statement h2 {
+  max-width:900px;
+  margin:24px auto;
+  font-size:clamp(42px,6vw,78px);
   font-weight:500;
-  line-height:1.12;
+  line-height:1.04;
 }
-.tools {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:50px;
-  align-items:center;
+.statement p {
+  font-size:14px;
+  line-height:1.9;
 }
-.tools-art {
-  min-height:370px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  background:linear-gradient(135deg,#d8c0e9,#aa85c8,#7d599e);
-}
-.tools-art span {
-  font-family:"Cormorant Garamond",Georgia,serif;
-  font-size:clamp(45px,6vw,75px);
-  font-style:italic;
-  line-height:.95;
-  color:white;
-}
-.about {
-  padding:90px 7%;
+.cta {
+  padding:95px 7%;
   text-align:center;
   color:white;
   background:linear-gradient(140deg,#bc9ad5,#9470b6);
 }
-.about h2 {
-  font-size:clamp(55px,8vw,90px);
+.cta h2 {
+  max-width:850px;
+  margin:18px auto;
+  font-size:clamp(53px,8vw,95px);
   font-weight:500;
   line-height:.95;
-  margin:25px auto;
 }
-.about p {
-  max-width:550px;
-  margin:auto;
+.cta p {
+  max-width:560px;
+  margin:25px auto 30px;
   font-size:14px;
-  line-height:2;
+  line-height:1.9;
 }
-footer {
-  background:#efe4f7;
-  padding:55px 6%;
-  text-align:center;
-  color:#684481;
+.cta .button {
+  background:white;
+  color:var(--plum);
+  border-color:white;
 }
-footer strong { font-size:15px; letter-spacing:4px; }
-footer p { font-size:12px; line-height:2; }
-.fade { animation:fadeUp 1.3s ease both; }
-.delay-1 { animation-delay:.2s; }
-.delay-2 { animation-delay:.45s; }
-.delay-3 { animation-delay:.7s; }
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(22px); }
-  to { opacity:1; transform:translateY(0); }
-}
-@keyframes imageReveal {
-  from { opacity:0; transform:scale(1.045); }
-  to { opacity:1; transform:scale(1); }
-}
-
-/* LOGIN UND PASSWORT */
-#login-section {
-  max-width:440px;
-  margin:70px auto;
-  padding:35px;
+.cta .button:hover { background:#f0e5f7; }
+.login-wrap {
+  max-width:480px;
+  margin:0 auto;
+  padding:38px;
   background:#f0e5f7;
   text-align:center;
 }
-#login-section h2 {
-  font-size:45px;
+.login-wrap h2 {
+  margin:10px 0;
+  font-size:48px;
   font-weight:400;
+}
+.login-wrap p {
+  font-size:13px;
+  line-height:1.8;
 }
 .auth-form {
   display:grid;
@@ -307,47 +335,81 @@ footer p { font-size:12px; line-height:2; }
   border:1px solid #cbb4db;
   background:white;
   color:var(--plum);
-  font:inherit;
 }
-.auth-message {
-  font-size:12px;
-  margin-top:18px;
-  line-height:1.7;
-  overflow-wrap:anywhere;
-}
+.auth-form .button { width:100%; }
 .auth-link {
   display:inline-block;
-  margin-top:14px;
+  margin-top:17px;
   font-size:12px;
   text-decoration:underline;
   cursor:pointer;
 }
-[hidden] { display:none !important; }
-
-@media(max-width:700px) {
+.auth-message {
+  margin-top:18px;
+  font-size:12px;
+  line-height:1.7;
+  overflow-wrap:anywhere;
+}
+footer {
+  padding:55px 6%;
+  background:#efe4f7;
+  text-align:center;
+}
+footer strong {
+  font-size:15px;
+  letter-spacing:4px;
+}
+footer p {
+  font-size:12px;
+  line-height:2;
+}
+.fade {
+  animation:fadeUp 1.2s ease both;
+}
+.delay-1 { animation-delay:.2s; }
+.delay-2 { animation-delay:.45s; }
+.delay-3 { animation-delay:.7s; }
+.delay-4 { animation-delay:.95s; }
+.reveal {
+  opacity:0;
+  transform:translateY(25px);
+  transition:opacity .85s ease,transform .85s ease;
+}
+.reveal.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(22px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@keyframes imageReveal {
+  from { opacity:0; transform:scale(1.045); }
+  to { opacity:1; transform:scale(1); }
+}
+@media(max-width:850px) {
+  .preview-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .benefit-grid { grid-template-columns:1fr; }
+}
+@media(max-width:600px) {
   .navbar { flex-direction:column; gap:18px; }
   .nav-links { justify-content:center; gap:16px; }
-  .hero { padding:20px 5% 55px; }
+  .hero { padding:20px 5% 58px; }
   .hero-image { height:290px; margin-top:25px; }
-  .hero-content { padding-top:40px; }
-  .section { padding:55px 5%; }
-  .collection-grid {
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:22px 15px;
-  }
-  .collection-card h3 { font-size:27px; }
-  .tools { grid-template-columns:1fr; }
-  .tools-art { min-height:260px; }
-}
-@media(max-width:390px) {
-  .collection-grid { grid-template-columns:1fr; }
+  .hero-content { padding-top:45px; }
+  .section { padding:65px 5%; }
+  .preview-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+  .preview-placeholder { font-size:26px; }
+  .statement,.cta { padding:70px 6%; }
+  .login-wrap { padding:30px 22px; }
 }
 @media(prefers-reduced-motion:reduce) {
   *,*::before,*::after {
     animation:none !important;
-    scroll-behavior:auto !important;
     transition:none !important;
+    scroll-behavior:auto !important;
   }
+  .reveal { opacity:1; transform:none; }
 }
 </style>
 </head>
@@ -358,42 +420,56 @@ footer p { font-size:12px; line-height:2; }
   <header class="navbar">
     <a class="brand" href="#top">NYRAAMANDA</a>
     <nav class="nav-links" aria-label="Hauptnavigation">
-      <a href="#collections">COLLECTIONS</a>
-      <a href="#tools">AI TOOLS</a>
-      <a href="#about">ABOUT</a>
-      <a href="#login">PRIVATE LIBRARY</a>
+      <a href="#preview">PREVIEW</a>
+      <a href="#benefits">THE LIBRARY</a>
+      <a href="#access">GET ACCESS</a>
+      <a href="#login">MEMBER LOGIN</a>
     </nav>
   </header>
 
   <div class="hero-image">
     <img
       src="hero-eye.png.webp"
-      alt="Editorial-Herobild mit Auge von NyraAmanda"
+      alt="NyraAmanda Editorial"
+      fetchpriority="high"
     >
   </div>
 
   <div class="hero-content">
     <div class="eyebrow fade">
-      The Private Editorial Archive
+      THE PRIVATE EDITORIAL WORLD
     </div>
 
     <h1 class="fade delay-1">
-      Editorial<br>
-      <em>Prompt Library</em>
+      Your Vision.<br>
+      <em>Your Editorial Era.</em>
     </h1>
 
-    <div class="serif byline fade delay-2">
-      by NyraAmanda
+    <div class="byline fade delay-2">
+      The Editorial Prompt Library by NyraAmanda
     </div>
 
     <p class="intro fade delay-3">
-      Täglicher Content. Kein Nachdenken. Kein Aufwand.<br>
-      Eine kuratierte Welt aus hochwertigen Editorial-Prompts.
+      Create visuals that don't just look beautiful.
+      They tell a story.<br><br>
+      Entdecke über 500 kuratierte Editorials für
+      außergewöhnliche KI-Bildwelten – mit fertigen
+      Prompts, die du direkt für deine kreativen
+      Projekte nutzen kannst.
     </p>
 
-    <a class="button fade delay-3" href="#collections">
-      Explore the Collections ↓
-    </a>
+    <div class="hero-actions fade delay-4">
+      <a class="button"
+         href="https://aphroditepromt.mytentary.com/p/iGCeyt"
+         target="_blank"
+         rel="noopener noreferrer">
+        ZUGANG SICHERN →
+      </a>
+
+      <a class="button button-outline" href="#preview">
+        EDITORIALS ENTDECKEN ↓
+      </a>
+    </div>
   </div>
 </section>
 
@@ -403,11 +479,152 @@ footer p { font-size:12px; line-height:2; }
 
 <main>
 
-<section id="login" style="scroll-margin-top:20px">
-  <div id="login-section">
+<section class="section center" id="preview">
+  <div class="reveal">
+    <div class="eyebrow">A glimpse inside</div>
+    <h2 class="section-heading">
+      The Editorial <em>Preview</em>
+    </h2>
+    <p class="section-description">
+      Von verträumt und sanft bis ausdrucksstark
+      und cineastisch: Jede Bildwelt erzählt
+      ihre eigene Geschichte.
+      Entdecke einen kleinen Vorgeschmack
+      auf die NyraAmanda Editorial Prompt Library.
+    </p>
+  </div>
+
+  <div class="preview-grid" id="preview-grid" aria-label="Editorial-Vorschaubilder"></div>
+
+  <p class="preview-note">
+    Eine kleine Vorschau. Die vollständigen Prompts
+    findest du exklusiv in der privaten Library.
+  </p>
+</section>
+
+<section class="benefits" id="benefits">
+  <div class="section">
+    <div class="reveal">
+      <div class="eyebrow">Less prompting. More creating.</div>
+      <h2 class="section-heading">
+        Your Creative <em>Shortcut.</em>
+      </h2>
+      <p class="section-description">
+        Schluss mit endlosem Experimentieren.
+        Finde schneller die Bildästhetik,
+        die du dir vorstellst – mit einer
+        übersichtlichen Library voller
+        kreativer Editorial-Ideen.
+      </p>
+    </div>
+
+    <div class="benefit-grid">
+      <article class="benefit reveal">
+        <div class="benefit-number">01 / DISCOVER</div>
+        <h3>Find Your Aesthetic</h3>
+        <p>
+          Stöbere durch über 500 Editorials
+          und entdecke Looks für unterschiedliche
+          Stimmungen, Themen und Bildwelten.
+        </p>
+      </article>
+
+      <article class="benefit reveal">
+        <div class="benefit-number">02 / COPY</div>
+        <h3>Ready-to-Use Prompts</h3>
+        <p>
+          Kein mühsames Formulieren von Grund auf.
+          Finde einen passenden Bildprompt,
+          kopiere ihn und nutze ihn in deinem
+          bevorzugten KI-Bildtool.
+        </p>
+      </article>
+
+      <article class="benefit reveal">
+        <div class="benefit-number">03 / CREATE</div>
+        <h3>Bring It to Life</h3>
+        <p>
+          Erschaffe neue Bildwelten und entdecke
+          bei ausgewählten Editorials zusätzliche
+          Videoprompts für bewegte Szenen.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="reveal">
+    <div class="eyebrow">One Library. Many Worlds.</div>
+    <h2 class="section-heading">
+      Explore the <em>Collections.</em>
+    </h2>
+    <p class="section-description">
+      Ob elegante Porträts, moderne Männer-Editorials,
+      romantische Paarmomente, Freundschaft oder
+      selbstbewusste Business-Looks:
+      Hier findest du kreative Inspiration
+      für unterschiedliche Bildstile.
+    </p>
+
+    <div class="collections">
+      <span class="collection-tag">Female Editorial</span>
+      <span class="collection-tag">Male Editorial</span>
+      <span class="collection-tag">Couple</span>
+      <span class="collection-tag">BFF</span>
+      <span class="collection-tag">Business Aesthetics</span>
+      <span class="collection-tag">Video Prompts</span>
+    </div>
+  </div>
+</section>
+
+<section class="statement">
+  <div class="reveal">
+    <div class="eyebrow">The NyraAmanda Philosophy</div>
+    <h2>
+      Less searching.<br>
+      More creating.<br>
+      <em>More of your vision.</em>
+    </h2>
+    <p>
+      Deine Kreativität verdient mehr Zeit
+      als die Suche nach dem perfekten Prompt.
+    </p>
+  </div>
+</section>
+
+<section class="cta" id="access">
+  <div class="reveal">
+    <div class="eyebrow">Your Creative Era Starts Here</div>
+    <h2>
+      Ready to Create<br>
+      <em>Something Beautiful?</em>
+    </h2>
+    <p>
+      Tauche ein in die NyraAmanda Editorial
+      Prompt Library und verwandle deine Ideen
+      in ausdrucksstarke Bildwelten.
+      Deine nächste kreative Inspiration
+      wartet bereits auf dich.
+    </p>
+
+    <a class="button"
+       href="https://aphroditepromt.mytentary.com/p/iGCeyt"
+       target="_blank"
+       rel="noopener noreferrer">
+      ZUGANG ZUR LIBRARY SICHERN →
+    </a>
+  </div>
+</section>
+
+<section class="section" id="login">
+  <div class="login-wrap reveal">
+    <div class="eyebrow">Already a Member?</div>
     <h2 id="auth-heading">Private Library</h2>
+
     <p id="auth-description">
-      Melde dich an, um deine Editorial Prompt Library zu öffnen.
+      Du hast bereits Zugang?
+      Melde dich an und öffne deine Library.
     </p>
 
     <form id="login-form" class="auth-form">
@@ -415,6 +632,7 @@ footer p { font-size:12px; line-height:2; }
         id="login-email"
         type="email"
         placeholder="E-Mail-Adresse"
+        aria-label="E-Mail-Adresse"
         autocomplete="email"
         required
       >
@@ -422,6 +640,7 @@ footer p { font-size:12px; line-height:2; }
         id="login-password"
         type="password"
         placeholder="Passwort"
+        aria-label="Passwort"
         autocomplete="current-password"
         required
       >
@@ -439,6 +658,7 @@ footer p { font-size:12px; line-height:2; }
         id="recovery-email"
         type="email"
         placeholder="Deine E-Mail-Adresse"
+        aria-label="E-Mail-Adresse für Passwort-Reset"
         autocomplete="email"
         required
       >
@@ -452,6 +672,7 @@ footer p { font-size:12px; line-height:2; }
         id="new-password"
         type="password"
         placeholder="Neues Passwort (mindestens 8 Zeichen)"
+        aria-label="Neues Passwort"
         autocomplete="new-password"
         minlength="8"
         required
@@ -460,6 +681,7 @@ footer p { font-size:12px; line-height:2; }
         id="confirm-password"
         type="password"
         placeholder="Neues Passwort wiederholen"
+        aria-label="Neues Passwort wiederholen"
         autocomplete="new-password"
         minlength="8"
         required
@@ -477,130 +699,6 @@ footer p { font-size:12px; line-height:2; }
   </div>
 </section>
 
-<section class="section" id="collections">
-  <div class="eyebrow">Discover your aesthetic</div>
-  <h2 class="section-heading">The Collections</h2>
-  <p class="section-description">
-    Entdecke deine Bildwelt. Wähle den Editorial-Style,
-    der zu deiner Vision passt.
-  </p>
-
-  <input
-    class="search"
-    id="collection-search"
-    type="search"
-    placeholder="Kollektionen durchsuchen …"
-    aria-label="Kollektionen durchsuchen"
-  >
-
-  <div class="collection-grid">
-
-    <article class="collection-card"
-      data-search="female editorial nature soft urban seasonal specials edgy">
-      <div class="collection-art"
-        style="background:linear-gradient(140deg,#d9bfdf,#b38ec7,#84649f)">
-        <span>Soft<br>Elegance</span>
-      </div>
-      <h3>
-        <a href="female-editorial.html"
-          style="text-decoration:none;color:inherit">
-          Female Editorial →
-        </a>
-      </h3>
-      <p>Natur · Romantisch · Urban · Saisonal · Ausdrucksstark</p>
-      <span class="collection-note">KOLLEKTION ENTDECKEN →</span>
-    </article>
-
-    <article class="collection-card"
-      data-search="male editorial urban nature bold attitude">
-      <div class="collection-art"
-        style="background:linear-gradient(140deg,#aa8ac1,#755a99,#c5a9d8)">
-        <span>Modern<br>Masculinity</span>
-      </div>
-      <h3>Male Editorial</h3>
-      <p>Urban · Nature · Attitude</p>
-      <span class="collection-note">COLLECTION COMING SOON</span>
-    </article>
-
-    <article class="collection-card"
-      data-search="business aesthetics professional">
-      <div class="collection-art"
-        style="background:linear-gradient(140deg,#ebdced,#bfa2d5,#9674b1)">
-        <span>The<br>Power Edit</span>
-      </div>
-      <h3>Business Aesthetics</h3>
-      <p>Professional · Confident · Elevated</p>
-      <span class="collection-note">COLLECTION COMING SOON</span>
-    </article>
-
-    <article class="collection-card"
-      data-search="couple specials romantic connection">
-      <div class="collection-art"
-        style="background:linear-gradient(140deg,#e7cce8,#c5a2cf,#9676b2)">
-        <span>Shared<br>Moments</span>
-      </div>
-      <h3>Couple Specials</h3>
-      <p>Connection · Romantic · Timeless</p>
-      <span class="collection-note">COLLECTION COMING SOON</span>
-    </article>
-
-    <article class="collection-card"
-      data-search="bff girls friendship lifestyle">
-      <div class="collection-art"
-        style="background:linear-gradient(140deg,#e0c8ef,#bd9edc,#9c7ac3)">
-        <span>Better<br>Together</span>
-      </div>
-      <h3>BFF Girls</h3>
-      <p>Friendship · Lifestyle · Fun</p>
-      <span class="collection-note">COLLECTION COMING SOON</span>
-    </article>
-
-  </div>
-</section>
-
-<section class="philosophy">
-  <div class="eyebrow">The NyraAmanda Philosophy</div>
-  <h2>
-    Gedacht für schnelle Entscheidungen.<br>
-    Für hochwertige Ergebnisse.<br>
-    <em>Für Tage, an denen es leicht sein darf.</em>
-  </h2>
-  <p>Mehr kreieren. Weniger überlegen.</p>
-</section>
-
-<section class="section tools" id="tools">
-  <div>
-    <div class="eyebrow">Beyond the Library</div>
-    <h2 class="section-heading">
-      Your Creative<br>
-      <em>AI Companions</em>
-    </h2>
-    <p class="section-description">
-      Entdecke deine kreativen AI-Assistenten und
-      hilfreichen Guides für deinen Editorial-Content.
-    </p>
-    <p class="section-description">
-      Die separate Seite für AI Tools & Bots folgt später.
-    </p>
-  </div>
-  <div class="tools-art">
-    <span>Create<br>without limits.</span>
-  </div>
-</section>
-
-<section class="about" id="about">
-  <div class="eyebrow">Curated by NyraAmanda</div>
-  <h2>
-    Your vision.<br>
-    <em>Your aesthetic.</em>
-  </h2>
-  <p>
-    Ich habe lange getestet, bis Bilder hochwertig wirken
-    und trotzdem natürlich bleiben.
-    Du kannst dir den Weg sparen.
-  </p>
-</section>
-
 </main>
 
 <footer>
@@ -614,25 +712,193 @@ footer p { font-size:12px; line-height:2; }
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
-const search = document.getElementById("collection-search");
-const cards = document.querySelectorAll(".collection-card");
-
-search.addEventListener("input", function() {
-  const query = search.value.toLowerCase().trim();
-
-  cards.forEach(function(card) {
-    const text = (
-      card.dataset.search + " " + card.textContent
-    ).toLowerCase();
-
-    card.hidden = !text.includes(query);
-  });
-});
+"use strict";
 
 const supabaseClient = window.supabase.createClient(
   "https://pcakhkkvpmcmimybjlav.supabase.co",
   "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky"
 );
+
+const SITE_URL =
+  "https://nyraamanda.github.io/editorialpromptslibrary/";
+
+/*
+  ÖFFENTLICHE VORSCHAU
+
+  Geplante Tabelle: public.homepage_previews
+  Geplante Spalten:
+    id
+    title
+    image_url
+    sort_order
+
+  Diese Tabelle richten wir gemeinsam mit dem
+  Homepage Manager im Adminbereich ein.
+
+  Es dürfen ausschließlich freigegebene
+  öffentliche Vorschaubilder eingetragen werden.
+  Keine privaten Prompts oder privaten Bild-URLs.
+*/
+
+const previewGrid =
+  document.getElementById("preview-grid");
+
+const previewLabels = [
+  "Soft Elegance",
+  "Golden Hour",
+  "Modern Muse",
+  "Urban Stories",
+  "Timeless",
+  "Bold Beauty",
+  "Shared Moments",
+  "Dreamy Days",
+  "The Power Edit",
+  "Editorial Art"
+];
+
+const previewColors = [
+  ["#e8d4e8","#a77bbf"],
+  ["#eed9d6","#ba8cae"],
+  ["#d9c7e8","#8b6aaa"],
+  ["#cfc1dc","#70558f"],
+  ["#e9d7ed","#b590c7"],
+  ["#d4b4d4","#82588f"],
+  ["#ead4df","#ad80b0"],
+  ["#e4d8f0","#a98ac6"],
+  ["#d4c4e5","#8667aa"],
+  ["#e9d5e8","#9e72b7"]
+];
+
+function addPreviewCard(title, imageUrl, index) {
+  const figure = document.createElement("figure");
+  figure.className = "preview-card reveal";
+
+  const art = document.createElement("div");
+  art.className = "preview-art";
+
+  if (imageUrl) {
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    img.alt = title || "Editorial-Vorschaubild";
+    img.loading = "lazy";
+    img.decoding = "async";
+    art.appendChild(img);
+  } else {
+    const colors = previewColors[index % previewColors.length];
+
+    art.style.background =
+      "linear-gradient(140deg," +
+      colors[0] + "," + colors[1] + ")";
+
+    const label = document.createElement("span");
+    label.className = "preview-placeholder";
+    label.textContent = title;
+    art.appendChild(label);
+  }
+
+  const caption = document.createElement("figcaption");
+  caption.textContent = title || "Editorial Preview";
+
+  figure.appendChild(art);
+  figure.appendChild(caption);
+  previewGrid.appendChild(figure);
+}
+
+function addPlaceholderCards(startIndex) {
+  for (let index = startIndex; index < 10; index++) {
+    addPreviewCard(previewLabels[index], null, index);
+  }
+}
+
+function renderPlaceholderPreviews() {
+  previewGrid.replaceChildren();
+  addPlaceholderCards(0);
+  observeReveals();
+}
+
+async function loadHomepagePreviews() {
+  try {
+    const { data, error } = await supabaseClient
+      .from("homepage_previews")
+      .select("id,title,image_url,sort_order")
+      .order("sort_order", { ascending:true })
+      .limit(10);
+
+    if (error || !data || data.length === 0) {
+      return;
+    }
+
+    const validItems = data.filter(item => {
+      if (typeof item.image_url !== "string") return false;
+
+      try {
+        const url = new URL(item.image_url);
+        return url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    });
+
+    if (!validItems.length) return;
+
+    previewGrid.replaceChildren();
+
+    validItems.forEach((item, index) => {
+      addPreviewCard(
+        item.title || "Editorial Preview",
+        item.image_url,
+        index
+      );
+    });
+
+    addPlaceholderCards(validItems.length);
+    observeReveals();
+
+  } catch (error) {
+    console.warn("Vorschaubilder noch nicht eingerichtet.");
+  }
+}
+
+/* SANFTE SCROLL-ANIMATIONEN */
+
+let revealObserver = null;
+
+if ("IntersectionObserver" in window) {
+  revealObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold:0.08,
+      rootMargin:"0px 0px 30px 0px"
+    }
+  );
+}
+
+function observeReveals() {
+  document.querySelectorAll(".reveal:not(.visible)")
+    .forEach(element => {
+      if (
+        !revealObserver ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        element.classList.add("visible");
+      } else {
+        revealObserver.observe(element);
+      }
+    });
+}
+
+renderPlaceholderPreviews();
+loadHomepagePreviews();
+observeReveals();
+
+/* ANMELDUNG UND PASSWORT */
 
 const loginForm =
   document.getElementById("login-form");
@@ -658,11 +924,6 @@ const heading =
 const description =
   document.getElementById("auth-description");
 
-const SITE_URL =
-  "https://nyraamanda.github.io/editorialpromptslibrary/";
-
-let recoveryMode = false;
-
 function showMode(mode) {
   loginForm.hidden = mode !== "login";
   recoveryForm.hidden = mode !== "request";
@@ -676,7 +937,7 @@ function showMode(mode) {
   if (mode === "login") {
     heading.textContent = "Private Library";
     description.textContent =
-      "Melde dich an, um deine Editorial Prompt Library zu öffnen.";
+      "Du hast bereits Zugang? Melde dich an und öffne deine Library.";
   }
 
   if (mode === "request") {
@@ -689,7 +950,6 @@ function showMode(mode) {
     heading.textContent = "Neues Passwort";
     description.textContent =
       "Gib jetzt dein neues Passwort ein.";
-    recoveryMode = true;
   }
 }
 
@@ -706,7 +966,7 @@ function showLoginError(error) {
     "Anmeldung fehlgeschlagen: " + error.message;
 }
 
-loginForm.addEventListener("submit", async function(event) {
+loginForm.addEventListener("submit", async event => {
   event.preventDefault();
 
   loginMessage.textContent = "Anmeldung läuft …";
@@ -731,7 +991,7 @@ loginForm.addEventListener("submit", async function(event) {
   window.location.href = "galerie.html";
 });
 
-forgotLink.addEventListener("click", function(event) {
+forgotLink.addEventListener("click", event => {
   event.preventDefault();
 
   document.getElementById("recovery-email").value =
@@ -740,12 +1000,12 @@ forgotLink.addEventListener("click", function(event) {
   showMode("request");
 });
 
-backLink.addEventListener("click", function(event) {
+backLink.addEventListener("click", event => {
   event.preventDefault();
   showMode("login");
 });
 
-recoveryForm.addEventListener("submit", async function(event) {
+recoveryForm.addEventListener("submit", async event => {
   event.preventDefault();
 
   const email =
@@ -756,7 +1016,7 @@ recoveryForm.addEventListener("submit", async function(event) {
 
   const { error } =
     await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: SITE_URL
+      redirectTo:SITE_URL
     });
 
   if (error) {
@@ -769,7 +1029,7 @@ recoveryForm.addEventListener("submit", async function(event) {
     "Falls ein Konto mit dieser E-Mail existiert, erhältst du einen Link. Bitte prüfe auch den Spam-Ordner.";
 });
 
-newPasswordForm.addEventListener("submit", async function(event) {
+newPasswordForm.addEventListener("submit", async event => {
   event.preventDefault();
 
   const password =
@@ -799,12 +1059,8 @@ newPasswordForm.addEventListener("submit", async function(event) {
     return;
   }
 
-  loginMessage.textContent =
-    "Passwort erfolgreich geändert. Du kannst dich jetzt anmelden.";
-
   await supabaseClient.auth.signOut();
 
-  recoveryMode = false;
   newPasswordForm.reset();
   showMode("login");
 
@@ -812,23 +1068,19 @@ newPasswordForm.addEventListener("submit", async function(event) {
     "Passwort erfolgreich geändert. Melde dich mit deinem neuen Passwort an.";
 });
 
-supabaseClient.auth.onAuthStateChange(
-  (event, session) => {
-    if (event === "PASSWORD_RECOVERY") {
-      showMode("reset");
-      document.getElementById("login").scrollIntoView();
-    }
+supabaseClient.auth.onAuthStateChange((event) => {
+  if (event === "PASSWORD_RECOVERY") {
+    showMode("reset");
+    document.getElementById("login").scrollIntoView();
   }
-);
+});
 
 async function checkRecoveryLink() {
   const params = new URLSearchParams(
     window.location.hash.replace(/^#/, "")
   );
 
-  const query = new URLSearchParams(
-    window.location.search
-  );
+  const query = new URLSearchParams(window.location.search);
 
   if (params.get("type") === "recovery") {
     const { data } = await supabaseClient.auth.getSession();
