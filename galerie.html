@@ -4,12 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>Editorial Galerie | NyraAmanda</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -18,9 +17,7 @@
       --bg: #faf7fc;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -95,7 +92,7 @@
     .gallery {
       max-width: 1450px;
       margin: auto;
-      padding: 10px 4% 90px;
+      padding: 10px 4% 70px;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 22px;
@@ -112,74 +109,30 @@
       width: 100%;
       aspect-ratio: 3 / 4;
       background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
+      overflow: hidden;
     }
 
     .preview img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
-    .card-body {
-      padding: 22px;
-    }
+    .card-body { padding: 22px; }
 
     .number {
       font-size: 10px;
       font-weight: 700;
       color: #977cac;
+      letter-spacing: 1px;
     }
 
     .card h2 {
       font-size: 32px;
-      margin: 12px 0;
+      margin: 12px 0 0;
       line-height: 1.1;
-    }
-
-    button {
-      width: 100%;
-      cursor: pointer;
-      padding: 13px 5px;
-      font-family: inherit;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .show {
-      border: 1px solid var(--purple);
-      color: var(--purple);
-      background: white;
-      margin-top: 10px;
-    }
-
-    .copy {
-      border: 1px solid var(--purple);
-      color: white;
-      background: var(--purple);
-      margin-top: 8px;
-    }
-
-    .prompt {
-      display: none;
-      background: #f5edf9;
-      color: #675573;
-      padding: 15px;
-      margin-top: 10px;
-      font-size: 12px;
-      line-height: 1.8;
-      white-space: pre-wrap;
       overflow-wrap: anywhere;
-    }
-
-    .prompt.open {
-      display: block;
     }
 
     .status {
@@ -187,6 +140,38 @@
       padding: 30px;
       color: var(--muted);
       font-size: 13px;
+    }
+
+    .cta {
+      text-align: center;
+      padding: 20px 5% 90px;
+    }
+
+    .cta h2 {
+      font-size: clamp(38px, 6vw, 70px);
+      margin: 10px 0 15px;
+    }
+
+    .cta p {
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .buy-button {
+      display: inline-block;
+      background: var(--purple);
+      color: white;
+      padding: 18px 35px;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      transition: background .2s;
+    }
+
+    .buy-button:hover {
+      background: #503367;
     }
 
     footer {
@@ -198,46 +183,20 @@
     }
 
     @media (max-width: 650px) {
-      header {
-        padding: 20px 5% 55px;
-      }
-
-      .hero {
-        margin-top: 65px;
-      }
-
-      .intro {
-        padding: 45px 4% 25px;
-      }
+      header { padding: 20px 5% 55px; }
+      .hero { margin-top: 65px; }
+      .intro { padding: 45px 4% 25px; }
 
       .gallery {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        padding: 10px 3% 60px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 10px 3% 50px;
       }
 
-      .card-body {
-        padding: 8px;
-      }
-
-      .card h2 {
-        font-size: 18px;
-      }
-
-      .number, .preview {
-        font-size: 8px;
-      }
-
-      button {
-        font-size: 9px;
-        padding: 10px 2px;
-        overflow-wrap: anywhere;
-      }
-
-      .prompt {
-        padding: 8px;
-        font-size: 10px;
-      }
+      .card-body { padding: 12px; }
+      .card h2 { font-size: 21px; }
+      .number { font-size: 9px; }
+      .cta { padding-bottom: 65px; }
     }
   </style>
 </head>
@@ -247,29 +206,24 @@
   <header>
     <nav>
       <a href="index.html">NYRAAMANDA</a>
-      <a href="nature-outdoor.html">← ZURÜCK</a>
+      <a href="index.html">← ZURÜCK</a>
     </nav>
 
     <div class="hero">
-      <div class="eyebrow" id="category">
-        EDITORIAL COLLECTION
-      </div>
-
-      <h1 id="title">Editorial Galerie</h1>
-
-      <p id="description">
-        Entdecke deine Editorial-Bildwelt.
+      <div class="eyebrow">EDITORIAL PROMPT LIBRARY</div>
+      <h1>Editorial Gallery</h1>
+      <p>
+        A curated world of editorial inspiration.
+        Explore the collections and discover the full library.
       </p>
     </div>
   </header>
 
   <main>
     <section class="intro">
-      <div class="eyebrow">EDITORIAL PROMPT LIBRARY</div>
-      <h2>Die Galerie</h2>
-      <p>
-        Bilder entdecken · Prompts ansehen · Prompts kopieren
-      </p>
+      <div class="eyebrow">THE COLLECTIONS</div>
+      <h2>Explore the Editorials</h2>
+      <p>One glimpse into every creative world.</p>
     </section>
 
     <div id="status" class="status">
@@ -277,6 +231,23 @@
     </div>
 
     <section id="gallery" class="gallery"></section>
+
+    <section class="cta">
+      <div class="eyebrow">THE COMPLETE EXPERIENCE</div>
+      <h2>Unlock the Full Library</h2>
+      <p>
+        Discover the complete Editorial Prompt Library
+        and bring your creative visions to life.
+      </p>
+      <a
+        class="buy-button"
+        href="https://aphroditepromt.mytentary.com/p/iGCeyt"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GET THE FULL LIBRARY →
+      </a>
+    </section>
   </main>
 
   <footer>
@@ -284,9 +255,6 @@
   </footer>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const collectionId = params.get("serie") || "mediteran-dreams";
-
     const gallery = document.getElementById("gallery");
     const status = document.getElementById("status");
 
@@ -295,50 +263,44 @@
         const response = await fetch("editorials.json");
 
         if (!response.ok) {
-          throw new Error("Inhaltsliste nicht gefunden");
+          throw new Error("editorials.json nicht gefunden");
         }
 
-        const data = await response.json();
+        const collections = await response.json();
 
-        const collection = data.collections.find(
-          item => item.id === collectionId
-        );
+        if (!Array.isArray(collections)) {
+          throw new Error("Ungültiges Datenformat");
+        }
 
-        if (!collection) {
-          status.textContent =
-            "Diese Editorial-Serie wurde nicht gefunden.";
+        const params = new URLSearchParams(window.location.search);
+        const selectedSeries = params.get("serie");
+
+        const visibleCollections = selectedSeries
+          ? collections.filter(item => item.slug === selectedSeries)
+          : collections;
+
+        if (visibleCollections.length === 0) {
+          status.textContent = "Keine Editorial-Serien gefunden.";
           return;
         }
 
-        document.title = collection.title + " | NyraAmanda";
-
-        document.getElementById("title").textContent =
-          collection.title;
-
-        document.getElementById("category").textContent =
-          collection.category || "EDITORIAL COLLECTION";
-
-        document.getElementById("description").textContent =
-          collection.description || "";
-
         status.style.display = "none";
 
-        collection.items.forEach((item, index) => {
+        visibleCollections.forEach((collection, index) => {
           const card = document.createElement("article");
           card.className = "card";
 
           const preview = document.createElement("div");
           preview.className = "preview";
 
-          if (item.image) {
+          const firstImage = collection.images?.[0];
+
+          if (firstImage?.src) {
             const img = document.createElement("img");
-            img.src = item.image;
-            img.alt = item.title || "Editorial Bild";
+            img.src = firstImage.src;
+            img.alt = firstImage.alt || collection.title;
             img.loading = "lazy";
             preview.appendChild(img);
-          } else {
-            preview.textContent =
-              "BILD " + String(index + 1).padStart(2, "0");
           }
 
           const body = document.createElement("div");
@@ -347,66 +309,20 @@
           const number = document.createElement("div");
           number.className = "number";
           number.textContent =
-            "EDITORIAL " + String(index + 1).padStart(2, "0");
+            "COLLECTION " + String(index + 1).padStart(2, "0");
 
           const heading = document.createElement("h2");
-          heading.textContent = item.title || "Editorial";
+          heading.textContent = collection.title || "Editorial";
 
-          const showButton = document.createElement("button");
-          showButton.className = "show";
-          showButton.textContent = "PROMPT ANSEHEN";
-          showButton.setAttribute("aria-expanded", "false");
-
-          const prompt = document.createElement("div");
-          prompt.className = "prompt";
-          prompt.textContent = item.prompt || "";
-
-          showButton.addEventListener("click", () => {
-            const isOpen = prompt.classList.toggle("open");
-
-            showButton.textContent = isOpen
-              ? "PROMPT VERBERGEN"
-              : "PROMPT ANSEHEN";
-
-            showButton.setAttribute(
-              "aria-expanded",
-              String(isOpen)
-            );
-          });
-
-          const copyButton = document.createElement("button");
-          copyButton.className = "copy";
-          copyButton.textContent = "PROMPT KOPIEREN";
-
-          copyButton.addEventListener("click", async () => {
-            try {
-              await navigator.clipboard.writeText(item.prompt || "");
-              copyButton.textContent = "KOPIERT ✓";
-            } catch (error) {
-              copyButton.textContent =
-                "KOPIEREN NICHT MÖGLICH";
-            }
-
-            setTimeout(() => {
-              copyButton.textContent = "PROMPT KOPIEREN";
-            }, 2000);
-          });
-
-          body.append(
-            number,
-            heading,
-            showButton,
-            prompt,
-            copyButton
-          );
-
+          body.append(number, heading);
           card.append(preview, body);
           gallery.appendChild(card);
         });
 
       } catch (error) {
+        console.error(error);
         status.textContent =
-          "Die Inhaltsliste ist noch nicht eingerichtet.";
+          "Die Galerie konnte noch nicht geladen werden.";
       }
     }
 
