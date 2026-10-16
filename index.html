@@ -1043,12 +1043,28 @@ const heading =
 const description =
   document.getElementById("auth-description");
 
+
 function showMode(mode) {
   loginForm.hidden = mode !== "login";
   recoveryForm.hidden = mode !== "request";
   newPasswordForm.hidden = mode !== "reset";
 
+  const signupForm =
+    document.getElementById("signup-form");
+
+  const signupLink =
+    document.getElementById("show-signup");
+
+  if (signupForm) {
+    signupForm.hidden = mode !== "signup";
+  }
+
+  if (signupLink) {
+    signupLink.hidden = mode !== "login";
+  }
+
   forgotLink.hidden = mode !== "login";
+
   backLink.hidden =
     mode === "login" || mode === "reset";
 
@@ -1058,6 +1074,12 @@ function showMode(mode) {
     heading.textContent = "Private Library";
     description.textContent =
       "Du hast bereits Zugang? Melde dich an und öffne deine Library.";
+  }
+
+  if (mode === "signup") {
+    heading.textContent = "Zugang aktivieren";
+    description.textContent =
+      "Verwende die E-Mail-Adresse deines Tentary-Kaufs und erstelle ein Passwort.";
   }
 
   if (mode === "request") {
