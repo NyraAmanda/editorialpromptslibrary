@@ -1,0 +1,1010 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin Dashboard | NyraAmanda</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --purple:#684583;
+  --light:#faf7fc;
+  --muted:#826d91;
+  --border:#e4d5ed;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--light);
+  color:var(--purple);
+  font-family:"DM Sans",sans-serif;
+}
+
+button,input,textarea,select { font:inherit; }
+button { cursor:pointer; }
+button:disabled { opacity:.5; cursor:wait; }
+
+header {
+  background:linear-gradient(135deg,#eee1f7,#d9c3eb,#c6a8dd);
+  padding:22px 5% 55px;
+}
+
+nav {
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+nav a {
+  color:var(--purple);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-decoration:none;
+}
+
+h1,h2,h3 {
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-weight:500;
+}
+
+h1 {
+  text-align:center;
+  font-size:clamp(50px,9vw,95px);
+  margin:60px 0 5px;
+}
+
+.subtitle {
+  text-align:center;
+  font-size:12px;
+  letter-spacing:2px;
+}
+
+main {
+  max-width:1200px;
+  margin:auto;
+  padding:35px 5% 100px;
+}
+
+.panel {
+  background:white;
+  border:1px solid var(--border);
+  padding:26px;
+  margin-bottom:25px;
+}
+
+.panel h2 {
+  font-size:40px;
+  margin:0 0 12px;
+}
+
+.panel p {
+  font-size:13px;
+  line-height:1.8;
+}
+
+label {
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  margin:18px 0 7px;
+}
+
+input,textarea,select {
+  display:block;
+  width:100%;
+  padding:13px;
+  border:1px solid #cbb4d9;
+  background:#fff;
+  color:#503367;
+  border-radius:0;
+}
+
+textarea {
+  min-height:180px;
+  resize:vertical;
+  line-height:1.6;
+}
+
+input[type="file"] { padding:12px; }
+
+.row {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.row > * { flex:1; }
+
+.actions {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn {
+  border:0;
+  padding:13px 18px;
+  background:var(--purple);
+  color:white;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.5px;
+}
+
+.btn.secondary {
+  background:#f1e8f6;
+  color:var(--purple);
+}
+
+.btn.danger { background:#a04765; }
+.btn:hover { filter:brightness(.94); }
+
+.note {
+  padding:14px;
+  background:#f4edf8;
+  font-size:12px;
+  line-height:1.7;
+}
+
+#message {
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#eee1f7;
+  color:#503367;
+  padding:13px 18px;
+  font-size:12px;
+  text-align:center;
+}
+
+#message.error {
+  background:#ffe5e8;
+  color:#922d48;
+}
+
+#message.success {
+  background:#e8f4eb;
+  color:#276c42;
+}
+
+.items {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin-top:20px;
+}
+
+.item {
+  border:1px solid var(--border);
+  padding:13px;
+  display:flex;
+  gap:14px;
+  min-width:0;
+}
+
+.thumb {
+  width:95px;
+  height:125px;
+  object-fit:cover;
+  background:#e5d4ee;
+  flex-shrink:0;
+}
+
+.item-info {
+  min-width:0;
+  flex:1;
+}
+
+.item h3 {
+  font-size:25px;
+  margin:4px 0 8px;
+  overflow-wrap:anywhere;
+}
+
+.item p {
+  font-size:11px;
+  margin:4px 0 12px;
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
+
+.small {
+  font-size:11px;
+  color:var(--muted);
+}
+
+#editor { scroll-margin-top:20px; }
+
+[hidden] { display:none !important; }
+
+@media(max-width:700px) {
+  .items { grid-template-columns:1fr; }
+  .panel { padding:17px; }
+  .item { gap:10px; }
+  .thumb { width:75px; height:105px; }
+  .btn { padding:11px; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="message">Admin-Zugang wird geprüft …</div>
+
+<div id="app" hidden>
+
+<header>
+  <nav>
+    <a href="index.html">NYRAAMANDA</a>
+
+    <div class="actions">
+      <a href="galerie.html">PRIVATE LIBRARY ↗</a>
+      <button class="btn secondary" id="logout">
+        LOG OUT
+      </button>
+    </div>
+  </nav>
+
+  <h1>Admin Dashboard</h1>
+  <div class="subtitle">MANAGE YOUR EDITORIAL WORLD</div>
+</header>
+
+<main>
+
+  <section class="panel" id="editor">
+    <h2 id="form-heading">Neues Editorial</h2>
+
+    <p>
+      Bild auswählen, Titel und Prompt eintragen und speichern.
+      Bestehende Editorials kannst du jederzeit bearbeiten.
+    </p>
+
+    <form id="editor-form">
+      <input type="hidden" id="item-id">
+
+      <label for="series">Editorial-Serie *</label>
+      <input
+        id="series"
+        list="series-list"
+        required
+        placeholder="z. B. Before the Fight"
+      >
+      <datalist id="series-list"></datalist>
+
+      <label for="title">Bildtitel</label>
+      <input
+        id="title"
+        placeholder="z. B. Editorial 01"
+      >
+
+      <label for="picture">Bild hochladen</label>
+      <input
+        id="picture"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+      >
+
+      <p class="small" id="image-note">
+        Für ein neues Editorial bitte ein Bild auswählen.
+        Beim Bearbeiten bleibt das bisherige Bild erhalten,
+        wenn du kein neues auswählst.
+      </p>
+
+      <label for="prompt">Vollständiger Prompt *</label>
+      <textarea
+        id="prompt"
+        required
+        placeholder="Hier den vollständigen Prompt einfügen …"
+      ></textarea>
+
+      <label for="sort-order">
+        Reihenfolge innerhalb der Serie
+      </label>
+      <input
+        id="sort-order"
+        type="number"
+        min="0"
+        value="0"
+      >
+
+      <div class="actions" style="margin-top:22px">
+        <button class="btn" type="submit" id="save">
+          EDITORIAL SPEICHERN
+        </button>
+
+        <button
+          class="btn secondary"
+          type="button"
+          id="reset"
+        >
+          NEUES EDITORIAL
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Library verwalten</h2>
+
+    <p>
+      Suche deine Editorials und bearbeite, lösche oder
+      verschiebe sie innerhalb ihrer Serie.
+    </p>
+
+    <div class="row">
+      <input
+        id="search"
+        type="search"
+        placeholder="Titel oder Serie suchen …"
+      >
+
+      <select id="filter">
+        <option value="">Alle Serien</option>
+      </select>
+    </div>
+
+    <p class="small" id="count">Lade Editorials …</p>
+
+    <div class="items" id="items"></div>
+
+    <div style="text-align:center;margin-top:22px">
+      <button class="btn secondary" id="more" hidden>
+        WEITERE ANZEIGEN
+      </button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Homepage Manager</h2>
+
+    <p>
+      Hier werden wir deine zehn öffentlichen
+      Vorschaubilder auswählen und sortieren.
+    </p>
+
+    <div class="note">
+      Der Homepage Manager wird im nächsten Schritt
+      eingerichtet.
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+const URL_SUPABASE =
+  "https://pcakhkkvpmcmimyblav.supabase.co";
+
+const KEY_SUPABASE =
+  "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
+
+const BUCKET = "editorial-images";
+
+const $ = id => document.getElementById(id);
+
+let db;
+
+if (window.supabase) {
+  db = window.supabase.createClient(
+    URL_SUPABASE,
+    KEY_SUPABASE
+  );
+} else {
+  document.getElementById("message").textContent =
+    "Supabase konnte nicht geladen werden. Bitte Seite neu laden.";
+}
+
+let allItems = [];
+let currentImagePath = null;
+let visibleLimit = 30;
+
+function message(text, kind = "") {
+  $("message").textContent = text;
+  $("message").className = kind;
+}
+
+function errorText(error) {
+  return error?.message || String(error);
+}
+
+function cleanFilename(name) {
+  const extension = name.split(".").pop().toLowerCase();
+
+  return ["jpg","jpeg","png","webp"].includes(extension)
+    ? extension
+    : "jpg";
+}
+
+function makePath(file) {
+  return "editorials/" +
+    crypto.randomUUID() + "." +
+    cleanFilename(file.name);
+}
+
+async function checkAdmin() {
+  if (!db) return;
+
+  try {
+    const { data: userData, error: userError } =
+      await db.auth.getUser();
+
+    if (userError || !userData.user) {
+      location.replace("index.html#login");
+      return;
+    }
+
+    const { data, error } = await db
+      .from("library_admins")
+      .select("user_id")
+      .eq("user_id", userData.user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      message(
+        "Zugriff verweigert: kein Admin-Konto.",
+        "error"
+      );
+      return;
+    }
+
+    $("app").hidden = false;
+    message("Admin-Zugang bestätigt.", "success");
+
+    await loadItems();
+
+  } catch (error) {
+    message(
+      "Admin-Prüfung fehlgeschlagen: " +
+      errorText(error),
+      "error"
+    );
+  }
+}
+
+async function loadItems() {
+  try {
+    const result = [];
+    const pageSize = 500;
+
+    for (let start = 0; ; start += pageSize) {
+      const { data, error } = await db
+        .from("editorial_items")
+        .select(
+          "id,series,title,image_path,prompt,sort_order"
+        )
+        .order("series")
+        .order("sort_order")
+        .order("id")
+        .range(start, start + pageSize - 1);
+
+      if (error) throw error;
+
+      result.push(...(data || []));
+
+      if (!data || data.length < pageSize) break;
+    }
+
+    allItems = result;
+
+    const names = [...new Set(
+      result.map(x => x.series).filter(Boolean)
+    )].sort((a,b) => a.localeCompare(b));
+
+    $("filter").replaceChildren(
+      new Option("Alle Serien", "")
+    );
+
+    $("series-list").replaceChildren();
+
+    for (const name of names) {
+      $("filter").add(new Option(name, name));
+      $("series-list").appendChild(
+        new Option(name, name)
+      );
+    }
+
+    renderItems();
+
+  } catch (error) {
+    message(
+      "Laden fehlgeschlagen: " +
+      errorText(error),
+      "error"
+    );
+  }
+}
+
+async function imageUrl(path) {
+  if (!path) return null;
+
+  const { data, error } = await db.storage
+    .from(BUCKET)
+    .createSignedUrl(path, 3600);
+
+  if (error) return null;
+
+  return data.signedUrl;
+}
+
+function button(label, className, callback) {
+  const el = document.createElement("button");
+
+  el.type = "button";
+  el.className = "btn " + className;
+  el.textContent = label;
+  el.addEventListener("click", callback);
+
+  return el;
+}
+
+function filteredItems() {
+  const q = $("search").value.trim().toLowerCase();
+  const selected = $("filter").value;
+
+  return allItems.filter(item => {
+    const matchesSeries =
+      !selected || item.series === selected;
+
+    const matchesSearch =
+      !q || [item.title, item.series].some(value =>
+        String(value || "")
+          .toLowerCase()
+          .includes(q)
+      );
+
+    return matchesSeries && matchesSearch;
+  });
+}
+
+function renderItems() {
+  const matches = filteredItems();
+  const visible = matches.slice(0, visibleLimit);
+  const container = $("items");
+
+  container.replaceChildren();
+
+  $("count").textContent =
+    matches.length + " von " +
+    allItems.length + " Editorials";
+
+  for (const item of visible) {
+    const article = document.createElement("article");
+    article.className = "item";
+
+    const img = document.createElement("img");
+    img.className = "thumb";
+    img.alt = item.title || "Editorial";
+    img.loading = "lazy";
+
+    article.appendChild(img);
+
+    imageUrl(item.image_path).then(url => {
+      if (url && img.isConnected) {
+        img.src = url;
+      }
+    });
+
+    const info = document.createElement("div");
+    info.className = "item-info";
+
+    const heading = document.createElement("h3");
+    heading.textContent = item.title || "Editorial";
+
+    const detail = document.createElement("p");
+    detail.textContent =
+      (item.series || "Ohne Serie") +
+      " · Position " +
+      (item.sort_order ?? 0);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    actions.append(
+      button(
+        "BEARBEITEN",
+        "secondary",
+        () => editItem(item.id)
+      ),
+      button(
+        "↑",
+        "secondary",
+        () => moveItem(item.id, -1)
+      ),
+      button(
+        "↓",
+        "secondary",
+        () => moveItem(item.id, 1)
+      ),
+      button(
+        "LÖSCHEN",
+        "danger",
+        () => deleteItem(item.id)
+      )
+    );
+
+    info.append(heading, detail, actions);
+    article.appendChild(info);
+    container.appendChild(article);
+  }
+
+  $("more").hidden =
+    visible.length >= matches.length;
+}
+
+function resetForm() {
+  $("editor-form").reset();
+  $("item-id").value = "";
+  $("sort-order").value = "0";
+
+  currentImagePath = null;
+
+  $("form-heading").textContent =
+    "Neues Editorial";
+
+  $("save").textContent =
+    "EDITORIAL SPEICHERN";
+
+  $("image-note").textContent =
+    "Für ein neues Editorial bitte ein Bild auswählen.";
+}
+
+function editItem(id) {
+  const item = allItems.find(x => x.id === id);
+
+  if (!item) return;
+
+  $("item-id").value = item.id;
+  $("series").value = item.series || "";
+  $("title").value = item.title || "";
+  $("prompt").value = item.prompt || "";
+  $("sort-order").value = item.sort_order ?? 0;
+  $("picture").value = "";
+
+  currentImagePath = item.image_path || null;
+
+  $("form-heading").textContent =
+    "Editorial bearbeiten";
+
+  $("save").textContent =
+    "ÄNDERUNGEN SPEICHERN";
+
+  $("image-note").textContent =
+    "Optional ein neues Bild wählen. Ohne Auswahl bleibt das alte Bild.";
+
+  $("editor").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+async function saveItem(event) {
+  event.preventDefault();
+
+  const save = $("save");
+  save.disabled = true;
+
+  message("Editorial wird gespeichert …");
+
+  let uploadedPath = null;
+  let databaseSaved = false;
+
+  try {
+    const id = $("item-id").value;
+    const file = $("picture").files[0];
+
+    if (!id && !file) {
+      throw new Error(
+        "Bitte ein Bild auswählen."
+      );
+    }
+
+    let path = currentImagePath;
+
+    if (file) {
+      if (![
+        "image/png",
+        "image/jpeg",
+        "image/webp"
+      ].includes(file.type)) {
+        throw new Error(
+          "Bitte JPG, PNG oder WebP auswählen."
+        );
+      }
+
+      if (file.size > 40 * 1024 * 1024) {
+        throw new Error(
+          "Dieses Bild ist größer als 40 MB. Bitte verkleinern."
+        );
+      }
+
+      uploadedPath = makePath(file);
+
+      const { error } = await db.storage
+        .from(BUCKET)
+        .upload(uploadedPath, file, {
+          contentType:file.type,
+          upsert:false
+        });
+
+      if (error) throw error;
+
+      path = uploadedPath;
+    }
+
+    const payload = {
+      series:$("series").value.trim(),
+      title:$("title").value.trim(),
+      prompt:$("prompt").value.trim(),
+      sort_order:Number(
+        $("sort-order").value
+      ) || 0,
+      image_path:path
+    };
+
+    if (!payload.series || !payload.prompt) {
+      throw new Error(
+        "Serie und Prompt sind Pflichtfelder."
+      );
+    }
+
+    let result;
+
+    if (id) {
+      result = await db
+        .from("editorial_items")
+        .update(payload)
+        .eq("id", Number(id))
+        .select("id")
+        .single();
+    } else {
+      result = await db
+        .from("editorial_items")
+        .insert(payload)
+        .select("id")
+        .single();
+    }
+
+    if (result.error) throw result.error;
+
+    databaseSaved = true;
+
+    if (
+      uploadedPath &&
+      currentImagePath &&
+      currentImagePath !== uploadedPath
+    ) {
+      const oldPath = currentImagePath;
+
+      const { count, error: countError } = await db
+        .from("editorial_items")
+        .select("id", {
+          count:"exact",
+          head:true
+        })
+        .eq("image_path", oldPath);
+
+      if (!countError && count === 0) {
+        const { error: removeError } =
+          await db.storage
+            .from(BUCKET)
+            .remove([oldPath]);
+
+        if (removeError) {
+          console.warn(
+            "Altes Bild nicht entfernt:",
+            removeError
+          );
+        }
+      }
+    }
+
+    resetForm();
+    await loadItems();
+
+    message(
+      "Editorial erfolgreich gespeichert! ✓",
+      "success"
+    );
+
+  } catch (error) {
+    if (uploadedPath && !databaseSaved) {
+      await db.storage
+        .from(BUCKET)
+        .remove([uploadedPath]);
+    }
+
+    message(
+      "Speichern fehlgeschlagen: " +
+      errorText(error),
+      "error"
+    );
+
+  } finally {
+    save.disabled = false;
+  }
+}
+
+async function deleteItem(id) {
+  const item = allItems.find(x => x.id === id);
+
+  if (!item) return;
+
+  const confirmed = confirm(
+    "Editorial wirklich dauerhaft löschen?\n\n" +
+    (item.title || item.series) +
+    "\n\nDieser Vorgang kann nicht rückgängig gemacht werden."
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const { data, error } = await db
+      .from("editorial_items")
+      .delete()
+      .eq("id", id)
+      .select("id");
+
+    if (error) throw error;
+
+    if (!data || data.length !== 1) {
+      throw new Error(
+        "Editorial wurde nicht gelöscht."
+      );
+    }
+
+    if (item.image_path) {
+      const { count, error: countError } = await db
+        .from("editorial_items")
+        .select("id", {
+          count:"exact",
+          head:true
+        })
+        .eq("image_path", item.image_path);
+
+      if (!countError && count === 0) {
+        const { error: storageError } =
+          await db.storage
+            .from(BUCKET)
+            .remove([item.image_path]);
+
+        if (storageError) {
+          console.warn(
+            "Bilddatei blieb gespeichert:",
+            storageError
+          );
+        }
+      }
+    }
+
+    if ($("item-id").value === String(id)) {
+      resetForm();
+    }
+
+    await loadItems();
+
+    message(
+      "Editorial gelöscht. ✓",
+      "success"
+    );
+
+  } catch (error) {
+    message(
+      "Löschen fehlgeschlagen: " +
+      errorText(error),
+      "error"
+    );
+  }
+}
+
+async function moveItem(id, direction) {
+  const item = allItems.find(x => x.id === id);
+
+  if (!item) return;
+
+  const siblings = allItems
+    .filter(x => x.series === item.series)
+    .sort((a,b) =>
+      (a.sort_order ?? 0) -
+      (b.sort_order ?? 0) ||
+      a.id - b.id
+    );
+
+  const index =
+    siblings.findIndex(x => x.id === id);
+
+  const next = index + direction;
+
+  if (next < 0 || next >= siblings.length) {
+    return;
+  }
+
+  [siblings[index], siblings[next]] =
+    [siblings[next], siblings[index]];
+
+  try {
+    message(
+      "Reihenfolge wird gespeichert …"
+    );
+
+    for (let i = 0; i < siblings.length; i++) {
+      const { error } = await db
+        .from("editorial_items")
+        .update({
+          sort_order:i + 1
+        })
+        .eq("id", siblings[i].id);
+
+      if (error) throw error;
+    }
+
+    await loadItems();
+
+    message(
+      "Reihenfolge gespeichert. ✓",
+      "success"
+    );
+
+  } catch (error) {
+    message(
+      "Sortierung fehlgeschlagen: " +
+      errorText(error),
+      "error"
+    );
+
+    await loadItems();
+  }
+}
+
+$("editor-form").addEventListener(
+  "submit",
+  saveItem
+);
+
+$("reset").addEventListener(
+  "click",
+  resetForm
+);
+
+$("search").addEventListener("input", () => {
+  visibleLimit = 30;
+  renderItems();
+});
+
+$("filter").addEventListener("change", () => {
+  visibleLimit = 30;
+  renderItems();
+});
+
+$("more").addEventListener("click", () => {
+  visibleLimit += 30;
+  renderItems();
+});
+
+$("logout").addEventListener(
+  "click",
+  async () => {
+    await db.auth.signOut();
+    location.replace("index.html#login");
+  }
+);
+
+checkAdmin();
+</script>
+
+</body>
+</html>
