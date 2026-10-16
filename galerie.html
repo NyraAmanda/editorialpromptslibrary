@@ -16,7 +16,6 @@
       --purple: #684583;
       --muted: #826d91;
       --bg: #faf7fc;
-      --lavender: #e8d8f2;
     }
 
     * { box-sizing: border-box; }
@@ -31,6 +30,7 @@
 
     button, input { font: inherit; }
     button { cursor: pointer; }
+    button:disabled { opacity: .6; cursor: default; }
 
     header {
       background: linear-gradient(135deg, #eee1f7, #d9c3eb, #c6a8dd);
@@ -177,9 +177,9 @@
     }
 
     .preview img {
+      display: block;
       width: 100%;
       height: 100%;
-      display: block;
       object-fit: cover;
     }
 
@@ -326,7 +326,6 @@
     <header>
       <nav>
         <a class="brand" href="index.html">NYRAAMANDA</a>
-
         <button id="logout-button" class="logout" type="button">
           LOG OUT →
         </button>
@@ -403,9 +402,11 @@
       "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
 
     const BUCKET_NAME = "editorial-images";
+
     const PAGE_SIZE = 24;
     const MAX_SIMULTANEOUS_IMAGES = 3;
     const MAX_ATTEMPTS = 3;
+    const IMAGE_TIMEOUT_MS = 12000;
 
     const privateApp = document.getElementById("private-app");
     const authStatus = document.getElementById("auth-status");
@@ -423,6 +424,7 @@
     let filteredItems = [];
     let visibleCount = 0;
     let imageObserver = null;
+    let generation = 0;
 
     const imageQueue = [];
     let activeImages = 0;
@@ -454,6 +456,20 @@
 
     function wait(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function withTimeout(promise, milliseconds, message) {
+      let timer;
+
+      const timeout = new Promise((resolve, reject) => {
+        timer = setTimeout(
+          () => reject(new Error(message)),
+          milliseconds
+        );
+      });
+
+      return Promise.race([promise, timeout])
+        .finally(() => clearTimeout(timer));
     }
 
     async function verifyAccess() {
@@ -496,11 +512,7 @@
         const items = [];
         const databasePageSize = 500;
 
-        for (
-          let start = 0;
-          ;
-          start += databasePageSize
-        ) {
+        for (let start = 0; ; start += databasePageSize) {
           const { data, error } = await client
             .from("editorial_items")
             .select("id,series,title,image_path,prompt,sort_order")
@@ -524,7 +536,6 @@
           return;
         }
 
-        setupImageObserver();
         resetAndRender();
 
       } catch (error) {
@@ -536,13 +547,22 @@
     }
 
     async function getImageUrl(path) {
-      if (!path) throw new Error("Kein Bildpfad vorhanden.");
+      if (!path) {
+        throw new Error("Kein Bildpfad vorhanden.");
+      }
 
-      const { data, error } = await client.storage
+      const request = client.storage
         .from(BUCKET_NAME)
         .createSignedUrl(path, 3600);
 
+      const { data, error } = await withTimeout(
+        request,
+        IMAGE_TIMEOUT_MS,
+        "Zeitüberschreitung beim Erstellen des Bildlinks."
+      );
+
       if (error) throw error;
+
       if (!data || !data.signedUrl) {
         throw new Error("Kein Bildlink erhalten.");
       }
@@ -550,27 +570,50 @@
       return data.signedUrl;
     }
 
-    function loadImageElement(img, url) {
+    function loadImageElement(url) {
       return new Promise((resolve, reject) => {
-        img.onload = () => {
-          img.onload = null;
-          img.onerror = null;
-          resolve();
-        };
+        const img = new Image();
+        let finished = false;
 
-        img.onerror = () => {
+        const timer = setTimeout(() => {
+          finish(new Error("Zeitüberschreitung beim Laden des Bildes."));
+        }, IMAGE_TIMEOUT_MS);
+
+        function finish(error) {
+          if (finished) return;
+          finished = true;
+
+          clearTimeout(timer);
           img.onload = null;
           img.onerror = null;
-          reject(new Error("Bild konnte nicht angezeigt werden."));
+
+          if (error) {
+            img.removeAttribute("src");
+            reject(error);
+          } else {
+            resolve(img);
+          }
+        }
+
+        img.onload = () => finish(null);
+        img.onerror = () => {
+          finish(new Error("Bilddatei konnte nicht geladen werden."));
         };
 
         img.src = url;
       });
     }
 
+    function taskIsCurrent(task) {
+      return (
+        task.generation === generation &&
+        task.preview.isConnected
+      );
+    }
+
     function enqueueImage(task) {
       if (
-        !task.preview.isConnected ||
+        !taskIsCurrent(task) ||
         task.finished ||
         task.queued ||
         task.loading
@@ -589,60 +632,68 @@
         const task = imageQueue.shift();
         task.queued = false;
 
-        if (!task.preview.isConnected || task.finished) continue;
+        if (!taskIsCurrent(task) || task.finished) continue;
 
         activeImages++;
         task.loading = true;
 
-        loadImageWithRetry(task).finally(() => {
-          task.loading = false;
-          activeImages--;
-          processImageQueue();
-        });
+        loadImageWithRetry(task)
+          .catch(error => {
+            console.error("Unerwarteter Bildfehler:", error);
+          })
+          .finally(() => {
+            task.loading = false;
+            activeImages--;
+            processImageQueue();
+          });
       }
     }
 
     async function loadImageWithRetry(task) {
-      while (task.attempts < MAX_ATTEMPTS) {
-        if (!task.preview.isConnected) return;
-
-        task.attempts++;
+      for (
+        let attempt = 1;
+        attempt <= MAX_ATTEMPTS;
+        attempt++
+      ) {
+        if (!taskIsCurrent(task)) return;
 
         try {
           task.state.hidden = false;
           task.state.textContent =
-            task.attempts === 1
+            attempt === 1
               ? "Bild wird geladen …"
               : "Bild wird erneut geladen …";
 
           const url = await getImageUrl(task.item.image_path);
 
-          if (!task.preview.isConnected) return;
+          if (!taskIsCurrent(task)) return;
 
-          await loadImageElement(task.img, url);
+          const loadedImage = await loadImageElement(url);
 
-          if (!task.preview.isConnected) return;
+          if (!taskIsCurrent(task)) return;
 
+          // Das bereits vollständig geladene Bild übernehmen.
+          task.img.src = loadedImage.src;
           task.img.hidden = false;
           task.state.hidden = true;
           task.finished = true;
+
           return;
 
         } catch (error) {
           console.warn(
-            "Bildladeversuch",
-            task.attempts,
+            "Bildladeversuch " + attempt,
             task.item.title,
             error
           );
 
-          if (task.attempts < MAX_ATTEMPTS) {
-            await wait(900 * task.attempts);
+          if (attempt < MAX_ATTEMPTS) {
+            await wait(900 * attempt);
           }
         }
       }
 
-      if (!task.preview.isConnected) return;
+      if (!taskIsCurrent(task)) return;
 
       task.state.replaceChildren();
 
@@ -655,7 +706,8 @@
       retry.textContent = "BILD ERNEUT LADEN";
 
       retry.addEventListener("click", () => {
-        task.attempts = 0;
+        if (!taskIsCurrent(task)) return;
+
         task.finished = false;
         task.state.textContent = "Bild wird erneut geladen …";
         enqueueImage(task);
@@ -697,7 +749,6 @@
       if (item.image_path) {
         const img = document.createElement("img");
         img.alt = item.title || item.series || "Editorial";
-        img.loading = "lazy";
         img.hidden = true;
 
         const imageState = document.createElement("div");
@@ -711,7 +762,7 @@
           img,
           state: imageState,
           preview,
-          attempts: 0,
+          generation,
           queued: false,
           loading: false,
           finished: false
@@ -769,7 +820,7 @@
       return card;
     }
 
-    function appendEditorials(items, startingIndex) {
+    function appendEditorials(items) {
       const groups = groupBySeries(items);
 
       groups.forEach((seriesItems, seriesName) => {
@@ -836,13 +887,15 @@
         visibleCount + PAGE_SIZE
       );
 
-      appendEditorials(nextItems, visibleCount);
+      appendEditorials(nextItems);
 
       visibleCount += nextItems.length;
       updateLoadMoreArea();
     }
 
     function resetAndRender() {
+      generation++;
+
       if (imageObserver) imageObserver.disconnect();
 
       imageQueue.length = 0;
