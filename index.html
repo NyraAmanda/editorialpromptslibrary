@@ -695,6 +695,36 @@ footer p {
     <a
       href="#login"
       class="auth-link"
+      
+    <a href="#login" class="auth-link" id="show-signup">
+      EPL bereits gekauft? Zugang aktivieren
+    </a>
+
+    <form id="signup-form" class="auth-form" hidden>
+
+      <input
+        id="signup-email"
+        type="email"
+        placeholder="E-Mail-Adresse aus deinem Tentary-Kauf"
+        autocomplete="email"
+        required
+      >
+
+      <input
+        id="signup-password"
+        type="password"
+        placeholder="Passwort erstellen (mindestens 8 Zeichen)"
+        autocomplete="new-password"
+        minlength="8"
+        required
+      >
+
+      <button class="button" type="submit">
+        ZUGANG AKTIVIEREN →
+      </button>
+
+    </form>
+
       id="forgot-password"
     >
       Passwort vergessen?
