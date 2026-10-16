@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#e8d8f2">
-<meta name="description" content="NyraAmanda Editorial Prompt Library – über 500 kuratierte Editorials, fertige Bildprompts und ausgewählte Videoprompts.">
+<meta name="description" content="NyraAmanda Editorial Prompt Library – entdecke über 500 kuratierte Editorials mit fertigen Bildprompts und ausgewählten Videoprompts.">
 <title>Editorial Prompt Library | NyraAmanda</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,92 +16,126 @@
 :root {
   --ivory:#faf7fc;
   --lavender:#e8d8f2;
-  --lilac:#d6bde9;
   --plum:#603b7d;
   --violet:#775095;
   --muted:#705a82;
-  --line:#e4d6ed;
 }
-* { box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+
+* {
+  box-sizing:border-box;
+}
+
+html {
+  scroll-behavior:smooth;
+}
+
 body {
   margin:0;
   background:var(--ivory);
   color:var(--plum);
   font-family:"DM Sans",Arial,sans-serif;
 }
-a { color:inherit; }
-button,input { font:inherit; }
-[hidden] { display:none !important; }
-.serif,h1,h2,h3 {
+
+a {
+  color:inherit;
+}
+
+button,
+input {
+  font:inherit;
+}
+
+[hidden] {
+  display:none !important;
+}
+
+h1,
+h2,
+h3 {
   font-family:"Cormorant Garamond",Georgia,serif;
 }
+
 .eyebrow {
   font-size:11px;
   font-weight:700;
-  letter-spacing:2.6px;
+  letter-spacing:2.5px;
   text-transform:uppercase;
 }
+
 .button {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:9px;
-  min-height:50px;
-  padding:16px 27px;
-  border:1px solid var(--violet);
+  min-height:51px;
+  padding:16px 29px;
   background:var(--violet);
+  border:1px solid var(--violet);
   color:white;
   text-decoration:none;
   text-transform:uppercase;
   font-size:11px;
   font-weight:700;
-  letter-spacing:1.3px;
+  letter-spacing:1.4px;
   cursor:pointer;
   transition:background .25s,transform .25s;
 }
+
 .button:hover {
   background:#593474;
   transform:translateY(-2px);
 }
-.button-outline {
-  background:transparent;
-  color:var(--plum);
-  border-color:#9475ab;
+
+.button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline:3px solid #a77cc2;
+  outline-offset:3px;
 }
-.button-outline:hover {
-  background:#e8d8f2;
-}
+
+/* HERO */
+
 .hero {
-  background:linear-gradient(140deg,#eee1f7,#dac4ec 65%,#c5a7df);
-  padding:23px 6% 82px;
+  background:linear-gradient(
+    140deg,
+    #eee1f7,
+    #dac4ec 65%,
+    #c5a7df
+  );
+  padding:23px 6% 78px;
 }
+
 .navbar {
   max-width:1250px;
   margin:auto;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:20px;
 }
+
 .brand {
   font-size:14px;
   font-weight:700;
   letter-spacing:3px;
   text-decoration:none;
 }
+
 .nav-links {
   display:flex;
-  flex-wrap:wrap;
-  gap:25px;
+  gap:22px;
 }
+
 .nav-links a {
   font-size:11px;
   font-weight:700;
   letter-spacing:1px;
   text-decoration:none;
 }
-.nav-links a:hover { text-decoration:underline; }
+
+.nav-links a:hover {
+  text-decoration:underline;
+}
+
 .hero-image {
   max-width:1250px;
   height:clamp(280px,42vw,520px);
@@ -109,6 +143,7 @@ button,input { font:inherit; }
   overflow:hidden;
   background:#c6a6db;
 }
+
 .hero-image img {
   display:block;
   width:100%;
@@ -117,98 +152,110 @@ button,input { font:inherit; }
   object-position:center 30%;
   animation:imageReveal 1.8s ease both;
 }
+
 .hero-content {
-  max-width:860px;
+  max-width:850px;
   margin:auto;
-  padding-top:60px;
+  padding-top:58px;
   text-align:center;
 }
+
 h1 {
-  margin:20px 0;
-  font-size:clamp(57px,9vw,110px);
+  margin:19px 0;
+  font-size:clamp(55px,9vw,110px);
   font-weight:500;
   line-height:.91;
   letter-spacing:-1.5px;
 }
-h1 em { color:#80519f; font-weight:400; }
+
+h1 em {
+  color:#80519f;
+  font-weight:400;
+}
+
 .byline {
   font-family:"Cormorant Garamond",Georgia,serif;
-  font-size:31px;
+  font-size:30px;
 }
+
 .intro {
-  max-width:610px;
-  margin:27px auto 32px;
+  max-width:590px;
+  margin:26px auto 30px;
   font-size:14px;
   line-height:1.95;
 }
-.hero-actions {
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.ribbon {
-  padding:23px 5%;
-  background:#f1e7f8;
-  text-align:center;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:1.5px;
-  line-height:2;
-}
-.section {
+
+/* EDITORIAL PREVIEW */
+
+.preview-section {
   max-width:1300px;
   margin:auto;
-  padding:90px 7%;
+  padding:85px 7% 90px;
+  text-align:center;
 }
+
 .section-heading {
   margin:15px 0;
-  font-size:clamp(47px,7vw,79px);
+  font-size:clamp(48px,7vw,80px);
   font-weight:500;
   line-height:1;
 }
-.section-description {
-  max-width:690px;
+
+.preview-description {
+  max-width:610px;
+  margin:0 auto;
   font-size:14px;
-  line-height:1.95;
+  line-height:1.9;
   color:var(--muted);
 }
-.center { text-align:center; }
-.center .section-description { margin:0 auto; }
+
 .preview-grid {
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
   gap:14px;
   margin-top:40px;
 }
+
 .preview-card {
   min-width:0;
   margin:0;
 }
+
 .preview-art {
   aspect-ratio:3/4;
   overflow:hidden;
-  background:linear-gradient(140deg,#e4d3ec,#c2a2d5,#9571b0);
   display:flex;
   align-items:center;
   justify-content:center;
-  text-align:center;
+  background:linear-gradient(
+    140deg,
+    #e4d3ec,
+    #9571b0
+  );
 }
+
 .preview-art img {
+  display:block;
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
   transition:transform .6s ease;
 }
-.preview-card:hover img { transform:scale(1.045); }
+
+.preview-card:hover img {
+  transform:scale(1.045);
+}
+
 .preview-placeholder {
   padding:10px;
   font-family:"Cormorant Garamond",Georgia,serif;
-  font-style:italic;
   font-size:clamp(20px,2.5vw,34px);
+  font-style:italic;
+  line-height:1.1;
   color:white;
+  text-align:center;
 }
+
 .preview-card figcaption {
   margin-top:10px;
   font-size:11px;
@@ -216,119 +263,83 @@ h1 em { color:#80519f; font-weight:400; }
   color:var(--muted);
   overflow-wrap:anywhere;
 }
+
 .preview-note {
-  margin:28px 0 0;
-  text-align:center;
-  color:var(--muted);
+  margin:28px auto 0;
   font-size:12px;
   line-height:1.8;
-}
-.benefits {
-  background:#f0e6f7;
-}
-.benefit-grid {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:22px;
-  margin-top:40px;
-}
-.benefit {
-  padding:32px 27px;
-  background:rgba(255,255,255,.7);
-  border:1px solid rgba(119,80,149,.12);
-}
-.benefit-number {
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:2px;
-}
-.benefit h3 {
-  margin:16px 0 12px;
-  font-size:35px;
-  font-weight:500;
-  line-height:1.05;
-}
-.benefit p {
-  margin:0;
   color:var(--muted);
-  font-size:13px;
-  line-height:1.85;
 }
-.collections {
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-top:30px;
-}
-.collection-tag {
-  padding:13px 18px;
-  border:1px solid #d4bfe2;
-  background:#f5edf9;
-  font-size:12px;
-  letter-spacing:.4px;
-}
-.statement {
-  padding:95px 7%;
-  background:#e9d9f4;
-  text-align:center;
-}
-.statement h2 {
-  max-width:900px;
-  margin:24px auto;
-  font-size:clamp(42px,6vw,78px);
-  font-weight:500;
-  line-height:1.04;
-}
-.statement p {
-  font-size:14px;
-  line-height:1.9;
-}
+
+/* KAUFBEREICH */
+
 .cta {
-  padding:95px 7%;
+  padding:90px 7%;
   text-align:center;
   color:white;
-  background:linear-gradient(140deg,#bc9ad5,#9470b6);
+  background:linear-gradient(
+    140deg,
+    #bc9ad5,
+    #9470b6
+  );
 }
+
 .cta h2 {
   max-width:850px;
-  margin:18px auto;
+  margin:20px auto;
   font-size:clamp(53px,8vw,95px);
   font-weight:500;
   line-height:.95;
 }
+
 .cta p {
-  max-width:560px;
+  max-width:570px;
   margin:25px auto 30px;
   font-size:14px;
-  line-height:1.9;
+  line-height:1.95;
 }
+
 .cta .button {
   background:white;
   color:var(--plum);
   border-color:white;
 }
-.cta .button:hover { background:#f0e5f7; }
+
+.cta .button:hover {
+  background:#f0e5f7;
+}
+
+/* MEMBER LOGIN */
+
+.login-section {
+  padding:80px 6%;
+}
+
 .login-wrap {
   max-width:480px;
-  margin:0 auto;
+  margin:auto;
   padding:38px;
   background:#f0e5f7;
   text-align:center;
 }
+
 .login-wrap h2 {
-  margin:10px 0;
+  margin:12px 0;
   font-size:48px;
   font-weight:400;
 }
+
 .login-wrap p {
   font-size:13px;
   line-height:1.8;
 }
+
 .auth-form {
   display:grid;
   gap:12px;
   margin-top:25px;
 }
+
 .auth-form input {
   width:100%;
   padding:15px;
@@ -336,7 +347,11 @@ h1 em { color:#80519f; font-weight:400; }
   background:white;
   color:var(--plum);
 }
-.auth-form .button { width:100%; }
+
+.auth-form .button {
+  width:100%;
+}
+
 .auth-link {
   display:inline-block;
   margin-top:17px;
@@ -344,84 +359,171 @@ h1 em { color:#80519f; font-weight:400; }
   text-decoration:underline;
   cursor:pointer;
 }
+
 .auth-message {
   margin-top:18px;
   font-size:12px;
   line-height:1.7;
   overflow-wrap:anywhere;
 }
+
+/* FOOTER */
+
 footer {
-  padding:55px 6%;
+  padding:45px 6%;
   background:#efe4f7;
   text-align:center;
 }
+
 footer strong {
   font-size:15px;
   letter-spacing:4px;
 }
+
 footer p {
   font-size:12px;
   line-height:2;
 }
+
+/* ANIMATIONEN */
+
 .fade {
   animation:fadeUp 1.2s ease both;
 }
-.delay-1 { animation-delay:.2s; }
-.delay-2 { animation-delay:.45s; }
-.delay-3 { animation-delay:.7s; }
-.delay-4 { animation-delay:.95s; }
+
+.delay-1 {
+  animation-delay:.2s;
+}
+
+.delay-2 {
+  animation-delay:.45s;
+}
+
+.delay-3 {
+  animation-delay:.7s;
+}
+
+.delay-4 {
+  animation-delay:.95s;
+}
+
 .reveal {
   opacity:0;
   transform:translateY(25px);
-  transition:opacity .85s ease,transform .85s ease;
+  transition:
+    opacity .85s ease,
+    transform .85s ease;
 }
+
 .reveal.visible {
   opacity:1;
   transform:translateY(0);
 }
+
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(22px); }
-  to { opacity:1; transform:translateY(0); }
+  from {
+    opacity:0;
+    transform:translateY(22px);
+  }
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
 }
+
 @keyframes imageReveal {
-  from { opacity:0; transform:scale(1.045); }
-  to { opacity:1; transform:scale(1); }
+  from {
+    opacity:0;
+    transform:scale(1.045);
+  }
+  to {
+    opacity:1;
+    transform:scale(1);
+  }
 }
+
+/* SMARTPHONE */
+
 @media(max-width:850px) {
-  .preview-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
-  .benefit-grid { grid-template-columns:1fr; }
+  .preview-grid {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
 }
+
 @media(max-width:600px) {
-  .navbar { flex-direction:column; gap:18px; }
-  .nav-links { justify-content:center; gap:16px; }
-  .hero { padding:20px 5% 58px; }
-  .hero-image { height:290px; margin-top:25px; }
-  .hero-content { padding-top:45px; }
-  .section { padding:65px 5%; }
-  .preview-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-  .preview-placeholder { font-size:26px; }
-  .statement,.cta { padding:70px 6%; }
-  .login-wrap { padding:30px 22px; }
+  .navbar {
+    flex-direction:column;
+    gap:17px;
+  }
+
+  .hero {
+    padding:20px 5% 58px;
+  }
+
+  .hero-image {
+    height:290px;
+    margin-top:25px;
+  }
+
+  .hero-content {
+    padding-top:45px;
+  }
+
+  .preview-section {
+    padding:65px 5%;
+  }
+
+  .preview-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+
+  .preview-placeholder {
+    font-size:26px;
+  }
+
+  .cta {
+    padding:70px 6%;
+  }
+
+  .login-section {
+    padding:65px 5%;
+  }
+
+  .login-wrap {
+    padding:30px 22px;
+  }
 }
+
 @media(prefers-reduced-motion:reduce) {
-  *,*::before,*::after {
+  *,
+  *::before,
+  *::after {
     animation:none !important;
     transition:none !important;
     scroll-behavior:auto !important;
   }
-  .reveal { opacity:1; transform:none; }
+
+  .reveal {
+    opacity:1;
+    transform:none;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- 1. HERO -->
+
 <section class="hero" id="top">
+
   <header class="navbar">
-    <a class="brand" href="#top">NYRAAMANDA</a>
+    <a class="brand" href="#top">
+      NYRAAMANDA
+    </a>
+
     <nav class="nav-links" aria-label="Hauptnavigation">
-      <a href="#preview">PREVIEW</a>
-      <a href="#benefits">THE LIBRARY</a>
       <a href="#access">GET ACCESS</a>
       <a href="#login">MEMBER LOGIN</a>
     </nav>
@@ -436,6 +538,7 @@ footer p {
   </div>
 
   <div class="hero-content">
+
     <div class="eyebrow fade">
       THE PRIVATE EDITORIAL WORLD
     </div>
@@ -452,175 +555,111 @@ footer p {
     <p class="intro fade delay-3">
       Create visuals that don't just look beautiful.
       They tell a story.<br><br>
-      Entdecke über 500 kuratierte Editorials für
-      außergewöhnliche KI-Bildwelten – mit fertigen
-      Prompts, die du direkt für deine kreativen
-      Projekte nutzen kannst.
+
+      Entdecke über 500 kuratierte Editorials
+      für außergewöhnliche KI-Bildwelten.
+
+      Fertige Bildprompts, inspirierende Looks
+      und ausgewählte Videoprompts –
+      alles an einem Ort.
     </p>
 
-    <div class="hero-actions fade delay-4">
-      <a class="button"
-         href="https://aphroditepromt.mytentary.com/p/iGCeyt"
-         target="_blank"
-         rel="noopener noreferrer">
-        ZUGANG SICHERN →
-      </a>
+    <a
+      class="button fade delay-4"
+      href="https://aphroditepromt.mytentary.com/p/iGCeyt"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ZUGANG SICHERN →
+    </a>
 
-      <a class="button button-outline" href="#preview">
-        EDITORIALS ENTDECKEN ↓
-      </a>
-    </div>
   </div>
 </section>
-
-<div class="ribbon">
-  CURATED EDITORIALS ✦ TIMELESS AESTHETICS ✦ CREATIVE FREEDOM
-</div>
 
 <main>
 
-<section class="section center" id="preview">
+<!-- 2. DIE EINZIGE GALERIEVORSCHAU -->
+
+<section class="preview-section" id="preview">
+
   <div class="reveal">
-    <div class="eyebrow">A glimpse inside</div>
+    <div class="eyebrow">
+      A GLIMPSE INSIDE
+    </div>
+
     <h2 class="section-heading">
       The Editorial <em>Preview</em>
     </h2>
-    <p class="section-description">
-      Von verträumt und sanft bis ausdrucksstark
-      und cineastisch: Jede Bildwelt erzählt
-      ihre eigene Geschichte.
-      Entdecke einen kleinen Vorgeschmack
-      auf die NyraAmanda Editorial Prompt Library.
+
+    <p class="preview-description">
+      Ein kleiner Einblick in deine neue kreative Welt.
+      Von sanften Porträts bis zu ausdrucksstarken
+      Editorial-Looks.
     </p>
   </div>
 
-  <div class="preview-grid" id="preview-grid" aria-label="Editorial-Vorschaubilder"></div>
+  <div
+    class="preview-grid"
+    id="preview-grid"
+    aria-label="Editorial-Vorschaubilder"
+  ></div>
 
   <p class="preview-note">
-    Eine kleine Vorschau. Die vollständigen Prompts
+    Die vollständigen Bild- und Videoprompts
     findest du exklusiv in der privaten Library.
   </p>
+
 </section>
 
-<section class="benefits" id="benefits">
-  <div class="section">
-    <div class="reveal">
-      <div class="eyebrow">Less prompting. More creating.</div>
-      <h2 class="section-heading">
-        Your Creative <em>Shortcut.</em>
-      </h2>
-      <p class="section-description">
-        Schluss mit endlosem Experimentieren.
-        Finde schneller die Bildästhetik,
-        die du dir vorstellst – mit einer
-        übersichtlichen Library voller
-        kreativer Editorial-Ideen.
-      </p>
-    </div>
-
-    <div class="benefit-grid">
-      <article class="benefit reveal">
-        <div class="benefit-number">01 / DISCOVER</div>
-        <h3>Find Your Aesthetic</h3>
-        <p>
-          Stöbere durch über 500 Editorials
-          und entdecke Looks für unterschiedliche
-          Stimmungen, Themen und Bildwelten.
-        </p>
-      </article>
-
-      <article class="benefit reveal">
-        <div class="benefit-number">02 / COPY</div>
-        <h3>Ready-to-Use Prompts</h3>
-        <p>
-          Kein mühsames Formulieren von Grund auf.
-          Finde einen passenden Bildprompt,
-          kopiere ihn und nutze ihn in deinem
-          bevorzugten KI-Bildtool.
-        </p>
-      </article>
-
-      <article class="benefit reveal">
-        <div class="benefit-number">03 / CREATE</div>
-        <h3>Bring It to Life</h3>
-        <p>
-          Erschaffe neue Bildwelten und entdecke
-          bei ausgewählten Editorials zusätzliche
-          Videoprompts für bewegte Szenen.
-        </p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="reveal">
-    <div class="eyebrow">One Library. Many Worlds.</div>
-    <h2 class="section-heading">
-      Explore the <em>Collections.</em>
-    </h2>
-    <p class="section-description">
-      Ob elegante Porträts, moderne Männer-Editorials,
-      romantische Paarmomente, Freundschaft oder
-      selbstbewusste Business-Looks:
-      Hier findest du kreative Inspiration
-      für unterschiedliche Bildstile.
-    </p>
-
-    <div class="collections">
-      <span class="collection-tag">Female Editorial</span>
-      <span class="collection-tag">Male Editorial</span>
-      <span class="collection-tag">Couple</span>
-      <span class="collection-tag">BFF</span>
-      <span class="collection-tag">Business Aesthetics</span>
-      <span class="collection-tag">Video Prompts</span>
-    </div>
-  </div>
-</section>
-
-<section class="statement">
-  <div class="reveal">
-    <div class="eyebrow">The NyraAmanda Philosophy</div>
-    <h2>
-      Less searching.<br>
-      More creating.<br>
-      <em>More of your vision.</em>
-    </h2>
-    <p>
-      Deine Kreativität verdient mehr Zeit
-      als die Suche nach dem perfekten Prompt.
-    </p>
-  </div>
-</section>
+<!-- 3. KAUFBEREICH -->
 
 <section class="cta" id="access">
+
   <div class="reveal">
-    <div class="eyebrow">Your Creative Era Starts Here</div>
+
+    <div class="eyebrow">
+      LESS PROMPTING. MORE CREATING.
+    </div>
+
     <h2>
-      Ready to Create<br>
-      <em>Something Beautiful?</em>
+      Your Next<br>
+      <em>Creative Era.</em>
     </h2>
+
     <p>
-      Tauche ein in die NyraAmanda Editorial
-      Prompt Library und verwandle deine Ideen
-      in ausdrucksstarke Bildwelten.
-      Deine nächste kreative Inspiration
-      wartet bereits auf dich.
+      Finde deinen Look. Kopiere deinen Prompt.
+      Erwecke deine Vision zum Leben.
+
+      Weniger Zeit mit Suchen verbringen –
+      mehr Zeit für außergewöhnliche Bilder.
     </p>
 
-    <a class="button"
-       href="https://aphroditepromt.mytentary.com/p/iGCeyt"
-       target="_blank"
-       rel="noopener noreferrer">
+    <a
+      class="button"
+      href="https://aphroditepromt.mytentary.com/p/iGCeyt"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       ZUGANG ZUR LIBRARY SICHERN →
     </a>
+
   </div>
+
 </section>
 
-<section class="section" id="login">
+<!-- 4. MITGLIEDER-LOGIN -->
+
+<section class="login-section" id="login">
+
   <div class="login-wrap reveal">
-    <div class="eyebrow">Already a Member?</div>
-    <h2 id="auth-heading">Private Library</h2>
+
+    <div class="eyebrow">
+      ALREADY A MEMBER?
+    </div>
+
+    <h2 id="auth-heading">
+      Private Library
+    </h2>
 
     <p id="auth-description">
       Du hast bereits Zugang?
@@ -628,6 +667,7 @@ footer p {
     </p>
 
     <form id="login-form" class="auth-form">
+
       <input
         id="login-email"
         type="email"
@@ -636,6 +676,7 @@ footer p {
         autocomplete="email"
         required
       >
+
       <input
         id="login-password"
         type="password"
@@ -644,16 +685,27 @@ footer p {
         autocomplete="current-password"
         required
       >
+
       <button class="button" type="submit">
         LIBRARY ÖFFNEN →
       </button>
+
     </form>
 
-    <a href="#login" class="auth-link" id="forgot-password">
+    <a
+      href="#login"
+      class="auth-link"
+      id="forgot-password"
+    >
       Passwort vergessen?
     </a>
 
-    <form id="recovery-form" class="auth-form" hidden>
+    <form
+      id="recovery-form"
+      class="auth-form"
+      hidden
+    >
+
       <input
         id="recovery-email"
         type="email"
@@ -662,12 +714,19 @@ footer p {
         autocomplete="email"
         required
       >
+
       <button class="button" type="submit">
         RESET-LINK SENDEN
       </button>
+
     </form>
 
-    <form id="new-password-form" class="auth-form" hidden>
+    <form
+      id="new-password-form"
+      class="auth-form"
+      hidden
+    >
+
       <input
         id="new-password"
         type="password"
@@ -677,6 +736,7 @@ footer p {
         minlength="8"
         required
       >
+
       <input
         id="confirm-password"
         type="password"
@@ -686,23 +746,37 @@ footer p {
         minlength="8"
         required
       >
+
       <button class="button" type="submit">
         PASSWORT SPEICHERN
       </button>
+
     </form>
 
-    <a href="#login" class="auth-link" id="back-to-login" hidden>
+    <a
+      href="#login"
+      class="auth-link"
+      id="back-to-login"
+      hidden
+    >
       Zurück zur Anmeldung
     </a>
 
-    <p id="login-message" class="auth-message" role="status"></p>
+    <p
+      id="login-message"
+      class="auth-message"
+      role="status"
+    ></p>
+
   </div>
+
 </section>
 
 </main>
 
 <footer>
   <strong>NYRAAMANDA</strong>
+
   <p>
     Editorial Prompt Library · Private Creative Archive<br>
     © NyraAmanda
@@ -714,6 +788,8 @@ footer p {
 <script>
 "use strict";
 
+/* SUPABASE */
+
 const supabaseClient = window.supabase.createClient(
   "https://pcakhkkvpmcmimybjlav.supabase.co",
   "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky"
@@ -723,21 +799,21 @@ const SITE_URL =
   "https://nyraamanda.github.io/editorialpromptslibrary/";
 
 /*
-  ÖFFENTLICHE VORSCHAU
+  VORSCHAUBILDER
 
-  Geplante Tabelle: public.homepage_previews
+  Der spätere Homepage Manager verwendet
+  eine eigene öffentliche Vorschau-Tabelle:
+
+  public.homepage_previews
+
   Geplante Spalten:
-    id
-    title
-    image_url
-    sort_order
+  id, title, image_url, sort_order
 
-  Diese Tabelle richten wir gemeinsam mit dem
-  Homepage Manager im Adminbereich ein.
+  Nur ausdrücklich freigegebene Vorschaubilder
+  dürfen öffentlich erreichbar sein.
 
-  Es dürfen ausschließlich freigegebene
-  öffentliche Vorschaubilder eingetragen werden.
-  Keine privaten Prompts oder privaten Bild-URLs.
+  Private Prompts und private Bilddateien
+  werden hier NICHT geladen.
 */
 
 const previewGrid =
@@ -764,7 +840,7 @@ const previewColors = [
   ["#e9d7ed","#b590c7"],
   ["#d4b4d4","#82588f"],
   ["#ead4df","#ad80b0"],
-  ["#e4d8f0","#a98ac6"],
+  ["#e4d4f0","#a98ac6"],
   ["#d4c4e5","#8667aa"],
   ["#e9d5e8","#9e72b7"]
 ];
@@ -778,13 +854,16 @@ function addPreviewCard(title, imageUrl, index) {
 
   if (imageUrl) {
     const img = document.createElement("img");
+
     img.src = imageUrl;
     img.alt = title || "Editorial-Vorschaubild";
     img.loading = "lazy";
     img.decoding = "async";
+
     art.appendChild(img);
   } else {
-    const colors = previewColors[index % previewColors.length];
+    const colors =
+      previewColors[index % previewColors.length];
 
     art.style.background =
       "linear-gradient(140deg," +
@@ -793,6 +872,7 @@ function addPreviewCard(title, imageUrl, index) {
     const label = document.createElement("span");
     label.className = "preview-placeholder";
     label.textContent = title;
+
     art.appendChild(label);
   }
 
@@ -805,8 +885,8 @@ function addPreviewCard(title, imageUrl, index) {
 }
 
 function addPlaceholderCards(startIndex) {
-  for (let index = startIndex; index < 10; index++) {
-    addPreviewCard(previewLabels[index], null, index);
+  for (let i = startIndex; i < 10; i++) {
+    addPreviewCard(previewLabels[i], null, i);
   }
 }
 
@@ -824,12 +904,14 @@ async function loadHomepagePreviews() {
       .order("sort_order", { ascending:true })
       .limit(10);
 
-    if (error || !data || data.length === 0) {
+    if (error || !data || !data.length) {
       return;
     }
 
     const validItems = data.filter(item => {
-      if (typeof item.image_url !== "string") return false;
+      if (typeof item.image_url !== "string") {
+        return false;
+      }
 
       try {
         const url = new URL(item.image_url);
@@ -839,7 +921,9 @@ async function loadHomepagePreviews() {
       }
     });
 
-    if (!validItems.length) return;
+    if (!validItems.length) {
+      return;
+    }
 
     previewGrid.replaceChildren();
 
@@ -855,11 +939,13 @@ async function loadHomepagePreviews() {
     observeReveals();
 
   } catch (error) {
-    console.warn("Vorschaubilder noch nicht eingerichtet.");
+    console.warn(
+      "Die Homepage-Vorschaubilder sind noch nicht eingerichtet."
+    );
   }
 }
 
-/* SANFTE SCROLL-ANIMATIONEN */
+/* SCROLL-ANIMATIONEN */
 
 let revealObserver = null;
 
@@ -881,11 +967,14 @@ if ("IntersectionObserver" in window) {
 }
 
 function observeReveals() {
-  document.querySelectorAll(".reveal:not(.visible)")
+  document
+    .querySelectorAll(".reveal:not(.visible)")
     .forEach(element => {
       if (
         !revealObserver ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches
       ) {
         element.classList.add("visible");
       } else {
@@ -898,7 +987,7 @@ renderPlaceholderPreviews();
 loadHomepagePreviews();
 observeReveals();
 
-/* ANMELDUNG UND PASSWORT */
+/* LOGIN UND PASSWORT */
 
 const loginForm =
   document.getElementById("login-form");
@@ -930,7 +1019,8 @@ function showMode(mode) {
   newPasswordForm.hidden = mode !== "reset";
 
   forgotLink.hidden = mode !== "login";
-  backLink.hidden = mode === "login" || mode === "reset";
+  backLink.hidden =
+    mode === "login" || mode === "reset";
 
   loginMessage.textContent = "";
 
@@ -963,33 +1053,40 @@ function showLoginError(error) {
 
   loginMessage.textContent =
     messages[error.message] ||
-    "Anmeldung fehlgeschlagen: " + error.message;
+    "Anmeldung fehlgeschlagen: " +
+    error.message;
 }
 
-loginForm.addEventListener("submit", async event => {
-  event.preventDefault();
+loginForm.addEventListener(
+  "submit",
+  async function(event) {
+    event.preventDefault();
 
-  loginMessage.textContent = "Anmeldung läuft …";
+    loginMessage.textContent =
+      "Anmeldung läuft …";
 
-  const email =
-    document.getElementById("login-email").value.trim();
+    const email =
+      document.getElementById("login-email")
+        .value.trim();
 
-  const password =
-    document.getElementById("login-password").value;
+    const password =
+      document.getElementById("login-password")
+        .value;
 
-  const { error } =
-    await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
+    const { error } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
 
-  if (error) {
-    showLoginError(error);
-    return;
+    if (error) {
+      showLoginError(error);
+      return;
+    }
+
+    window.location.href = "galerie.html";
   }
-
-  window.location.href = "galerie.html";
-});
+);
 
 forgotLink.addEventListener("click", event => {
   event.preventDefault();
@@ -1005,89 +1102,106 @@ backLink.addEventListener("click", event => {
   showMode("login");
 });
 
-recoveryForm.addEventListener("submit", async event => {
-  event.preventDefault();
+recoveryForm.addEventListener(
+  "submit",
+  async function(event) {
+    event.preventDefault();
 
-  const email =
-    document.getElementById("recovery-email").value.trim();
+    const email =
+      document.getElementById("recovery-email")
+        .value.trim();
 
-  loginMessage.textContent =
-    "Anfrage wird gesendet …";
-
-  const { error } =
-    await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo:SITE_URL
-    });
-
-  if (error) {
     loginMessage.textContent =
-      "Fehler beim Senden: " + error.message;
-    return;
-  }
+      "Anfrage wird gesendet …";
 
-  loginMessage.textContent =
-    "Falls ein Konto mit dieser E-Mail existiert, erhältst du einen Link. Bitte prüfe auch den Spam-Ordner.";
-});
+    const { error } =
+      await supabaseClient.auth
+        .resetPasswordForEmail(email, {
+          redirectTo:SITE_URL
+        });
 
-newPasswordForm.addEventListener("submit", async event => {
-  event.preventDefault();
+    if (error) {
+      loginMessage.textContent =
+        "Fehler beim Senden: " + error.message;
+      return;
+    }
 
-  const password =
-    document.getElementById("new-password").value;
-
-  const confirmPassword =
-    document.getElementById("confirm-password").value;
-
-  if (password !== confirmPassword) {
     loginMessage.textContent =
-      "Die beiden Passwörter stimmen nicht überein.";
-    return;
+      "Falls ein Konto mit dieser E-Mail existiert, erhältst du einen Link. Bitte prüfe auch den Spam-Ordner.";
   }
+);
 
-  loginMessage.textContent =
-    "Passwort wird gespeichert …";
+newPasswordForm.addEventListener(
+  "submit",
+  async function(event) {
+    event.preventDefault();
 
-  const { error } =
-    await supabaseClient.auth.updateUser({
-      password
-    });
+    const password =
+      document.getElementById("new-password")
+        .value;
 
-  if (error) {
+    const confirmPassword =
+      document.getElementById("confirm-password")
+        .value;
+
+    if (password !== confirmPassword) {
+      loginMessage.textContent =
+        "Die beiden Passwörter stimmen nicht überein.";
+      return;
+    }
+
     loginMessage.textContent =
-      "Passwort konnte nicht gespeichert werden: " +
-      error.message;
-    return;
+      "Passwort wird gespeichert …";
+
+    const { error } =
+      await supabaseClient.auth.updateUser({
+        password
+      });
+
+    if (error) {
+      loginMessage.textContent =
+        "Passwort konnte nicht gespeichert werden: " +
+        error.message;
+      return;
+    }
+
+    await supabaseClient.auth.signOut();
+
+    newPasswordForm.reset();
+    showMode("login");
+
+    loginMessage.textContent =
+      "Passwort erfolgreich geändert. Melde dich mit deinem neuen Passwort an.";
   }
+);
 
-  await supabaseClient.auth.signOut();
-
-  newPasswordForm.reset();
-  showMode("login");
-
-  loginMessage.textContent =
-    "Passwort erfolgreich geändert. Melde dich mit deinem neuen Passwort an.";
-});
-
-supabaseClient.auth.onAuthStateChange((event) => {
-  if (event === "PASSWORD_RECOVERY") {
-    showMode("reset");
-    document.getElementById("login").scrollIntoView();
+supabaseClient.auth.onAuthStateChange(
+  (event) => {
+    if (event === "PASSWORD_RECOVERY") {
+      showMode("reset");
+      document.getElementById("login")
+        .scrollIntoView();
+    }
   }
-});
+);
 
 async function checkRecoveryLink() {
   const params = new URLSearchParams(
     window.location.hash.replace(/^#/, "")
   );
 
-  const query = new URLSearchParams(window.location.search);
+  const query = new URLSearchParams(
+    window.location.search
+  );
 
   if (params.get("type") === "recovery") {
-    const { data } = await supabaseClient.auth.getSession();
+    const { data } =
+      await supabaseClient.auth.getSession();
 
     if (data.session) {
       showMode("reset");
-      document.getElementById("login").scrollIntoView();
+      document.getElementById("login")
+        .scrollIntoView();
     }
   }
 
@@ -1098,7 +1212,8 @@ async function checkRecoveryLink() {
   }
 
   if (window.location.hash === "#login") {
-    document.getElementById("login").scrollIntoView();
+    document.getElementById("login")
+      .scrollIntoView();
   }
 }
 
