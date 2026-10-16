@@ -171,18 +171,13 @@ wenn du kein neues auswählst.
 <label for="prompt">Vollständiger Prompt *</label>
 <textarea id="prompt" required placeholder="Hier den vollständigen Prompt einfügen …"></textarea>
 
-  
 <label for="video-prompt">🎬 Videoprompt (optional)</label>
-<textarea
-  id="video-prompt"
-  placeholder="Hier den vollständigen englischen Videoprompt einfügen …"
-></textarea>
+<textarea id="video-prompt" placeholder="Hier den vollständigen englischen Videoprompt einfügen …"></textarea>
 <p class="small">
-  Nur ausfüllen, wenn zu diesem Editorial ein Videoprompt gehört.
-  Der bisherige Bildprompt bleibt unverändert.
+Nur ausfüllen, wenn zu diesem Editorial ein Videoprompt gehört.
+Der bisherige Bildprompt bleibt unverändert.
 </p>
 
-  
 <label for="sort-order">Reihenfolge innerhalb der Serie</label>
 <input id="sort-order" type="number" min="0" value="0">
 
@@ -364,7 +359,6 @@ async function checkAdmin() {
       return;
     }
 
-
     const { data, error } = await db
       .from("library_admins")
       .select("user_id")
@@ -380,10 +374,12 @@ async function checkAdmin() {
 
     $("app").hidden = false;
     message("Admin-Zugang bestätigt.", "success");
+
+    // Ladefehler werden getrennt von der Admin-Prüfung angezeigt.
     await loadItems();
 
   } catch (error) {
-    message("Admin-Prüfung fehlgeschlagen: " + errorText(error), "error");
+    message("Admin-Prüfung oder Laden fehlgeschlagen: " + errorText(error), "error");
   }
 }
 
@@ -402,7 +398,6 @@ async function loadItems() {
         .order("sort_order")
         .order("id")
         .range(start, start + pageSize - 1);
-
 
       if (error) throw error;
 
@@ -489,7 +484,7 @@ function renderItems() {
 
     imageUrl(item.image_path).then(url => {
       if (url && img.isConnected) img.src = url;
-    });
+    }).catch(() => {});
 
     const info = document.createElement("div");
     info.className = "item-info";
@@ -500,7 +495,8 @@ function renderItems() {
     const detail = document.createElement("p");
     detail.textContent =
       (item.series || "Ohne Serie") +
-      " · Position " + (item.sort_order ?? 0);
+      " · Position " + (item.sort_order ?? 0) +
+      (item.video_prompt?.trim() ? " · 🎬 Videoprompt" : "");
 
     const actions = document.createElement("div");
     actions.className = "actions";
@@ -599,16 +595,14 @@ async function saveItem(event) {
       path = uploadedPath;
     }
 
-  
-const payload = {
-  series,
-  title: $("title").value.trim(),
-  prompt,
-  video_prompt: $("video-prompt").value.trim() || null,
-  sort_order: Number($("sort-order").value) || 0,
-  image_path: path
-};
-
+    const payload = {
+      series,
+      title: $("title").value.trim(),
+      prompt,
+      video_prompt: $("video-prompt").value.trim() || null,
+      sort_order: Number($("sort-order").value) || 0,
+      image_path: path
+    };
 
     const result = id
       ? await db.from("editorial_items")
@@ -751,15 +745,6 @@ function importLog(text) {
 function importKey(series, title) {
   return normalizeText(series) + "||" + normalizeText(title);
 }
-
-/*
-Der gewählte Ordner heißt "images".
-Der Browser liefert z. B.:
-images/☀️ Summer Retro/1000130284.png
-
-Die JSON enthält denselben originalPath.
-Wir vergleichen diese vollständigen Pfade.
-*/
 
 function localImagePath(file) {
   return normalizePath(file.webkitRelativePath || file.name);
@@ -934,17 +919,13 @@ async function prepareImport() {
 
     for (const path of fileMap.keys()) {
       if (!jsonMap.has(path)) {
-        problems.push(
-          "Bild ohne JSON-Zuordnung: " + path
-        );
+        problems.push("Bild ohne JSON-Zuordnung: " + path);
       }
     }
 
     for (const path of jsonMap.keys()) {
       if (!fileMap.has(path)) {
-        problems.push(
-          "JSON-Eintrag ohne vorhandene Bilddatei: " + path
-        );
+        problems.push("JSON-Eintrag ohne vorhandene Bilddatei: " + path);
       }
     }
 
@@ -1032,7 +1013,6 @@ async function prepareImport() {
         "Import nicht freigegeben. Bitte Prüfbericht ansehen.",
         "error"
       );
-
       return;
     }
 
@@ -1171,17 +1151,13 @@ async function startImport() {
         savedBytes += optimized.size;
         existing.add(row.key);
 
-        importLog(
-          "✓ " + row.series + " / " + row.title
-        );
+        importLog("✓ " + row.series + " / " + row.title);
 
       } catch (error) {
         failed++;
 
         if (uploadedPath && !saved) {
-          await db.storage
-            .from(BUCKET)
-            .remove([uploadedPath]);
+          await db.storage.from(BUCKET).remove([uploadedPath]);
         }
 
         importLog(
