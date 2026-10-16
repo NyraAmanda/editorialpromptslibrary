@@ -3,401 +3,212 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Admin Dashboard | NyraAmanda</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-:root {
-  --purple:#684583;
-  --light:#faf7fc;
-  --muted:#826d91;
-  --border:#e4d5ed;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:var(--light);
-  color:var(--purple);
-  font-family:"DM Sans",sans-serif;
-}
-button,input,textarea,select { font:inherit; }
-button { cursor:pointer; }
-button:disabled { opacity:.5; cursor:wait; }
-header {
-  background:linear-gradient(135deg,#eee1f7,#d9c3eb,#c6a8dd);
-  padding:22px 5% 55px;
-}
-nav {
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-}
-nav a {
-  color:var(--purple);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1px;
-  text-decoration:none;
-}
-h1,h2,h3 {
-  font-family:"Cormorant Garamond",Georgia,serif;
-  font-weight:500;
-}
-h1 {
-  text-align:center;
-  font-size:clamp(50px,9vw,95px);
-  margin:60px 0 5px;
-}
-.subtitle {
-  text-align:center;
-  font-size:12px;
-  letter-spacing:2px;
-}
-main {
-  max-width:1200px;
-  margin:auto;
-  padding:35px 5% 100px;
-}
-.panel {
-  background:white;
-  border:1px solid var(--border);
-  padding:26px;
-  margin-bottom:25px;
-}
-.panel h2 {
-  font-size:40px;
-  margin:0 0 12px;
-}
-.panel p {
-  font-size:13px;
-  line-height:1.8;
-}
-label {
-  display:block;
-  font-size:11px;
-  font-weight:700;
-  margin:18px 0 7px;
-}
-input,textarea,select {
-  display:block;
-  width:100%;
-  padding:13px;
-  border:1px solid #cbb4d9;
-  background:#fff;
-  color:#503367;
-}
-textarea {
-  min-height:180px;
-  resize:vertical;
-  line-height:1.6;
-}
-input[type="file"] { padding:12px; }
-.row {
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.row > * { flex:1; }
-.actions {
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.btn {
-  border:0;
-  padding:13px 18px;
-  background:var(--purple);
-  color:white;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.5px;
-}
-.btn.secondary {
-  background:#f1e8f6;
-  color:var(--purple);
-}
-.btn.danger { background:#a04765; }
-.btn:hover { filter:brightness(.94); }
-.note {
-  padding:14px;
-  background:#f4edf8;
-  font-size:12px;
-  line-height:1.7;
-}
-#message {
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#eee1f7;
-  color:#503367;
-  padding:13px 18px;
-  font-size:12px;
-  text-align:center;
-}
-#message.error {
-  background:#ffe5e8;
-  color:#922d48;
-}
-#message.success {
-  background:#e8f4eb;
-  color:#276c42;
-}
-.items {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-  margin-top:20px;
-}
-.item {
-  border:1px solid var(--border);
-  padding:13px;
-  display:flex;
-  gap:14px;
-  min-width:0;
-}
-.thumb {
-  width:95px;
-  height:125px;
-  object-fit:cover;
-  background:#e5d4ee;
-  flex-shrink:0;
-}
-.item-info {
-  min-width:0;
-  flex:1;
-}
-.item h3 {
-  font-size:25px;
-  margin:4px 0 8px;
-  overflow-wrap:anywhere;
-}
-.item p {
-  font-size:11px;
-  margin:4px 0 12px;
-  color:var(--muted);
-  overflow-wrap:anywhere;
-}
-.small {
-  font-size:11px;
-  color:var(--muted);
-}
-progress {
-  width:100%;
-  height:18px;
-  accent-color:var(--purple);
-}
-#import-log {
-  max-height:200px;
-  overflow:auto;
-  white-space:pre-wrap;
-  background:#faf7fc;
-  border:1px solid var(--border);
-  padding:12px;
-  font-size:11px;
-  line-height:1.7;
-}
-#editor { scroll-margin-top:20px; }
-[hidden] { display:none !important; }
-@media(max-width:700px) {
-  .items { grid-template-columns:1fr; }
-  .panel { padding:17px; }
-  .item { gap:10px; }
-  .thumb { width:75px; height:105px; }
-  .btn { padding:11px; }
+:root{--purple:#684583;--light:#faf7fc;--muted:#826d91;--border:#e4d5ed}
+*{box-sizing:border-box}
+body{margin:0;background:var(--light);color:var(--purple);font-family:"DM Sans",sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+header{background:linear-gradient(135deg,#eee1f7,#d9c3eb,#c6a8dd);padding:22px 5% 55px}
+nav{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+nav a{color:var(--purple);font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500}
+h1{text-align:center;font-size:clamp(50px,9vw,95px);margin:60px 0 5px}
+.subtitle{text-align:center;font-size:12px;letter-spacing:2px}
+main{max-width:1200px;margin:auto;padding:35px 5% 100px}
+.panel{background:white;border:1px solid var(--border);padding:26px;margin-bottom:25px}
+.panel h2{font-size:40px;margin:0 0 12px}
+.panel p{font-size:13px;line-height:1.8}
+label{display:block;font-size:11px;font-weight:700;margin:18px 0 7px}
+input,textarea,select{display:block;width:100%;padding:13px;border:1px solid #cbb4d9;background:#fff;color:#503367}
+textarea{min-height:180px;resize:vertical;line-height:1.6}
+input[type=file]{padding:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.row>*{flex:1}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;padding:13px 18px;background:var(--purple);color:white;font-size:11px;font-weight:700;letter-spacing:.5px}
+.btn.secondary{background:#f1e8f6;color:var(--purple)}
+.btn.danger{background:#a04765}
+.btn:hover:not(:disabled){filter:brightness(.94)}
+.note{padding:14px;background:#f4edf8;font-size:12px;line-height:1.7}
+#message{position:sticky;top:0;z-index:10;background:#eee1f7;color:#503367;padding:13px 18px;font-size:12px;text-align:center}
+#message.error{background:#ffe5e8;color:#922d48}
+#message.success{background:#e8f4eb;color:#276c42}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}
+.item{border:1px solid var(--border);padding:13px;display:flex;gap:14px;min-width:0}
+.thumb{width:95px;height:125px;object-fit:cover;background:#e5d4ee;flex-shrink:0}
+.item-info{min-width:0;flex:1}
+.item h3{font-size:25px;margin:4px 0 8px;overflow-wrap:anywhere}
+.item p{font-size:11px;margin:4px 0 12px;color:var(--muted);overflow-wrap:anywhere}
+.small{font-size:11px;color:var(--muted)}
+progress{width:100%;height:18px;accent-color:var(--purple)}
+#import-log{max-height:300px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#faf7fc;border:1px solid var(--border);padding:12px;font-size:11px;line-height:1.7}
+#editor{scroll-margin-top:20px}
+[hidden]{display:none!important}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+.stat{padding:15px;background:#f4edf8;text-align:center}
+.stat strong{display:block;font-size:28px}
+.stat span{font-size:11px}
+.stat.good{background:#e8f4eb;color:#276c42}
+.stat.bad{background:#ffe5e8;color:#922d48}
+@media(max-width:700px){
+.items{grid-template-columns:1fr}
+.panel{padding:17px}
+.item{gap:10px}
+.thumb{width:75px;height:105px}
+.btn{padding:11px}
+.stats{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
-
 <body>
 
 <div id="message">Admin-Zugang wird geprüft …</div>
 
 <div id="app" hidden>
-
 <header>
-  <nav>
-    <a href="index.html">NYRAAMANDA</a>
-    <div class="actions">
-      <a href="galerie.html">PRIVATE LIBRARY ↗</a>
-      <button class="btn secondary" id="logout">LOG OUT</button>
-    </div>
-  </nav>
-  <h1>Admin Dashboard</h1>
-  <div class="subtitle">MANAGE YOUR EDITORIAL WORLD</div>
+<nav>
+<a href="index.html">NYRAAMANDA</a>
+<div class="actions">
+<a href="galerie.html">PRIVATE LIBRARY ↗</a>
+<button class="btn secondary" id="logout">LOG OUT</button>
+</div>
+</nav>
+<h1>Admin Dashboard</h1>
+<div class="subtitle">MANAGE YOUR EDITORIAL WORLD</div>
 </header>
 
 <main>
 
 <section class="panel">
-  <h2>Editorials gesammelt importieren</h2>
+<h2>Editorials gesammelt importieren</h2>
+<p>
+Sicherer Import mit vollständiger Bild-Prompt-Zuordnung.
+Die Bilder werden automatisch verkleinert und als WebP
+in deinem privaten Supabase-Speicher abgelegt.
+Deine Originalbilder bleiben unverändert.
+</p>
 
-  <p>
-    Wähle deinen gesamten Bilderordner aus.
-    Alle Bilder werden vor dem Hochladen automatisch
-    verkleinert und als WebP gespeichert.
-    Deine Originale bleiben unverändert.
-  </p>
+<div class="note">
+<strong>Wichtig:</strong>
+Wähle zuerst den Ordner <strong>images</strong> mit allen
+Serien-Unterordnern. Danach wählst du deine private
+Import-JSON aus. Diese JSON gehört nicht auf GitHub.
+</div>
 
-  <div class="note">
-    <strong>Wichtig:</strong>
-    Wähle den Ordner <strong>images</strong>, in dem
-    deine Editorial-Serienordner liegen.
-    Lade zusätzlich deine private JSON-Datei mit
-    den zugehörigen Prompts hoch.
-    Diese JSON-Datei wird nicht auf GitHub veröffentlicht.
-  </div>
+<label for="bulk-folder">1. Gesamten Ordner images auswählen</label>
+<input id="bulk-folder" type="file" webkitdirectory directory multiple>
 
-  <label for="bulk-folder">1. Gesamten Bilderordner auswählen</label>
-  <input
-    id="bulk-folder"
-    type="file"
-    webkitdirectory
-    directory
-    multiple
-  >
+<label for="bulk-json">2. Private Import-JSON auswählen</label>
+<input id="bulk-json" type="file" accept=".json,application/json">
 
-  <label for="bulk-json">2. Private Prompt-JSON-Datei auswählen</label>
-  <input
-    id="bulk-json"
-    type="file"
-    accept=".json,application/json"
-  >
+<p id="bulk-summary" class="small">
+Noch keine Dateien ausgewählt.
+</p>
 
-  <p class="small" id="bulk-summary">
-    Noch keine Dateien ausgewählt.
-  </p>
+<div class="stats" id="bulk-stats" hidden>
+<div class="stat"><strong id="stat-files">0</strong><span>Bilder im Ordner</span></div>
+<div class="stat"><strong id="stat-json">0</strong><span>Einträge in JSON</span></div>
+<div class="stat good"><strong id="stat-ready">0</strong><span>Sicher zugeordnet</span></div>
+<div class="stat bad"><strong id="stat-errors">0</strong><span>Probleme</span></div>
+</div>
 
-  <div class="actions">
-    <button class="btn secondary" id="bulk-check" type="button">
-      IMPORT PRÜFEN
-    </button>
-    <button class="btn" id="bulk-start" type="button" disabled>
-      SAMMELIMPORT STARTEN
-    </button>
-    <button class="btn danger" id="bulk-stop" type="button" disabled>
-      STOPPEN
-    </button>
-  </div>
+<div class="actions">
+<button class="btn secondary" id="bulk-check" type="button">
+IMPORT PRÜFEN
+</button>
+<button class="btn" id="bulk-start" type="button" disabled>
+SAMMELIMPORT STARTEN
+</button>
+<button class="btn danger" id="bulk-stop" type="button" disabled>
+STOPPEN
+</button>
+</div>
 
-  <div id="bulk-progress-box" hidden style="margin-top:20px">
-    <progress id="bulk-progress" value="0" max="100"></progress>
-    <p id="bulk-status" class="small"></p>
-    <div id="import-log"></div>
-  </div>
+<div id="bulk-progress-box" hidden style="margin-top:20px">
+<progress id="bulk-progress" value="0" max="100"></progress>
+<p id="bulk-status" class="small"></p>
+<div id="import-log"></div>
+</div>
 
-  <p class="small">
-    Der Import läuft in diesem Browserfenster.
-    Bitte den Tab währenddessen geöffnet lassen.
-    Bei einem Abbruch kannst du den Import später
-    erneut starten. Bereits importierte Bilder
-    werden anhand ihres Importnamens übersprungen.
-  </p>
+<p class="small">
+Der Import läuft in diesem Browserfenster.
+Bitte den Tab währenddessen geöffnet lassen.
+Bei einem Abbruch kannst du nach erneuter Prüfung fortfahren.
+Bereits importierte Einträge mit gleicher Serie und gleichem
+Bildtitel werden übersprungen.
+</p>
 </section>
 
 <section class="panel" id="editor">
-  <h2 id="form-heading">Neues Editorial</h2>
+<h2 id="form-heading">Neues Editorial</h2>
+<p>Einzelne Editorials erstellen oder bearbeiten.</p>
 
-  <p>
-    Einzelnes Bild hochladen, Serie und Prompt eintragen
-    und speichern. Die Bildoptimierung erfolgt automatisch.
-  </p>
+<form id="editor-form">
+<input type="hidden" id="item-id">
 
-  <form id="editor-form">
-    <input type="hidden" id="item-id">
+<label for="series">Editorial-Serie *</label>
+<input id="series" list="series-list" required placeholder="z. B. Before the Fight">
+<datalist id="series-list"></datalist>
 
-    <label for="series">Editorial-Serie *</label>
-    <input
-      id="series"
-      list="series-list"
-      required
-      placeholder="z. B. Before the Fight"
-    >
-    <datalist id="series-list"></datalist>
+<label for="title">Bildtitel</label>
+<input id="title" placeholder="z. B. before-the-fight-01">
 
-    <label for="title">Bildtitel</label>
-    <input id="title" placeholder="z. B. Editorial 01">
+<label for="picture">Bild hochladen</label>
+<input id="picture" type="file" accept="image/png,image/jpeg,image/webp">
 
-    <label for="picture">Bild hochladen</label>
-    <input
-      id="picture"
-      type="file"
-      accept="image/png,image/jpeg,image/webp"
-    >
+<p class="small" id="image-note">
+Für ein neues Editorial bitte ein Bild auswählen.
+Beim Bearbeiten bleibt das bisherige Bild erhalten,
+wenn du kein neues auswählst.
+</p>
 
-    <p class="small" id="image-note">
-      Für ein neues Editorial bitte ein Bild auswählen.
-      Beim Bearbeiten bleibt das bisherige Bild erhalten,
-      wenn du kein neues auswählst.
-    </p>
+<label for="prompt">Vollständiger Prompt *</label>
+<textarea id="prompt" required placeholder="Hier den vollständigen Prompt einfügen …"></textarea>
 
-    <label for="prompt">Vollständiger Prompt *</label>
-    <textarea
-      id="prompt"
-      required
-      placeholder="Hier den vollständigen Prompt einfügen …"
-    ></textarea>
+<label for="sort-order">Reihenfolge innerhalb der Serie</label>
+<input id="sort-order" type="number" min="0" value="0">
 
-    <label for="sort-order">Reihenfolge innerhalb der Serie</label>
-    <input id="sort-order" type="number" min="0" value="0">
-
-    <div class="actions" style="margin-top:22px">
-      <button class="btn" type="submit" id="save">
-        EDITORIAL SPEICHERN
-      </button>
-      <button class="btn secondary" type="button" id="reset">
-        NEUES EDITORIAL
-      </button>
-    </div>
-  </form>
+<div class="actions" style="margin-top:22px">
+<button class="btn" type="submit" id="save">EDITORIAL SPEICHERN</button>
+<button class="btn secondary" type="button" id="reset">NEUES EDITORIAL</button>
+</div>
+</form>
 </section>
 
 <section class="panel">
-  <h2>Library verwalten</h2>
-  <p>
-    Suche deine Editorials und bearbeite, lösche
-    oder verschiebe sie innerhalb ihrer Serie.
-  </p>
+<h2>Library verwalten</h2>
+<p>Suche, bearbeite, lösche oder verschiebe deine Editorials.</p>
 
-  <div class="row">
-    <input
-      id="search"
-      type="search"
-      placeholder="Titel oder Serie suchen …"
-    >
-    <select id="filter">
-      <option value="">Alle Serien</option>
-    </select>
-  </div>
+<div class="row">
+<input id="search" type="search" placeholder="Titel oder Serie suchen …">
+<select id="filter">
+<option value="">Alle Serien</option>
+</select>
+</div>
 
-  <p class="small" id="count">Lade Editorials …</p>
-  <div class="items" id="items"></div>
+<p class="small" id="count">Lade Editorials …</p>
+<div class="items" id="items"></div>
 
-  <div style="text-align:center;margin-top:22px">
-    <button class="btn secondary" id="more" hidden>
-      WEITERE ANZEIGEN
-    </button>
-  </div>
+<div style="text-align:center;margin-top:22px">
+<button class="btn secondary" id="more" hidden>
+WEITERE ANZEIGEN
+</button>
+</div>
 </section>
 
 <section class="panel">
-  <h2>Homepage Manager</h2>
-  <p>
-    Hier werden deine zehn öffentlichen Vorschaubilder
-    ausgewählt und sortiert.
-  </p>
-  <div class="note">
-    Dieser Bereich ist noch nicht eingerichtet.
-    Deine privaten Bilder werden nicht automatisch
-    öffentlich freigegeben.
-  </div>
+<h2>Homepage Manager</h2>
+<p>Hier werden später deine öffentlichen Vorschaubilder ausgewählt.</p>
+<div class="note">
+Dieser Bereich ist noch nicht eingerichtet.
+Deine privaten Bilder werden nicht automatisch öffentlich freigegeben.
+</div>
 </section>
 
 </main>
@@ -406,31 +217,26 @@ progress {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
-const URL_SUPABASE =
-  "https://pcakhkkvpmcmimybjlav.supabase.co";
+"use strict";
 
-const KEY_SUPABASE =
-  "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
-
+const URL_SUPABASE = "https://pcakhkkvpmcmimybjlav.supabase.co";
+const KEY_SUPABASE = "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
 const BUCKET = "editorial-images";
 const $ = id => document.getElementById(id);
 
-let db;
+let db = null;
 let allItems = [];
 let currentImagePath = null;
 let visibleLimit = 30;
 let importPlan = [];
 let importRunning = false;
 let stopRequested = false;
+let importVerified = false;
 
 if (window.supabase) {
-  db = window.supabase.createClient(
-    URL_SUPABASE,
-    KEY_SUPABASE
-  );
+  db = window.supabase.createClient(URL_SUPABASE, KEY_SUPABASE);
 } else {
-  $("message").textContent =
-    "Supabase konnte nicht geladen werden.";
+  $("message").textContent = "Supabase konnte nicht geladen werden.";
 }
 
 function message(text, kind = "") {
@@ -454,11 +260,14 @@ function normalizeText(value) {
     .replace(/\\/g, "/");
 }
 
+function normalizePath(value) {
+  let path = String(value || "").replace(/\\/g, "/");
+  path = path.replace(/^\.\/+/, "").replace(/^\/+/, "");
+  return normalizeText(path);
+}
+
 function baseName(path) {
-  return String(path || "")
-    .replace(/\\/g, "/")
-    .split("/")
-    .pop();
+  return String(path || "").replace(/\\/g, "/").split("/").pop();
 }
 
 function withoutExtension(name) {
@@ -467,12 +276,12 @@ function withoutExtension(name) {
 
 function imageFile(file) {
   return (
-    ["image/jpeg","image/png","image/webp"].includes(file.type) ||
+    ["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
     /\.(jpe?g|png|webp)$/i.test(file.name)
   );
 }
 
-/* AUTOMATISCHE BILDOPTIMIERUNG */
+/* BILDOPTIMIERUNG */
 
 async function optimizeImage(file) {
   if (!imageFile(file)) {
@@ -482,24 +291,14 @@ async function optimizeImage(file) {
   const bitmap = await createImageBitmap(file);
 
   try {
-    const maxWidth = 1600;
-    const maxHeight = 2000;
-
     const factor = Math.min(
       1,
-      maxWidth / bitmap.width,
-      maxHeight / bitmap.height
+      1600 / bitmap.width,
+      2000 / bitmap.height
     );
 
-    const width = Math.max(
-      1,
-      Math.round(bitmap.width * factor)
-    );
-
-    const height = Math.max(
-      1,
-      Math.round(bitmap.height * factor)
-    );
+    const width = Math.max(1, Math.round(bitmap.width * factor));
+    const height = Math.max(1, Math.round(bitmap.height * factor));
 
     const canvas = document.createElement("canvas");
     canvas.width = width;
@@ -532,7 +331,7 @@ async function optimizeImage(file) {
     return new File(
       [blob],
       withoutExtension(file.name) + ".webp",
-      { type:"image/webp" }
+      { type: "image/webp" }
     );
   } finally {
     bitmap.close();
@@ -545,7 +344,7 @@ async function checkAdmin() {
   if (!db) return;
 
   try {
-    const { data:userData, error:userError } =
+    const { data: userData, error: userError } =
       await db.auth.getUser();
 
     if (userError || !userData.user) {
@@ -571,10 +370,7 @@ async function checkAdmin() {
     await loadItems();
 
   } catch (error) {
-    message(
-      "Admin-Prüfung fehlgeschlagen: " + errorText(error),
-      "error"
-    );
+    message("Admin-Prüfung fehlgeschlagen: " + errorText(error), "error");
   }
 }
 
@@ -605,12 +401,9 @@ async function loadItems() {
 
     const names = [...new Set(
       result.map(x => x.series).filter(Boolean)
-    )].sort((a,b) => a.localeCompare(b));
+    )].sort((a, b) => a.localeCompare(b));
 
-    $("filter").replaceChildren(
-      new Option("Alle Serien", "")
-    );
-
+    $("filter").replaceChildren(new Option("Alle Serien", ""));
     $("series-list").replaceChildren();
 
     for (const name of names) {
@@ -621,10 +414,8 @@ async function loadItems() {
     renderItems();
 
   } catch (error) {
-    message(
-      "Laden fehlgeschlagen: " + errorText(error),
-      "error"
-    );
+    message("Laden fehlgeschlagen: " + errorText(error), "error");
+    throw error;
   }
 }
 
@@ -652,11 +443,9 @@ function filteredItems() {
   const selected = $("filter").value;
 
   return allItems.filter(item => {
-    const matchesSeries =
-      !selected || item.series === selected;
-
+    const matchesSeries = !selected || item.series === selected;
     const matchesSearch =
-      !q || [item.title,item.series].some(value =>
+      !q || [item.title, item.series].some(value =>
         String(value || "").toLowerCase().includes(q)
       );
 
@@ -672,8 +461,7 @@ function renderItems() {
   container.replaceChildren();
 
   $("count").textContent =
-    matches.length + " von " +
-    allItems.length + " Editorials";
+    matches.length + " von " + allItems.length + " Editorials";
 
   for (const item of visible) {
     const article = document.createElement("article");
@@ -704,13 +492,13 @@ function renderItems() {
     actions.className = "actions";
 
     actions.append(
-      button("BEARBEITEN","secondary",() => editItem(item.id)),
-      button("↑","secondary",() => moveItem(item.id,-1)),
-      button("↓","secondary",() => moveItem(item.id,1)),
-      button("LÖSCHEN","danger",() => deleteItem(item.id))
+      button("BEARBEITEN", "secondary", () => editItem(item.id)),
+      button("↑", "secondary", () => moveItem(item.id, -1)),
+      button("↓", "secondary", () => moveItem(item.id, 1)),
+      button("LÖSCHEN", "danger", () => deleteItem(item.id))
     );
 
-    info.append(heading,detail,actions);
+    info.append(heading, detail, actions);
     article.appendChild(info);
     container.appendChild(article);
   }
@@ -749,7 +537,7 @@ function editItem(id) {
   $("image-note").textContent =
     "Optional ein neues Bild wählen. Ohne Auswahl bleibt das alte Bild.";
 
-  $("editor").scrollIntoView({ behavior:"smooth" });
+  $("editor").scrollIntoView({ behavior: "smooth" });
 }
 
 async function saveItem(event) {
@@ -787,9 +575,9 @@ async function saveItem(event) {
 
       const { error } = await db.storage
         .from(BUCKET)
-        .upload(uploadedPath,optimizedFile,{
-          contentType:"image/webp",
-          upsert:false
+        .upload(uploadedPath, optimizedFile, {
+          contentType: "image/webp",
+          upsert: false
         });
 
       if (error) throw error;
@@ -798,16 +586,16 @@ async function saveItem(event) {
 
     const payload = {
       series,
-      title:$("title").value.trim(),
+      title: $("title").value.trim(),
       prompt,
-      sort_order:Number($("sort-order").value) || 0,
-      image_path:path
+      sort_order: Number($("sort-order").value) || 0,
+      image_path: path
     };
 
     const result = id
       ? await db.from("editorial_items")
           .update(payload)
-          .eq("id",Number(id))
+          .eq("id", Number(id))
           .select("id")
           .single()
       : await db.from("editorial_items")
@@ -828,18 +616,14 @@ async function saveItem(event) {
 
     resetForm();
     await loadItems();
-
-    message("Editorial erfolgreich gespeichert! ✓","success");
+    message("Editorial erfolgreich gespeichert! ✓", "success");
 
   } catch (error) {
     if (uploadedPath && !databaseSaved) {
       await db.storage.from(BUCKET).remove([uploadedPath]);
     }
 
-    message(
-      "Speichern fehlgeschlagen: " + errorText(error),
-      "error"
-    );
+    message("Speichern fehlgeschlagen: " + errorText(error), "error");
   } finally {
     save.disabled = false;
   }
@@ -850,11 +634,11 @@ async function removeImageIfUnused(path) {
 
   const { count, error } = await db
     .from("editorial_items")
-    .select("id",{ count:"exact",head:true })
-    .eq("image_path",path);
+    .select("id", { count: "exact", head: true })
+    .eq("image_path", path);
 
   if (!error && count === 0) {
-    const { error:removeError } = await db.storage
+    const { error: removeError } = await db.storage
       .from(BUCKET)
       .remove([path]);
 
@@ -874,13 +658,14 @@ async function deleteItem(id) {
   if (!confirmed) return;
 
   try {
-    const { data,error } = await db
+    const { data, error } = await db
       .from("editorial_items")
       .delete()
-      .eq("id",id)
+      .eq("id", id)
       .select("id");
 
     if (error) throw error;
+
     if (!data || data.length !== 1) {
       throw new Error("Editorial wurde nicht gelöscht.");
     }
@@ -890,23 +675,20 @@ async function deleteItem(id) {
     if ($("item-id").value === String(id)) resetForm();
 
     await loadItems();
-    message("Editorial gelöscht. ✓","success");
+    message("Editorial gelöscht. ✓", "success");
 
   } catch (error) {
-    message(
-      "Löschen fehlgeschlagen: " + errorText(error),
-      "error"
-    );
+    message("Löschen fehlgeschlagen: " + errorText(error), "error");
   }
 }
 
-async function moveItem(id,direction) {
+async function moveItem(id, direction) {
   const item = allItems.find(x => x.id === id);
   if (!item) return;
 
   const siblings = allItems
     .filter(x => x.series === item.series)
-    .sort((a,b) =>
+    .sort((a, b) =>
       (a.sort_order ?? 0) - (b.sort_order ?? 0) ||
       a.id - b.id
     );
@@ -916,8 +698,8 @@ async function moveItem(id,direction) {
 
   if (next < 0 || next >= siblings.length) return;
 
-  [siblings[index],siblings[next]] =
-    [siblings[next],siblings[index]];
+  [siblings[index], siblings[next]] =
+    [siblings[next], siblings[index]];
 
   try {
     message("Reihenfolge wird gespeichert …");
@@ -925,25 +707,22 @@ async function moveItem(id,direction) {
     for (let i = 0; i < siblings.length; i++) {
       const { error } = await db
         .from("editorial_items")
-        .update({ sort_order:i + 1 })
-        .eq("id",siblings[i].id);
+        .update({ sort_order: i + 1 })
+        .eq("id", siblings[i].id);
 
       if (error) throw error;
     }
 
     await loadItems();
-    message("Reihenfolge gespeichert. ✓","success");
+    message("Reihenfolge gespeichert. ✓", "success");
 
   } catch (error) {
-    message(
-      "Sortierung fehlgeschlagen: " + errorText(error),
-      "error"
-    );
+    message("Sortierung fehlgeschlagen: " + errorText(error), "error");
     await loadItems();
   }
 }
 
-/* SAMMELIMPORT */
+/* SICHERER SAMMELIMPORT */
 
 function importLog(text) {
   const el = $("import-log");
@@ -951,63 +730,69 @@ function importLog(text) {
   el.scrollTop = el.scrollHeight;
 }
 
-function importKey(series,title) {
-  return normalizeText(series) + "||" +
-    normalizeText(title);
+function importKey(series, title) {
+  return normalizeText(series) + "||" + normalizeText(title);
 }
 
-function relativeParts(file) {
-  const path = String(
-    file.webkitRelativePath || file.name
-  ).replace(/\\/g,"/");
+/*
+Der gewählte Ordner heißt "images".
+Der Browser liefert z. B.:
+images/☀️ Summer Retro/1000130284.png
 
-  return path.split("/").filter(Boolean);
+Die JSON enthält denselben originalPath.
+Wir vergleichen diese vollständigen Pfade.
+*/
+
+function localImagePath(file) {
+  return normalizePath(file.webkitRelativePath || file.name);
 }
 
-function seriesFromFile(file) {
-  const parts = relativeParts(file);
-
-  // images / Serienname / bild.jpg
-  if (parts.length >= 3) {
-    return parts.slice(1,-1).join(" / ");
-  }
-
-  return "Ohne Serie";
-}
-
-function getJsonImageEntries(json) {
+function readJsonEntries(json) {
   if (!json || !Array.isArray(json.series)) {
-    throw new Error(
-      "Die JSON-Datei enthält keine erkennbare Serienliste."
-    );
+    throw new Error("Die JSON enthält keine gültige Serienliste.");
   }
 
   const entries = [];
 
   for (const series of json.series) {
     const seriesName = String(
-      series.title || series.name || ""
+      series.displayName || series.title || series.name || ""
     ).trim();
 
-    if (!seriesName) continue;
+    if (!seriesName) {
+      throw new Error("Eine Serie in der JSON hat keinen Namen.");
+    }
 
-    const images = Array.isArray(series.images)
-      ? series.images
-      : [];
+    if (!Array.isArray(series.images)) {
+      throw new Error(
+        "Die Serie '" + seriesName + "' enthält keine gültige Bilderliste."
+      );
+    }
 
-    for (let i = 0; i < images.length; i++) {
-      const img = images[i];
+    for (let i = 0; i < series.images.length; i++) {
+      const img = series.images[i];
 
-      if (!img || typeof img !== "object") continue;
+      if (!img || typeof img !== "object") {
+        throw new Error(
+          "Ungültiger Bildeintrag in Serie '" + seriesName + "'."
+        );
+      }
+
+      const originalPath = normalizePath(img.originalPath);
+      const filename = String(img.filename || "").trim();
+      const title = String(
+        img.displayName || withoutExtension(filename)
+      ).trim();
 
       entries.push({
-        series:seriesName,
-        filename:String(img.filename || "").trim(),
-        originalPath:String(img.originalPath || "").trim(),
-        prompt:typeof img.prompt === "string"
+        series: seriesName,
+        originalPath,
+        filename,
+        title,
+        prompt: typeof img.prompt === "string"
           ? img.prompt.trim()
           : "",
-        position:i + 1
+        sort_order: i + 1
       });
     }
   }
@@ -1015,164 +800,269 @@ function getJsonImageEntries(json) {
   return entries;
 }
 
-function matchJsonEntry(file,entries) {
-  const fileParts = relativeParts(file);
-  const fileName = normalizeText(file.name);
-  const series = normalizeText(seriesFromFile(file));
-
-  const candidates = entries.filter(entry =>
-    normalizeText(entry.filename) === fileName ||
-    normalizeText(baseName(entry.originalPath)) === fileName
-  );
-
-  if (!candidates.length) return null;
-
-  const sameSeries = candidates.filter(entry =>
-    normalizeText(entry.series) === series
-  );
-
-  if (sameSeries.length === 1) return sameSeries[0];
-
-  if (sameSeries.length > 1) {
-    const matchingPath = sameSeries.filter(entry => {
-      const original = normalizeText(entry.originalPath);
-      const relative = normalizeText(fileParts.join("/"));
-      return original.endsWith(relative);
-    });
-
-    if (matchingPath.length === 1) return matchingPath[0];
-    return null;
-  }
-
-  // Nur eindeutige Treffer zulassen.
-  return candidates.length === 1 ? candidates[0] : null;
+function invalidateImport() {
+  importVerified = false;
+  importPlan = [];
+  $("bulk-start").disabled = true;
+  $("bulk-stats").hidden = true;
+  $("bulk-progress-box").hidden = true;
 }
 
 async function prepareImport() {
   if (importRunning) return;
 
-  $("bulk-start").disabled = true;
-  importPlan = [];
+  invalidateImport();
 
-  const files = [...$("bulk-folder").files]
-    .filter(imageFile);
-
+  const files = [...$("bulk-folder").files].filter(imageFile);
   const jsonFile = $("bulk-json").files[0];
 
   if (!files.length) {
-    message("Bitte zuerst deinen Bilderordner auswählen.","error");
+    message("Bitte zuerst den gesamten Ordner images auswählen.", "error");
     return;
   }
 
   if (!jsonFile) {
-    message(
-      "Bitte zusätzlich die private Prompt-JSON-Datei auswählen.",
-      "error"
-    );
+    message("Bitte die private Import-JSON auswählen.", "error");
     return;
   }
 
+  $("bulk-progress-box").hidden = false;
+  $("import-log").textContent = "";
+  $("bulk-status").textContent = "Prüfung läuft …";
+
   try {
     const json = JSON.parse(await jsonFile.text());
-    const entries = getJsonImageEntries(json);
+    const entries = readJsonEntries(json);
 
-    const matched = [];
-    const unmatched = [];
-    const ambiguousKeys = new Set();
+    const problems = [];
+    const fileMap = new Map();
+    const jsonMap = new Map();
+    const titleMap = new Map();
 
     for (const file of files) {
-      const entry = matchJsonEntry(file,entries);
+      const path = localImagePath(file);
 
-      if (!entry || !entry.prompt) {
-        unmatched.push(file.webkitRelativePath || file.name);
+      if (!path.startsWith("images/")) {
+        problems.push(
+          "Falscher Bilderordner: " + path +
+          " – bitte direkt den Ordner images auswählen."
+        );
+      }
+
+      if (fileMap.has(path)) {
+        problems.push("Doppelte Bilddatei: " + path);
+      } else {
+        fileMap.set(path, file);
+      }
+    }
+
+    for (const entry of entries) {
+      if (!entry.originalPath) {
+        problems.push(
+          "JSON-Eintrag ohne Originalpfad: " +
+          entry.series + " / " + entry.filename
+        );
         continue;
       }
 
-      const series = entry.series;
-      const title = file.name;
-      const key = importKey(series,title);
-
-      if (ambiguousKeys.has(key)) {
-        unmatched.push(file.webkitRelativePath || file.name);
-        continue;
+      if (!entry.originalPath.startsWith("images/")) {
+        problems.push(
+          "Ungültiger JSON-Pfad: " + entry.originalPath
+        );
       }
 
-      matched.push({
-        file,
-        series,
-        title,
-        prompt:entry.prompt,
-        sort_order:entry.position,
-        key
-      });
-    }
-
-    const counts = new Map();
-
-    for (const row of matched) {
-      counts.set(row.key,(counts.get(row.key) || 0) + 1);
-    }
-
-    importPlan = matched.filter(row => {
-      if (counts.get(row.key) !== 1) {
-        unmatched.push(row.file.webkitRelativePath || row.file.name);
-        return false;
+      if (jsonMap.has(entry.originalPath)) {
+        problems.push(
+          "Doppelter JSON-Bildpfad: " + entry.originalPath
+        );
+      } else {
+        jsonMap.set(entry.originalPath, entry);
       }
-      return true;
-    });
 
-    const existing = new Set(
-      allItems.map(item => importKey(item.series,item.title))
-    );
+      if (
+        entry.filename &&
+        normalizeText(baseName(entry.originalPath)) !==
+        normalizeText(entry.filename)
+      ) {
+        problems.push(
+          "Dateiname passt nicht zum JSON-Pfad: " +
+          entry.originalPath
+        );
+      }
 
-    const newCount = importPlan.filter(
-      row => !existing.has(row.key)
-    ).length;
+      if (!entry.prompt) {
+        problems.push(
+          "Original-Prompt fehlt: " + entry.originalPath
+        );
+      }
 
-    $("bulk-summary").textContent =
-      files.length + " Bilder gefunden · " +
-      importPlan.length + " mit eindeutigem Prompt · " +
-      newCount + " noch nicht importiert · " +
-      unmatched.length + " ohne sichere Zuordnung.";
+      if (!entry.title) {
+        problems.push(
+          "Anzeigename fehlt: " + entry.originalPath
+        );
+      }
 
-    $("bulk-progress-box").hidden = false;
-    $("import-log").textContent = "";
+      const titleKey = importKey(entry.series, entry.title);
 
-    importLog(
-      "Prüfung abgeschlossen: " +
-      importPlan.length + " eindeutig zugeordnete Bilder."
-    );
+      if (titleMap.has(titleKey)) {
+        problems.push(
+          "Doppelter Anzeigename innerhalb einer Serie: " +
+          entry.series + " / " + entry.title
+        );
+      } else {
+        titleMap.set(titleKey, entry.originalPath);
+      }
+    }
 
-    importLog(
-      "Noch nicht vorhanden: " + newCount
-    );
-
-    if (unmatched.length) {
-      importLog(
-        "ACHTUNG: " + unmatched.length +
-        " Bilder wurden nicht sicher zugeordnet."
-      );
-
-      unmatched.slice(0,25).forEach(path =>
-        importLog("Nicht zugeordnet: " + path)
-      );
-
-      if (unmatched.length > 25) {
-        importLog(
-          "Weitere nicht zugeordnete Bilder: " +
-          (unmatched.length - 25)
+    for (const path of fileMap.keys()) {
+      if (!jsonMap.has(path)) {
+        problems.push(
+          "Bild ohne JSON-Zuordnung: " + path
         );
       }
     }
 
+    for (const path of jsonMap.keys()) {
+      if (!fileMap.has(path)) {
+        problems.push(
+          "JSON-Eintrag ohne vorhandene Bilddatei: " + path
+        );
+      }
+    }
+
+    const plan = [];
+
+    for (const [path, file] of fileMap) {
+      const entry = jsonMap.get(path);
+
+      if (!entry) continue;
+      if (!entry.prompt || !entry.title) continue;
+
+      plan.push({
+        file,
+        series: entry.series,
+        title: entry.title,
+        prompt: entry.prompt,
+        sort_order: entry.sort_order,
+        originalPath: path,
+        key: importKey(entry.series, entry.title)
+      });
+    }
+
+    const existingCounts = new Map();
+
+    for (const item of allItems) {
+      const key = importKey(item.series, item.title);
+      existingCounts.set(
+        key,
+        (existingCounts.get(key) || 0) + 1
+      );
+    }
+
+    for (const row of plan) {
+      if ((existingCounts.get(row.key) || 0) > 1) {
+        problems.push(
+          "Mehrere bestehende Datenbankeinträge mit demselben Titel: " +
+          row.series + " / " + row.title
+        );
+      }
+    }
+
+    const newCount = plan.filter(
+      row => !existingCounts.has(row.key)
+    ).length;
+
+    $("stat-files").textContent = files.length;
+    $("stat-json").textContent = entries.length;
+    $("stat-ready").textContent = plan.length;
+    $("stat-errors").textContent = problems.length;
+    $("bulk-stats").hidden = false;
+
+    $("bulk-summary").textContent =
+      files.length + " Bilder im Ordner · " +
+      entries.length + " JSON-Einträge · " +
+      plan.length + " zugeordnet · " +
+      newCount + " noch nicht importiert · " +
+      problems.length + " Probleme.";
+
+    importLog("=== IMPORTPRÜFUNG ===");
+    importLog("Bilder im Ordner: " + files.length);
+    importLog("Einträge in JSON: " + entries.length);
+    importLog("Zugeordnet: " + plan.length);
+    importLog("Noch nicht importiert: " + newCount);
+    importLog("Probleme: " + problems.length);
+    importLog("");
+
+    if (problems.length) {
+      importLog("IMPORT GESPERRT – BITTE PROBLEME KLÄREN:");
+      problems.slice(0, 100).forEach(problem =>
+        importLog("! " + problem)
+      );
+
+      if (problems.length > 100) {
+        importLog(
+          "... und " + (problems.length - 100) +
+          " weitere Probleme."
+        );
+      }
+
+      $("bulk-status").textContent =
+        "Import gesperrt: " + problems.length +
+        " Probleme gefunden.";
+
+      message(
+        "Import nicht freigegeben. Bitte Prüfbericht ansehen.",
+        "error"
+      );
+
+      return;
+    }
+
+    if (files.length !== entries.length ||
+        plan.length !== files.length) {
+      throw new Error(
+        "Die Anzahl der Bilddateien und JSON-Einträge stimmt nicht überein."
+      );
+    }
+
+    importPlan = plan;
+    importVerified = true;
+
+    importLog("✓ Alle Bildpfade eindeutig zugeordnet.");
+    importLog("✓ Alle Prompts vorhanden.");
+    importLog("✓ Alle Anzeigenamen vorhanden.");
+    importLog("✓ Keine doppelten Bildpfade oder Anzeigenamen.");
+    importLog("");
+    importLog(
+      "IMPORT FREIGEGEBEN: " + newCount +
+      " neue Bilder können hochgeladen werden."
+    );
+
+    if (newCount < plan.length) {
+      importLog(
+        "Hinweis: Bereits vorhandene Titel werden übersprungen. " +
+        "Die Prüfung kann nicht bestätigen, ob deren gespeicherte " +
+        "Prompts mit der JSON übereinstimmen."
+      );
+    }
+
     $("bulk-start").disabled = newCount === 0;
 
+    $("bulk-status").textContent =
+      newCount === 0
+        ? "Alle Einträge mit diesen Titeln sind bereits vorhanden."
+        : "Prüfung erfolgreich. Import ist bereit.";
+
     message(
-      "Import geprüft. Bitte Ergebnis kontrollieren.",
-      newCount ? "success" : ""
+      "Importprüfung erfolgreich: " +
+      plan.length + " Bilder sicher zugeordnet.",
+      "success"
     );
 
   } catch (error) {
+    invalidateImport();
+    $("bulk-progress-box").hidden = false;
+    importLog("FEHLER: " + errorText(error));
     message(
       "Importprüfung fehlgeschlagen: " + errorText(error),
       "error"
@@ -1181,19 +1071,22 @@ async function prepareImport() {
 }
 
 async function startImport() {
-  if (importRunning || !importPlan.length) return;
+  if (importRunning || !importVerified || !importPlan.length) {
+    return;
+  }
 
   const confirmed = confirm(
-    "Sammelimport starten?\n\n" +
-    "Bilder werden automatisch verkleinert und " +
-    "privat in Supabase gespeichert.\n\n" +
-    "Bitte das Browserfenster geöffnet lassen."
+    "Sammelimport wirklich starten?\n\n" +
+    importPlan.length + " Bilder wurden geprüft.\n" +
+    "Neue Bilder werden privat in Supabase gespeichert.\n\n" +
+    "Bitte den Browser geöffnet lassen."
   );
 
   if (!confirmed) return;
 
   importRunning = true;
   stopRequested = false;
+  importVerified = false;
 
   $("bulk-start").disabled = true;
   $("bulk-check").disabled = true;
@@ -1204,7 +1097,7 @@ async function startImport() {
   $("import-log").textContent = "";
 
   const existing = new Set(
-    allItems.map(item => importKey(item.series,item.title))
+    allItems.map(item => importKey(item.series, item.title))
   );
 
   const pending = importPlan.filter(
@@ -1229,29 +1122,28 @@ async function startImport() {
         $("bulk-status").textContent =
           "Verarbeite " + (done + failed + 1) +
           " von " + pending.length +
-          ": " + row.file.name;
+          ": " + row.title;
 
         const optimized = await optimizeImage(row.file);
-
         uploadedPath = makePath();
 
-        const { error:uploadError } = await db.storage
+        const { error: uploadError } = await db.storage
           .from(BUCKET)
-          .upload(uploadedPath,optimized,{
-            contentType:"image/webp",
-            upsert:false
+          .upload(uploadedPath, optimized, {
+            contentType: "image/webp",
+            upsert: false
           });
 
         if (uploadError) throw uploadError;
 
-        const { error:insertError } = await db
+        const { error: insertError } = await db
           .from("editorial_items")
           .insert({
-            series:row.series,
-            title:row.title,
-            prompt:row.prompt,
-            image_path:uploadedPath,
-            sort_order:row.sort_order
+            series: row.series,
+            title: row.title,
+            prompt: row.prompt,
+            image_path: uploadedPath,
+            sort_order: row.sort_order
           });
 
         if (insertError) throw insertError;
@@ -1275,7 +1167,7 @@ async function startImport() {
         }
 
         importLog(
-          "FEHLER: " + row.file.name +
+          "FEHLER: " + row.originalPath +
           " — " + errorText(error)
         );
 
@@ -1299,8 +1191,15 @@ async function startImport() {
       failed ? "error" : "success"
     );
 
+  } catch (error) {
+    message(
+      "Import unterbrochen: " + errorText(error),
+      "error"
+    );
   } finally {
     importRunning = false;
+    importPlan = [];
+    importVerified = false;
 
     $("bulk-check").disabled = false;
     $("bulk-stop").disabled = true;
@@ -1312,27 +1211,26 @@ async function startImport() {
 
 /* BUTTONS UND EREIGNISSE */
 
-$("editor-form").addEventListener("submit",saveItem);
-$("reset").addEventListener("click",resetForm);
+$("editor-form").addEventListener("submit", saveItem);
+$("reset").addEventListener("click", resetForm);
 
-$("search").addEventListener("input",() => {
+$("search").addEventListener("input", () => {
   visibleLimit = 30;
   renderItems();
 });
 
-$("filter").addEventListener("change",() => {
+$("filter").addEventListener("change", () => {
   visibleLimit = 30;
   renderItems();
 });
 
-$("more").addEventListener("click",() => {
+$("more").addEventListener("click", () => {
   visibleLimit += 30;
   renderItems();
 });
 
-$("bulk-folder").addEventListener("change",() => {
-  importPlan = [];
-  $("bulk-start").disabled = true;
+$("bulk-folder").addEventListener("change", () => {
+  invalidateImport();
 
   const files = [...$("bulk-folder").files].filter(imageFile);
 
@@ -1341,29 +1239,28 @@ $("bulk-folder").addEventListener("change",() => {
     "Bitte anschließend IMPORT PRÜFEN klicken.";
 });
 
-$("bulk-json").addEventListener("change",() => {
-  importPlan = [];
-  $("bulk-start").disabled = true;
+$("bulk-json").addEventListener("change", () => {
+  invalidateImport();
 });
 
-$("bulk-check").addEventListener("click",prepareImport);
-$("bulk-start").addEventListener("click",startImport);
+$("bulk-check").addEventListener("click", prepareImport);
+$("bulk-start").addEventListener("click", startImport);
 
-$("bulk-stop").addEventListener("click",() => {
+$("bulk-stop").addEventListener("click", () => {
   stopRequested = true;
   $("bulk-stop").disabled = true;
+
   importLog(
     "Stopp angefordert. Das aktuelle Bild wird noch verarbeitet."
   );
 });
 
-$("logout").addEventListener("click",async () => {
+$("logout").addEventListener("click", async () => {
   await db.auth.signOut();
   location.replace("index.html#login");
 });
 
 checkAdmin();
 </script>
-
 </body>
 </html>
