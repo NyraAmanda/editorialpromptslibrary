@@ -1175,49 +1175,62 @@ newPasswordForm.addEventListener(
   }
 );
 
-supabaseClient.auth.onAuthStateChange(
-  (event) => {
-    if (event === "PASSWORD_RECOVERY") {
-      showMode("reset");
-      document.getElementById("login")
-        .scrollIntoView();
-    }
+
+/* EINLADUNG UND PASSWORT-RESET */
+
+function openPasswordSetup() {
+  showMode("reset");
+  description.textContent =
+    "Willkommen in deiner Editorial Prompt Library! Lege jetzt dein persönliches Passwort fest.";
+  document.getElementById("login").scrollIntoView();
+}
+
+supabaseClient.auth.onAuthStateChange((event) => {
+  if (event === "PASSWORD_RECOVERY") {
+    showMode("reset");
+    document.getElementById("login").scrollIntoView();
   }
-);
+});
 
 async function checkRecoveryLink() {
-  const params = new URLSearchParams(
+  const hash = new URLSearchParams(
     window.location.hash.replace(/^#/, "")
   );
+  const query = new URLSearchParams(window.location.search);
 
-  const query = new URLSearchParams(
-    window.location.search
-  );
-
-  if (params.get("type") === "recovery") {
-    const { data } =
-      await supabaseClient.auth.getSession();
-
-    if (data.session) {
-      showMode("reset");
-      document.getElementById("login")
-        .scrollIntoView();
-    }
-  }
-
-  if (query.has("error_description")) {
+  if (query.has("error_description") || hash.has("error_description")) {
     showMode("request");
     loginMessage.textContent =
-      "Der Link ist ungültig oder abgelaufen. Bitte fordere einen neuen an.";
+      "Der Einladungs- oder Passwort-Link ist ungültig oder abgelaufen.";
+    return;
+  }
+
+  const type = hash.get("type") || query.get("type");
+
+  if (type === "invite" || type === "recovery") {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (!error && data.session) {
+      if (type === "invite") {
+        openPasswordSetup();
+      } else {
+        showMode("reset");
+        document.getElementById("login").scrollIntoView();
+      }
+    } else {
+      loginMessage.textContent =
+        "Der Link konnte noch nicht bestätigt werden. Bitte lade die Seite erneut.";
+    }
+    return;
   }
 
   if (window.location.hash === "#login") {
-    document.getElementById("login")
-      .scrollIntoView();
+    document.getElementById("login").scrollIntoView();
   }
 }
 
 checkRecoveryLink();
+
 </script>
 
 </body>
