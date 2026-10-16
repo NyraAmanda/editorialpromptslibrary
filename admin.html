@@ -171,6 +171,18 @@ wenn du kein neues auswählst.
 <label for="prompt">Vollständiger Prompt *</label>
 <textarea id="prompt" required placeholder="Hier den vollständigen Prompt einfügen …"></textarea>
 
+  
+<label for="video-prompt">🎬 Videoprompt (optional)</label>
+<textarea
+  id="video-prompt"
+  placeholder="Hier den vollständigen englischen Videoprompt einfügen …"
+></textarea>
+<p class="small">
+  Nur ausfüllen, wenn zu diesem Editorial ein Videoprompt gehört.
+  Der bisherige Bildprompt bleibt unverändert.
+</p>
+
+  
 <label for="sort-order">Reihenfolge innerhalb der Serie</label>
 <input id="sort-order" type="number" min="0" value="0">
 
@@ -383,8 +395,8 @@ async function loadItems() {
 
     for (let start = 0; ; start += pageSize) {
       const { data, error } = await db
+        .select("id,series,title,image_path,prompt,video_prompt,sort_order")
         .from("editorial_items")
-        .select("id,series,title,image_path,prompt,sort_order")
         .order("series")
         .order("sort_order")
         .order("id")
@@ -527,6 +539,7 @@ function editItem(id) {
   $("series").value = item.series || "";
   $("title").value = item.title || "";
   $("prompt").value = item.prompt || "";
+  $("video-prompt").value = item.video_prompt || "";
   $("sort-order").value = item.sort_order ?? 0;
   $("picture").value = "";
 
@@ -584,13 +597,16 @@ async function saveItem(event) {
       path = uploadedPath;
     }
 
-    const payload = {
-      series,
-      title: $("title").value.trim(),
-      prompt,
-      sort_order: Number($("sort-order").value) || 0,
-      image_path: path
-    };
+  
+const payload = {
+  series,
+  title: $("title").value.trim(),
+  prompt,
+  video_prompt: $("video-prompt").value.trim() || null,
+  sort_order: Number($("sort-order").value) || 0,
+  image_path: path
+};
+
 
     const result = id
       ? await db.from("editorial_items")
