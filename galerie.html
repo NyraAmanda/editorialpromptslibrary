@@ -20,7 +20,6 @@
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -32,7 +31,6 @@
 
     button, input { font: inherit; }
     button { cursor: pointer; }
-    button:disabled { cursor: default; opacity: .6; }
 
     header {
       background: linear-gradient(135deg, #eee1f7, #d9c3eb, #c6a8dd);
@@ -176,9 +174,6 @@
       position: relative;
       overflow: hidden;
       background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .preview img {
@@ -204,12 +199,10 @@
       line-height: 1.6;
     }
 
-    .image-state[hidden] { display: none; }
-
     .retry-button {
       padding: 12px 15px;
       border: 1px solid #684583;
-      background: #fff;
+      background: white;
       color: #684583;
       font-size: 11px;
       font-weight: 700;
@@ -258,6 +251,47 @@
 
     .copy-button:hover { background: #593474; }
 
+    .load-more-area {
+      max-width: 600px;
+      margin: 15px auto 70px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .progress-track {
+      height: 5px;
+      background: #e7d8ef;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: #775095;
+      transition: width .25s ease;
+    }
+
+    .load-more-button {
+      width: 100%;
+      padding: 19px;
+      background: #775095;
+      color: white;
+      border: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    .load-more-button:hover { background: #593474; }
+
     footer {
       text-align: center;
       padding: 45px 15px;
@@ -288,7 +322,6 @@
 </head>
 
 <body>
-
   <div id="private-app" hidden>
     <header>
       <nav>
@@ -301,9 +334,7 @@
 
       <div class="hero">
         <div class="eyebrow">THE PRIVATE EDITORIAL ARCHIVE</div>
-
         <h1>Editorial<br>Prompt Library</h1>
-
         <p>
           Welcome to your creative world.<br>
           Explore every editorial and copy your next prompt.
@@ -335,6 +366,20 @@
       </div>
 
       <div id="library-content"></div>
+
+      <div id="load-more-area" class="load-more-area" hidden>
+        <div id="progress-text" class="progress-text"></div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <button
+          id="load-more-button"
+          class="load-more-button"
+          type="button"
+        >
+          WEITERE EDITORIALS LADEN ↓
+        </button>
+      </div>
     </main>
 
     <footer>
@@ -358,6 +403,9 @@
       "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
 
     const BUCKET_NAME = "editorial-images";
+    const PAGE_SIZE = 24;
+    const MAX_SIMULTANEOUS_IMAGES = 3;
+    const MAX_ATTEMPTS = 3;
 
     const privateApp = document.getElementById("private-app");
     const authStatus = document.getElementById("auth-status");
@@ -365,22 +413,47 @@
     const content = document.getElementById("library-content");
     const search = document.getElementById("search");
 
+    const loadMoreArea = document.getElementById("load-more-area");
+    const loadMoreButton = document.getElementById("load-more-button");
+    const progressText = document.getElementById("progress-text");
+    const progressFill = document.getElementById("progress-fill");
+
     let client;
     let allItems = [];
+    let filteredItems = [];
+    let visibleCount = 0;
     let imageObserver = null;
 
     const imageQueue = [];
-    const MAX_SIMULTANEOUS_IMAGES = 4;
-    const MAX_ATTEMPTS = 3;
     let activeImages = 0;
 
     function redirectToLogin() {
       window.location.replace("index.html#login");
     }
 
-    function showError(message) {
+    function showStatus(message) {
       status.hidden = false;
       status.textContent = message;
+    }
+
+    function groupBySeries(items) {
+      const groups = new Map();
+
+      items.forEach(item => {
+        const series = item.series || "Other Editorials";
+
+        if (!groups.has(series)) {
+          groups.set(series, []);
+        }
+
+        groups.get(series).push(item);
+      });
+
+      return groups;
+    }
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async function verifyAccess() {
@@ -417,70 +490,53 @@
     }
 
     async function loadLibrary() {
-      showError("Deine Editorials werden geladen …");
+      showStatus("Deine Editorials werden geladen …");
 
       try {
         const items = [];
-        const pageSize = 500;
+        const databasePageSize = 500;
 
-        for (let start = 0; ; start += pageSize) {
+        for (
+          let start = 0;
+          ;
+          start += databasePageSize
+        ) {
           const { data, error } = await client
             .from("editorial_items")
             .select("id,series,title,image_path,prompt,sort_order")
             .order("series", { ascending: true })
             .order("sort_order", { ascending: true })
             .order("id", { ascending: true })
-            .range(start, start + pageSize - 1);
+            .range(start, start + databasePageSize - 1);
 
           if (error) throw error;
 
           items.push(...(data || []));
 
-          if (!data || data.length < pageSize) break;
+          if (!data || data.length < databasePageSize) break;
         }
 
         allItems = items;
+        filteredItems = [...allItems];
 
         if (allItems.length === 0) {
-          showError("Es sind noch keine Editorials vorhanden.");
+          showStatus("Es sind noch keine Editorials vorhanden.");
           return;
         }
 
-        status.hidden = true;
-        renderLibrary(allItems);
+        setupImageObserver();
+        resetAndRender();
 
       } catch (error) {
         console.error(error);
-        showError(
+        showStatus(
           "Die Editorials konnten nicht geladen werden. Bitte prüfe die Supabase-Zugriffsrechte."
         );
       }
     }
 
-    function groupBySeries(items) {
-      const groups = new Map();
-
-      items.forEach(function(item) {
-        const series = item.series || "Other Editorials";
-
-        if (!groups.has(series)) {
-          groups.set(series, []);
-        }
-
-        groups.get(series).push(item);
-      });
-
-      return groups;
-    }
-
-    function wait(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     async function getImageUrl(path) {
-      if (!path) {
-        throw new Error("Kein Bildpfad gespeichert.");
-      }
+      if (!path) throw new Error("Kein Bildpfad vorhanden.");
 
       const { data, error } = await client.storage
         .from(BUCKET_NAME)
@@ -512,40 +568,9 @@
       });
     }
 
-    function createImageTask(item, preview) {
-      const img = document.createElement("img");
-      img.alt = item.title || item.series || "Editorial";
-      img.loading = "lazy";
-      img.hidden = true;
-
-      const state = document.createElement("div");
-      state.className = "image-state";
-      state.textContent = "Bild wird geladen …";
-
-      preview.append(img, state);
-
-      const task = {
-        item,
-        img,
-        state,
-        preview,
-        attempts: 0,
-        queued: false,
-        loading: false,
-        finished: false,
-        cancelled: false
-      };
-
-      return task;
-    }
-
-    function taskIsCurrent(task) {
-      return !task.cancelled && task.preview.isConnected;
-    }
-
     function enqueueImage(task) {
       if (
-        !taskIsCurrent(task) ||
+        !task.preview.isConnected ||
         task.finished ||
         task.queued ||
         task.loading
@@ -564,7 +589,7 @@
         const task = imageQueue.shift();
         task.queued = false;
 
-        if (!taskIsCurrent(task) || task.finished) continue;
+        if (!task.preview.isConnected || task.finished) continue;
 
         activeImages++;
         task.loading = true;
@@ -579,7 +604,7 @@
 
     async function loadImageWithRetry(task) {
       while (task.attempts < MAX_ATTEMPTS) {
-        if (!taskIsCurrent(task)) return;
+        if (!task.preview.isConnected) return;
 
         task.attempts++;
 
@@ -592,11 +617,11 @@
 
           const url = await getImageUrl(task.item.image_path);
 
-          if (!taskIsCurrent(task)) return;
+          if (!task.preview.isConnected) return;
 
           await loadImageElement(task.img, url);
 
-          if (!taskIsCurrent(task)) return;
+          if (!task.preview.isConnected) return;
 
           task.img.hidden = false;
           task.state.hidden = true;
@@ -605,23 +630,24 @@
 
         } catch (error) {
           console.warn(
-            "Bildladeversuch " + task.attempts,
+            "Bildladeversuch",
+            task.attempts,
             task.item.title,
             error
           );
 
           if (task.attempts < MAX_ATTEMPTS) {
-            await wait(700 * task.attempts);
+            await wait(900 * task.attempts);
           }
         }
       }
 
-      if (!taskIsCurrent(task)) return;
+      if (!task.preview.isConnected) return;
 
       task.state.replaceChildren();
 
-      const text = document.createElement("span");
-      text.textContent = "Bild konnte nicht geladen werden.";
+      const message = document.createElement("span");
+      message.textContent = "Bild konnte nicht geladen werden.";
 
       const retry = document.createElement("button");
       retry.type = "button";
@@ -635,7 +661,7 @@
         enqueueImage(task);
       });
 
-      task.state.append(text, retry);
+      task.state.append(message, retry);
     }
 
     function setupImageObserver() {
@@ -643,8 +669,8 @@
 
       imageObserver = new IntersectionObserver(
         entries => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
 
             const task = entry.target._imageTask;
 
@@ -652,11 +678,10 @@
               enqueueImage(task);
               imageObserver.unobserve(entry.target);
             }
-          }
+          });
         },
         {
-          root: null,
-          rootMargin: "600px 0px",
+          rootMargin: "400px 0px",
           threshold: 0
         }
       );
@@ -670,14 +695,37 @@
       preview.className = "preview";
 
       if (item.image_path) {
-        const task = createImageTask(item, preview);
+        const img = document.createElement("img");
+        img.alt = item.title || item.series || "Editorial";
+        img.loading = "lazy";
+        img.hidden = true;
+
+        const imageState = document.createElement("div");
+        imageState.className = "image-state";
+        imageState.textContent = "Bild wird geladen …";
+
+        preview.append(img, imageState);
+
+        const task = {
+          item,
+          img,
+          state: imageState,
+          preview,
+          attempts: 0,
+          queued: false,
+          loading: false,
+          finished: false
+        };
+
         preview._imageTask = task;
         imageObserver.observe(preview);
+
       } else {
-        const state = document.createElement("div");
-        state.className = "image-state";
-        state.textContent = "Für dieses Editorial ist kein Bild gespeichert.";
-        preview.appendChild(state);
+        const imageState = document.createElement("div");
+        imageState.className = "image-state";
+        imageState.textContent =
+          "Für dieses Editorial ist kein Bild gespeichert.";
+        preview.appendChild(imageState);
       }
 
       const body = document.createElement("div");
@@ -700,10 +748,9 @@
       copyButton.type = "button";
       copyButton.textContent = "COPY PROMPT →";
 
-      copyButton.addEventListener("click", async function() {
+      copyButton.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(item.prompt || "");
-
           copyButton.textContent = "COPIED ✓";
 
           setTimeout(() => {
@@ -722,67 +769,114 @@
       return card;
     }
 
-    function renderLibrary(items) {
-      if (imageObserver) imageObserver.disconnect();
-
-      for (const task of imageQueue) {
-        task.cancelled = true;
-      }
-      imageQueue.length = 0;
-
-      content.replaceChildren();
-      setupImageObserver();
-
+    function appendEditorials(items, startingIndex) {
       const groups = groupBySeries(items);
-      let overallIndex = 0;
 
-      groups.forEach(function(seriesItems, seriesName) {
-        const section = document.createElement("section");
-        section.className = "series-section";
+      groups.forEach((seriesItems, seriesName) => {
+        let section = [...content.children].find(
+          element => element.dataset.series === seriesName
+        );
 
-        const heading = document.createElement("h2");
-        heading.className = "series-heading";
-        heading.textContent = seriesName;
+        if (!section) {
+          section = document.createElement("section");
+          section.className = "series-section";
+          section.dataset.series = seriesName;
 
-        const count = document.createElement("div");
-        count.className = "series-count";
-        count.textContent = seriesItems.length + " EDITORIALS";
+          const heading = document.createElement("h2");
+          heading.className = "series-heading";
+          heading.textContent = seriesName;
 
-        const gallery = document.createElement("div");
-        gallery.className = "gallery";
+          const count = document.createElement("div");
+          count.className = "series-count";
 
-        seriesItems.forEach(function(item) {
-          overallIndex++;
-          gallery.appendChild(createCard(item, overallIndex));
+          const gallery = document.createElement("div");
+          gallery.className = "gallery";
+
+          section.append(heading, count, gallery);
+          content.appendChild(section);
+        }
+
+        const gallery = section.querySelector(".gallery");
+        const count = section.querySelector(".series-count");
+
+        seriesItems.forEach(item => {
+          const index = filteredItems.indexOf(item) + 1;
+          gallery.appendChild(createCard(item, index));
         });
 
-        section.append(heading, count, gallery);
-        content.appendChild(section);
+        count.textContent =
+          gallery.children.length + " EDITORIALS";
       });
-
-      if (items.length === 0) {
-        showError("Keine passenden Editorials gefunden.");
-      } else {
-        status.hidden = true;
-      }
     }
 
-    search.addEventListener("input", function() {
+    function updateLoadMoreArea() {
+      const total = filteredItems.length;
+
+      if (total === 0) {
+        loadMoreArea.hidden = true;
+        return;
+      }
+
+      loadMoreArea.hidden = false;
+
+      progressText.textContent =
+        visibleCount + " von " + total + " Editorials angezeigt";
+
+      progressFill.style.width =
+        ((visibleCount / total) * 100) + "%";
+
+      loadMoreButton.hidden = visibleCount >= total;
+    }
+
+    function showNextPage() {
+      if (visibleCount >= filteredItems.length) return;
+
+      const nextItems = filteredItems.slice(
+        visibleCount,
+        visibleCount + PAGE_SIZE
+      );
+
+      appendEditorials(nextItems, visibleCount);
+
+      visibleCount += nextItems.length;
+      updateLoadMoreArea();
+    }
+
+    function resetAndRender() {
+      if (imageObserver) imageObserver.disconnect();
+
+      imageQueue.length = 0;
+      content.replaceChildren();
+
+      setupImageObserver();
+      visibleCount = 0;
+
+      if (filteredItems.length === 0) {
+        showStatus("Keine passenden Editorials gefunden.");
+        loadMoreArea.hidden = true;
+        return;
+      }
+
+      status.hidden = true;
+      showNextPage();
+    }
+
+    search.addEventListener("input", () => {
       const query = search.value.trim().toLowerCase();
 
-      const filtered = allItems.filter(function(item) {
-        return [item.series, item.title].some(function(value) {
-          return String(value || "")
-            .toLowerCase()
-            .includes(query);
-        });
+      filteredItems = allItems.filter(item => {
+        return [item.series, item.title].some(value =>
+          String(value || "").toLowerCase().includes(query)
+        );
       });
 
-      renderLibrary(filtered);
+      resetAndRender();
     });
 
+    loadMoreButton.addEventListener("click", showNextPage);
+
     document.getElementById("logout-button")
-      .addEventListener("click", async function() {
+      .addEventListener("click", async () => {
         try {
           await client.auth.signOut();
         } finally {
