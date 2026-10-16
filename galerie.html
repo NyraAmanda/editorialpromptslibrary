@@ -2,1419 +2,1603 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Private Editorial Library | NyraAmanda</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Private Editorial Library | NyraAmanda</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --purple: #684583;
-      --muted: #826d91;
-      --bg: #faf7fc;
-      --soft: #f0e5f7;
-      --border: #e5d5ed;
-    }
+<style>
+:root {
+  --purple:#684583;
+  --muted:#826d91;
+  --bg:#faf7fc;
+  --soft:#f0e5f7;
+  --border:#e5d5ed;
+}
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--purple);
+  font-family:"DM Sans",Arial,sans-serif;
+}
+button,input {font:inherit}
+button {cursor:pointer}
+button:disabled {opacity:.6;cursor:default}
+[hidden] {display:none!important}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--purple);
-      font-family: "DM Sans", Arial, sans-serif;
-    }
-
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    button:disabled { opacity: .6; cursor: default; }
-    [hidden] { display: none !important; }
-
-    header {
-      background: linear-gradient(135deg, #eee1f7, #d9c3eb, #c6a8dd);
-      padding: 25px 5% 65px;
-    }
-
-    nav {
-      max-width: 1300px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      color: inherit;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 2px;
-    }
-
-    .logout {
-      border: 1px solid #795598;
-      background: transparent;
-      color: #684583;
-      padding: 12px 18px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-
-    .logout:hover {
-      background: #684583;
-      color: white;
-    }
-
-    .hero {
-      text-align: center;
-      margin: 65px auto 0;
-      max-width: 850px;
-    }
-
-    .eyebrow {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    h1, h2, h3 {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-weight: 400;
-    }
-
-    h1 {
-      font-size: clamp(55px, 10vw, 110px);
-      line-height: .95;
-      margin: 22px 0;
-    }
-
-    .hero p {
-      font-size: 13px;
-      line-height: 1.9;
-      max-width: 550px;
-      margin: 25px auto 0;
-    }
-
-    .toolbar {
-      max-width: 1350px;
-      margin: auto;
-      padding: 55px 5% 30px;
-    }
-
-    .toolbar h2 {
-      font-size: clamp(38px, 6vw, 65px);
-      margin: 12px 0;
-    }
-
-    .toolbar p {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .category-label {
-      margin: 30px 0 12px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    .category-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-    }
-
-    .category-button {
-      border: 1px solid #ccb5dc;
-      background: white;
-      color: var(--purple);
-      padding: 12px 16px;
-      font-size: 11px;
-      font-weight: 600;
-      transition: background .15s ease, color .15s ease;
-    }
-
-    .category-button:hover,
-    .category-button.active {
-      background: #775095;
-      color: white;
-      border-color: #775095;
-    }
-
-    .subcategory-panel {
-      padding: 18px;
-      background: #f3ebf8;
-      border: 1px solid var(--border);
-      margin-top: 15px;
-    }
-
-    .search {
-      width: 100%;
-      max-width: 650px;
-      margin-top: 12px;
-      padding: 16px;
-      border: 1px solid #ccb5dc;
-      background: white;
-      color: var(--purple);
-      font-size: 13px;
-    }
-
-    .search-hint {
-      font-size: 11px !important;
-      margin: 8px 0 0;
-    }
-
-    .active-filter {
-      margin-top: 22px;
-      padding: 14px 18px;
-      border-left: 3px solid #775095;
-      background: white;
-      color: #74538c;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .status {
-      text-align: center;
-      padding: 35px 15px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    .series-section {
-      max-width: 1450px;
-      margin: 0 auto;
-      padding: 35px 4% 45px;
-    }
-
-    .series-heading {
-      font-size: clamp(35px, 5vw, 58px);
-      margin: 0 0 8px;
-      overflow-wrap: anywhere;
-    }
-
-    .series-count {
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 1px;
-      margin-bottom: 25px;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-    }
-
-    .card {
-      min-width: 0;
-      overflow: hidden;
-      background: white;
-      box-shadow: 0 12px 35px rgba(90, 50, 115, .07);
-    }
-
-    .preview {
-      aspect-ratio: 3 / 4;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
-    }
-
-    .preview img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .image-state {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 12px;
-      padding: 20px;
-      text-align: center;
-      background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
-      color: #56356d;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .retry-button {
-      padding: 12px 15px;
-      border: 1px solid #684583;
-      background: white;
-      color: #684583;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .card-body { padding: 20px; }
-
-    .number {
-      font-size: 10px;
-      font-weight: 700;
-      color: #977cac;
-      letter-spacing: 1px;
-    }
-
-    .card h3 {
-      font-size: 30px;
-      line-height: 1.1;
-      margin: 10px 0 15px;
-      overflow-wrap: anywhere;
-    }
-
-    .prompt {
-      font-size: 12px;
-      line-height: 1.8;
-      color: #5e4c6a;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      max-height: 230px;
-      overflow-y: auto;
-      padding: 15px;
-      background: #faf6fd;
-      border: 1px solid #eee3f5;
-    }
-
-    .copy-button {
-      width: 100%;
-      margin-top: 15px;
-      padding: 15px;
-      background: #775095;
-      color: white;
-      border: 0;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-    }
-
-    .copy-button:hover { background: #593474; }
-
-    .load-more-area {
-      max-width: 600px;
-      margin: 15px auto 70px;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .progress-text {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-
-    .progress-track {
-      height: 5px;
-      background: #e7d8ef;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 22px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0;
-      background: #775095;
-      transition: width .25s ease;
-    }
-
-    .load-more-button {
-      width: 100%;
-      padding: 19px;
-      background: #775095;
-      color: white;
-      border: none;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-    }
-
-    .load-more-button:hover { background: #593474; }
-
-    footer {
-      text-align: center;
-      padding: 45px 15px;
-      background: #f0e5f7;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
-
-    @media (max-width: 800px) {
-      .gallery {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-      }
-
-      .card-body { padding: 13px; }
-      .card h3 { font-size: 24px; }
-    }
-
-    @media (max-width: 480px) {
-      header { padding-bottom: 50px; }
-      .hero { margin-top: 50px; }
-      .gallery { grid-template-columns: 1fr; }
-      .series-section { padding: 25px 4% 35px; }
-      .category-button { padding: 11px 13px; }
-    }
-  </style>
+header {
+  background:linear-gradient(135deg,#eee1f7,#d9c3eb,#c6a8dd);
+  padding:25px 5% 65px;
+}
+nav {
+  max-width:1300px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+.brand {
+  color:inherit;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:2px;
+}
+.logout {
+  border:1px solid #795598;
+  background:transparent;
+  color:#684583;
+  padding:12px 18px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+.logout:hover {background:#684583;color:white}
+.hero {
+  text-align:center;
+  margin:65px auto 0;
+  max-width:850px;
+}
+.eyebrow {
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+h1,h2,h3 {
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-weight:400;
+}
+h1 {
+  font-size:clamp(55px,10vw,110px);
+  line-height:.95;
+  margin:22px 0;
+}
+.hero p {
+  font-size:13px;
+  line-height:1.9;
+  max-width:550px;
+  margin:25px auto 0;
+}
+.toolbar {
+  max-width:1350px;
+  margin:auto;
+  padding:55px 5% 30px;
+}
+.toolbar h2 {
+  font-size:clamp(38px,6vw,65px);
+  margin:12px 0;
+}
+.toolbar p {
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.8;
+}
+.category-label {
+  margin:30px 0 12px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.category-buttons {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+}
+.category-button {
+  border:1px solid #ccb5dc;
+  background:white;
+  color:var(--purple);
+  padding:12px 16px;
+  font-size:11px;
+  font-weight:600;
+  transition:background .15s ease,color .15s ease;
+}
+.category-button:hover,
+.category-button.active {
+  background:#775095;
+  color:white;
+  border-color:#775095;
+}
+.subcategory-panel {
+  padding:18px;
+  background:#f3ebf8;
+  border:1px solid var(--border);
+  margin-top:15px;
+}
+.search {
+  width:100%;
+  max-width:650px;
+  margin-top:12px;
+  padding:16px;
+  border:1px solid #ccb5dc;
+  background:white;
+  color:var(--purple);
+  font-size:13px;
+}
+.search-hint {
+  font-size:11px!important;
+  margin:8px 0 0;
+}
+.active-filter {
+  margin-top:22px;
+  padding:14px 18px;
+  border-left:3px solid #775095;
+  background:white;
+  color:#74538c;
+  font-size:12px;
+  line-height:1.6;
+}
+.status {
+  text-align:center;
+  padding:35px 15px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
+}
+.series-section {
+  max-width:1450px;
+  margin:0 auto;
+  padding:35px 4% 45px;
+}
+.series-heading {
+  font-size:clamp(35px,5vw,58px);
+  margin:0 0 8px;
+  overflow-wrap:anywhere;
+}
+.series-count {
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:1px;
+  margin-bottom:25px;
+}
+.gallery {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+}
+.card {
+  min-width:0;
+  overflow:hidden;
+  background:white;
+  box-shadow:0 12px 35px rgba(90,50,115,.07);
+}
+.preview {
+  aspect-ratio:3/4;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(145deg,#e8d7ce,#c5add2,#947bac);
+}
+.preview img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.image-state {
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:12px;
+  padding:20px;
+  text-align:center;
+  background:linear-gradient(145deg,#e8d7ce,#c5add2,#947bac);
+  color:#56356d;
+  font-size:12px;
+  line-height:1.6;
+}
+.retry-button {
+  padding:12px 15px;
+  border:1px solid #684583;
+  background:white;
+  color:#684583;
+  font-size:11px;
+  font-weight:700;
+}
+.card-body {padding:20px}
+.number {
+  font-size:10px;
+  font-weight:700;
+  color:#977cac;
+  letter-spacing:1px;
+}
+.card h3 {
+  font-size:30px;
+  line-height:1.1;
+  margin:10px 0 15px;
+  overflow-wrap:anywhere;
+}
+.prompt-label {
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.3px;
+  margin:18px 0 9px;
+}
+.prompt {
+  font-size:12px;
+  line-height:1.8;
+  color:#5e4c6a;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  max-height:230px;
+  overflow-y:auto;
+  padding:15px;
+  background:#faf6fd;
+  border:1px solid #eee3f5;
+}
+.copy-button {
+  width:100%;
+  margin-top:15px;
+  padding:15px;
+  background:#775095;
+  color:white;
+  border:0;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.5px;
+}
+.copy-button:hover {background:#593474}
+.video-section {
+  margin-top:23px;
+  padding-top:18px;
+  border-top:1px solid #e5d5ed;
+}
+.video-label {
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  margin-bottom:10px;
+}
+.video-prompt {
+  background:#f2ebf8;
+  border:1px solid #d9c5e7;
+}
+.video-copy {
+  background:#4d315f;
+}
+.video-copy:hover {background:#382346}
+.video-badge {
+  display:inline-block;
+  margin-top:12px;
+  padding:7px 10px;
+  background:#f0e5f7;
+  color:#684583;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.7px;
+}
+.load-more-area {
+  max-width:600px;
+  margin:15px auto 70px;
+  padding:20px;
+  text-align:center;
+}
+.progress-text {
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+.progress-track {
+  height:5px;
+  background:#e7d8ef;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:22px;
+}
+.progress-fill {
+  height:100%;
+  width:0;
+  background:#775095;
+  transition:width .25s ease;
+}
+.load-more-button {
+  width:100%;
+  padding:19px;
+  background:#775095;
+  color:white;
+  border:none;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+}
+.load-more-button:hover {background:#593474}
+footer {
+  text-align:center;
+  padding:45px 15px;
+  background:#f0e5f7;
+  font-size:11px;
+  letter-spacing:1px;
+}
+@media(max-width:800px) {
+  .gallery {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+  .card-body {padding:13px}
+  .card h3 {font-size:24px}
+}
+@media(max-width:480px) {
+  header {padding-bottom:50px}
+  .hero {margin-top:50px}
+  .gallery {grid-template-columns:1fr}
+  .series-section {padding:25px 4% 35px}
+  .category-button {padding:11px 13px}
+}
+</style>
 </head>
 
 <body>
-  <div id="private-app" hidden>
-    <header>
-      <nav>
-        <a class="brand" href="index.html">NYRAAMANDA</a>
-        <button id="logout-button" class="logout" type="button">
-          LOG OUT →
-        </button>
-      </nav>
 
-      <div class="hero">
-        <div class="eyebrow">THE PRIVATE EDITORIAL ARCHIVE</div>
-        <h1>Editorial<br>Prompt Library</h1>
-        <p>
-          Welcome to your creative world.<br>
-          Explore every editorial and copy your next prompt.
-        </p>
-      </div>
-    </header>
+<div id="private-app" hidden>
+<header>
+<nav>
+<a class="brand" href="index.html">NYRAAMANDA</a>
+<button id="logout-button" class="logout" type="button">
+LOG OUT →
+</button>
+</nav>
 
-    <main>
-      <section class="toolbar">
-        <div class="eyebrow">YOUR CREATIVE ARCHIVE</div>
-        <h2>Find Your Inspiration</h2>
-        <p>
-          Wähle deine Collection und anschließend dein Thema.
-          Oder suche direkt nach einem bestimmten Editorial.
-        </p>
+<div class="hero">
+<div class="eyebrow">THE PRIVATE EDITORIAL ARCHIVE</div>
+<h1>Editorial<br>Prompt Library</h1>
+<p>
+Welcome to your creative world.<br>
+Explore every editorial and copy your next prompt.
+</p>
+</div>
+</header>
 
-        <div class="category-label">01 · CHOOSE YOUR COLLECTION</div>
-        <div id="collection-buttons" class="category-buttons"></div>
+<main>
+<section class="toolbar">
+<div class="eyebrow">YOUR CREATIVE ARCHIVE</div>
+<h2>Find Your Inspiration</h2>
+<p>
+Wähle deine Collection und anschließend dein Thema.
+Oder entdecke alle Editorials mit Videoprompt unter
+🎬 Video Prompts.
+</p>
 
-        <div id="subcategory-panel" class="subcategory-panel" hidden>
-          <div class="category-label" style="margin-top:0">
-            02 · CHOOSE YOUR MOOD
-          </div>
-          <div id="subcategory-buttons" class="category-buttons"></div>
-        </div>
+<div class="category-label">01 · CHOOSE YOUR COLLECTION</div>
+<div id="collection-buttons" class="category-buttons"></div>
 
-        <div class="category-label">SEARCH THE ENTIRE LIBRARY</div>
-        <input
-          id="search"
-          class="search"
-          type="search"
-          placeholder="z. B. Mediterranean Muse, Sunset, Coffee …"
-          aria-label="Alle Editorials durchsuchen"
-        >
-        <p class="search-hint">
-          Die Suche funktioniert über alle Collections und Kategorien hinweg.
-        </p>
+<div id="subcategory-panel" class="subcategory-panel" hidden>
+<div class="category-label" style="margin-top:0">
+02 · CHOOSE YOUR MOOD
+</div>
+<div id="subcategory-buttons" class="category-buttons"></div>
+</div>
 
-        <div id="active-filter" class="active-filter" hidden></div>
-      </section>
+<div class="category-label">SEARCH THE ENTIRE LIBRARY</div>
+<input
+  id="search"
+  class="search"
+  type="search"
+  placeholder="z. B. Mediterranean Muse, Sunset, Coffee …"
+  aria-label="Alle Editorials durchsuchen"
+>
+<p class="search-hint">
+Die Suche funktioniert über alle Collections und Kategorien hinweg.
+</p>
 
-      <div id="status" class="status" role="status">
-        Deine private Library wird geladen …
-      </div>
+<div id="active-filter" class="active-filter" hidden></div>
+</section>
 
-      <div id="library-content"></div>
+<div id="status" class="status" role="status">
+Deine private Library wird geladen …
+</div>
 
-      <div id="load-more-area" class="load-more-area" hidden>
-        <div id="progress-text" class="progress-text"></div>
-        <div class="progress-track">
-          <div id="progress-fill" class="progress-fill"></div>
-        </div>
-        <button
-          id="load-more-button"
-          class="load-more-button"
-          type="button"
-        >
-          WEITERE EDITORIALS LADEN ↓
-        </button>
-      </div>
-    </main>
+<div id="library-content"></div>
 
-    <footer>
-      NYRAAMANDA · PRIVATE EDITORIAL PROMPT LIBRARY
-    </footer>
-  </div>
+<div id="load-more-area" class="load-more-area" hidden>
+<div id="progress-text" class="progress-text"></div>
+<div class="progress-track">
+<div id="progress-fill" class="progress-fill"></div>
+</div>
+<button
+  id="load-more-button"
+  class="load-more-button"
+  type="button"
+>
+WEITERE EDITORIALS LADEN ↓
+</button>
+</div>
+</main>
 
-  <div id="auth-status" class="status" role="status">
-    Zugang wird überprüft …
-  </div>
+<footer>
+NYRAAMANDA · PRIVATE EDITORIAL PROMPT LIBRARY
+</footer>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<div id="auth-status" class="status" role="status">
+Zugang wird überprüft …
+</div>
 
-  <script>
-    "use strict";
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-    const SUPABASE_URL =
-      "https://pcakhkkvpmcmimybjlav.supabase.co";
+<script>
+"use strict";
 
-    const SUPABASE_KEY =
-      "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
+const SUPABASE_URL =
+  "https://pcakhkkvpmcmimybjlav.supabase.co";
 
-    const BUCKET_NAME = "editorial-images";
+const SUPABASE_KEY =
+  "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
 
-    const PAGE_SIZE = 24;
-    const MAX_SIMULTANEOUS_IMAGES = 3;
-    const MAX_ATTEMPTS = 3;
-    const IMAGE_TIMEOUT_MS = 12000;
+const BUCKET_NAME = "editorial-images";
 
-    const COLLECTIONS = {
-      all: {
-        label: "Alle Editorials",
-        moods: []
-      },
-      female: {
-        label: "Female",
-        moods: [
-          "Nature & Outdoor",
-          "Cute & Soft",
-          "Urban & Lifestyle",
-          "Seasonal",
-          "Specials",
-          "Edgy & Bold"
-        ]
-      },
-      male: {
-        label: "Male",
-        moods: [
-          "Urban & Lifestyle",
-          "Edgy & Bold",
-          "Nature & Outdoor",
-          "Specials"
-        ]
-      },
-      couple: {
-        label: "Couple",
-        moods: ["Couple Collection", "Cat & Dog"]
-      },
-      bff: {
-        label: "BFF Girls",
-        moods: ["BFF Collection"]
-      },
-      business: {
-        label: "Business",
-        moods: ["Business Aesthetics"]
-      }
-    };
+const PAGE_SIZE = 24;
+const MAX_SIMULTANEOUS_IMAGES = 3;
+const MAX_ATTEMPTS = 3;
+const IMAGE_TIMEOUT_MS = 12000;
 
-    /*
-      Diese Seriennamen stammen aus deiner Editorial-Übersicht.
+/*
+  VIDEO ist eine zusätzliche, übergreifende Collection.
+  Die ursprünglichen Kategorien bleiben erhalten.
+*/
 
-      Jeder Name wird einer Collection und einem Thema zugeordnet.
-      Der Abgleich ignoriert Groß-/Kleinschreibung, Emojis und
-      die Zusätze "(NEW)" oder "(New)".
+const COLLECTIONS = {
+  all: {
+    label:"Alle Editorials",
+    moods:[]
+  },
+  female: {
+    label:"Female",
+    moods:[
+      "Nature & Outdoor",
+      "Cute & Soft",
+      "Urban & Lifestyle",
+      "Seasonal",
+      "Specials",
+      "Edgy & Bold"
+    ]
+  },
+  male: {
+    label:"Male",
+    moods:[
+      "Urban & Lifestyle",
+      "Edgy & Bold",
+      "Nature & Outdoor",
+      "Specials"
+    ]
+  },
+  couple: {
+    label:"Couple",
+    moods:["Couple Collection","Cat & Dog"]
+  },
+  bff: {
+    label:"BFF Girls",
+    moods:["BFF Collection"]
+  },
+  business: {
+    label:"Business",
+    moods:["Business Aesthetics"]
+  },
+  video: {
+    label:"🎬 Video Prompts",
+    moods:[]
+  }
+};
 
-      Bei mehrfach verwendeten Namen entscheidet die vorhandene
-      Datenbank-Serie, soweit sie eine Collection erkennen lässt.
-    */
+/*
+  Bestehende Serienzuordnungen unverändert beibehalten.
+*/
 
-    const CATEGORY_NAMES = {
-      female: {
-        "Nature & Outdoor": [
-          "Mediterranean Muse", "SUP Girl", "Bohemian Wind",
-          "Relax Garden", "Aqualume", "Soleil Series",
-          "Tropical Escape - NB", "Tidal Stillness",
-          "Golden Landscape", "Where the Music Lives",
-          "Feathers & Gaze", "Botanical Beauty",
-          "The Pineapple Statement", "Earth & Ember",
-          "Modern Bohemian", "Sunlit Reverie",
-          "Car Window", "Outdoor", "Nature", "Floral",
-          "Surfer", "Malibu Surfergirl", "Sunset"
-        ],
-        "Cute & Soft": [
-          "The Contemporary Muse", "The Quiet Courtyard",
-          "Riad by the Sea", "Sweet Lila/Mint",
-          "The Art of Simplicity", "Mediteran Dreams",
-          "Burnt Orange Dreams", "Rollergirl",
-          "Warm Grain", "Ivory & Olive",
-          "Carousel Nocturne", "Pastel World",
-          "Dark Velvet Portrait", "The Beauty Edit",
-          "Frozen Delight", "Micro Expressions",
-          "Quiet Mediterranean Moments",
-          "Dancing with the Last Sun", "Cherry Bloom",
-          "Lemon Love", "It’s Melone Love",
-          "Lunapark Love", "Color Against the Sky",
-          "Flora Aurea", "Chambre Bleue",
-          "Fruit Loops", "Blush in Motion",
-          "Ceramics Workshop", "Analog Escape",
-          "Cute", "Cozy", "Butterfly Model",
-          "Bubbles", "Glitter"
-        ],
-        "Urban & Lifestyle": [
-          "Hero Walk", "Statement Pose",
-          "Luminous Rebellion", "Liminal Summer",
-          "Urban Solitude", "Goldenhour Streetportrait",
-          "Rooftop", "Everyday, But Better",
-          "Retro Frequency", "Laundry & Thoughts",
-          "Peripheral Glance", "Café Brake",
-          "Industrial Gravel", "Night Subway",
-          "Cozy Office", "Cafe", "Streetshooting",
-          "Skaterpark", "Streetline", "Car Roof",
-          "Trench Coat", "Wild Grace", "Paris",
-          "Urban Drift"
-        ],
-        "Seasonal": [
-          "Halloween", "Halloween Prompts",
-          "Halloween Makeup", "Ephemeral Bloom",
-          "Between Amber and Light",
-          "Valentinsday Special"
-        ],
-        "Specials": [
-          "Floral portrait", "Red Thai Curry Special",
-          "Coachella Viral Video", "Ära der Frisuren"
-        ],
-        "Edgy & Bold": [
-          "Soda Pink Motel", "Sound of presence",
-          "Mono Pink", "Black Stripe Theory",
-          "The Forbidden Portrait", "Soda Pop",
-          "Soft Rebellion", "Green Juice Attitude",
-          "After Hours at the Diner", "Leo",
-          "Naughty", "Harley", "Colorfull",
-          "Underground", "Pink Hair", "Rocker Girl",
-          "Summer Retro", "Iconic Rock",
-          "Golden Nomads", "Rainbow Festival",
-          "Soft Chaos", "Miss Starshine",
-          "Sunbound Nomad", "Suspended Motion",
-          "Quiet Attitude", "Fresh Strawberry",
-          "Chilling Banana", "Lazy Orange",
-          "Studio Gold", "Gravity & Joy",
-          "Between Pattern and Line",
-          "Beach Pop", "Aqua Extravaganza"
-        ]
-      },
-      male: {
-        "Urban & Lifestyle": [
-          "Velvet Diner", "Urban Descent",
-          "Static Presence", "Before the Fight",
-          "Market Fragments", "Urban Coffee Break",
-          "Skyline Contemplation", "Refined Casual",
-          "Urban Silence", "Modern Calm",
-          "Street Perspective", "Stairway Perspective"
-        ],
-        "Edgy & Bold": [
-          "Grounded Power", "Choose Luck",
-          "News in a Box", "Veggie Vogue",
-          "Prismatic Motion", "Golden Frequency",
-          "Smoke & Swagger", "Chromatic Identity",
-          "Light Through Silence", "Midnight Steel",
-          "Iron Rebel", "Caught in the Moment"
-        ],
-        "Nature & Outdoor": [
-          "Nord Shore Sight", "Tropical Escape - NB",
-          "Edge of Stillness", "Dusty Landscape",
-          "Festival State of Mind",
-          "Feathered Sovereign", "Ocean Drift"
-        ],
-        "Specials": [
-          "Red Thai Curry Special (M)",
-          "Coachella Special Male",
-          "Ära der Männerfrisuren"
-        ]
-      },
-      couple: {
-        "Couple Collection": [
-          "Shared Mornings", "Sunday Morning Routine",
-          "Spa Movie Day", "Karusell Love",
-          "Quiet Intimacy in Motion", "Held in Descent",
-          "Window Kiss", "Refined Application",
-          "Sunset cudle",
-          "Tropical Escape just the two of us",
-          "Stillness with Intent", "Blue Hour Embrace",
-          "Cool Proximity", "Coachella Couple",
-          "Quiet Between Waves", "Unnoticed Intentions",
-          "Between Light and Sound",
-          "Caught in the Ordinary",
-          "Wrapped in Laughter",
-          "In Between the Leaves", "Aligned",
-          "Dual Attitude", "Where Art Meets Us",
-          "You & Me", "More Champagne",
-          "Festival Love", "Festival feeling",
-          "Filtered Intimacy", "Romantic Sunset",
-          "Evening Ritual", "Just Us, Here",
-          "Time, Held Still", "Held in Silence"
-        ],
-        "Cat & Dog": [
-          "Cat Lovers", "Dog Lovers"
-        ]
-      },
-      bff: {
-        "BFF Collection": [
-          "Sipping Into Summer", "Summer Besties",
-          "Pier Rebels", "Pineapple Roadtrip",
-          "Caught in the Moment", "Sunset Comfort",
-          "Carried by Laughter", "Mirror Sefie Duo"
-        ]
-      },
-      business: {
-        "Business Aesthetics": [
-          "Business Launch"
-        ]
-      }
-    };
+const CATEGORY_NAMES = {
+  female: {
+    "Nature & Outdoor": [
+      "Mediterranean Muse","SUP Girl","Bohemian Wind",
+      "Relax Garden","Aqualume","Soleil Series",
+      "Tropical Escape - NB","Tidal Stillness",
+      "Golden Landscape","Where the Music Lives",
+      "Feathers & Gaze","Botanical Beauty",
+      "The Pineapple Statement","Earth & Ember",
+      "Modern Bohemian","Sunlit Reverie",
+      "Car Window","Outdoor","Nature","Floral",
+      "Surfer","Malibu Surfergirl","Sunset"
+    ],
+    "Cute & Soft": [
+      "The Contemporary Muse","The Quiet Courtyard",
+      "Riad by the Sea","Sweet Lila/Mint",
+      "The Art of Simplicity","Mediteran Dreams",
+      "Burnt Orange Dreams","Rollergirl",
+      "Warm Grain","Ivory & Olive",
+      "Carousel Nocturne","Pastel World",
+      "Dark Velvet Portrait","The Beauty Edit",
+      "Frozen Delight","Micro Expressions",
+      "Quiet Mediterranean Moments",
+      "Dancing with the Last Sun","Cherry Bloom",
+      "Lemon Love","It’s Melone Love",
+      "Lunapark Love","Color Against the Sky",
+      "Flora Aurea","Chambre Bleue",
+      "Fruit Loops","Blush in Motion",
+      "Ceramics Workshop","Analog Escape",
+      "Cute","Cozy","Butterfly Model",
+      "Bubbles","Glitter"
+    ],
+    "Urban & Lifestyle": [
+      "Hero Walk","Statement Pose",
+      "Luminous Rebellion","Liminal Summer",
+      "Urban Solitude","Goldenhour Streetportrait",
+      "Rooftop","Everyday, But Better",
+      "Retro Frequency","Laundry & Thoughts",
+      "Peripheral Glance","Café Brake",
+      "Industrial Gravel","Night Subway",
+      "Cozy Office","Cafe","Streetshooting",
+      "Skaterpark","Streetline","Car Roof",
+      "Trench Coat","Wild Grace","Paris",
+      "Urban Drift"
+    ],
+    "Seasonal": [
+      "Halloween","Halloween Prompts",
+      "Halloween Makeup","Ephemeral Bloom",
+      "Between Amber and Light",
+      "Valentinsday Special"
+    ],
+    "Specials": [
+      "Floral portrait","Red Thai Curry Special",
+      "Coachella Viral Video","Ära der Frisuren"
+    ],
+    "Edgy & Bold": [
+      "Soda Pink Motel","Sound of presence",
+      "Mono Pink","Black Stripe Theory",
+      "The Forbidden Portrait","Soda Pop",
+      "Soft Rebellion","Green Juice Attitude",
+      "After Hours at the Diner","Leo",
+      "Naughty","Harley","Colorfull",
+      "Underground","Pink Hair","Rocker Girl",
+      "Summer Retro","Iconic Rock",
+      "Golden Nomads","Rainbow Festival",
+      "Soft Chaos","Miss Starshine",
+      "Sunbound Nomad","Suspended Motion",
+      "Quiet Attitude","Fresh Strawberry",
+      "Chilling Banana","Lazy Orange",
+      "Studio Gold","Gravity & Joy",
+      "Between Pattern and Line",
+      "Beach Pop","Aqua Extravaganza"
+    ]
+  },
+  male: {
+    "Urban & Lifestyle": [
+      "Velvet Diner","Urban Descent",
+      "Static Presence","Before the Fight",
+      "Market Fragments","Urban Coffee Break",
+      "Skyline Contemplation","Refined Casual",
+      "Urban Silence","Modern Calm",
+      "Street Perspective","Stairway Perspective"
+    ],
+    "Edgy & Bold": [
+      "Grounded Power","Choose Luck",
+      "News in a Box","Veggie Vogue",
+      "Prismatic Motion","Golden Frequency",
+      "Smoke & Swagger","Chromatic Identity",
+      "Light Through Silence","Midnight Steel",
+      "Iron Rebel","Caught in the Moment"
+    ],
+    "Nature & Outdoor": [
+      "Nord Shore Sight","Tropical Escape - NB",
+      "Edge of Stillness","Dusty Landscape",
+      "Festival State of Mind",
+      "Feathered Sovereign","Ocean Drift"
+    ],
+    "Specials": [
+      "Red Thai Curry Special (M)",
+      "Coachella Special Male",
+      "Ära der Männerfrisuren"
+    ]
+  },
+  couple: {
+    "Couple Collection": [
+      "Shared Mornings","Sunday Morning Routine",
+      "Spa Movie Day","Karusell Love",
+      "Quiet Intimacy in Motion","Held in Descent",
+      "Window Kiss","Refined Application",
+      "Sunset cudle",
+      "Tropical Escape just the two of us",
+      "Stillness with Intent","Blue Hour Embrace",
+      "Cool Proximity","Coachella Couple",
+      "Quiet Between Waves","Unnoticed Intentions",
+      "Between Light and Sound",
+      "Caught in the Ordinary",
+      "Wrapped in Laughter",
+      "In Between the Leaves","Aligned",
+      "Dual Attitude","Where Art Meets Us",
+      "You & Me","More Champagne",
+      "Festival Love","Festival feeling",
+      "Filtered Intimacy","Romantic Sunset",
+      "Evening Ritual","Just Us, Here",
+      "Time, Held Still","Held in Silence"
+    ],
+    "Cat & Dog": [
+      "Cat Lovers","Dog Lovers"
+    ]
+  },
+  bff: {
+    "BFF Collection": [
+      "Sipping Into Summer","Summer Besties",
+      "Pier Rebels","Pineapple Roadtrip",
+      "Caught in the Moment","Sunset Comfort",
+      "Carried by Laughter","Mirror Sefie Duo"
+    ]
+  },
+  business: {
+    "Business Aesthetics": [
+      "Business Launch"
+    ]
+  }
+};
 
-    const privateApp = document.getElementById("private-app");
-    const authStatus = document.getElementById("auth-status");
-    const status = document.getElementById("status");
-    const content = document.getElementById("library-content");
-    const search = document.getElementById("search");
+const privateApp = document.getElementById("private-app");
+const authStatus = document.getElementById("auth-status");
+const status = document.getElementById("status");
+const content = document.getElementById("library-content");
+const search = document.getElementById("search");
 
-    const collectionButtons =
-      document.getElementById("collection-buttons");
-    const subcategoryPanel =
-      document.getElementById("subcategory-panel");
-    const subcategoryButtons =
-      document.getElementById("subcategory-buttons");
-    const activeFilter =
-      document.getElementById("active-filter");
+const collectionButtons =
+  document.getElementById("collection-buttons");
+const subcategoryPanel =
+  document.getElementById("subcategory-panel");
+const subcategoryButtons =
+  document.getElementById("subcategory-buttons");
+const activeFilter =
+  document.getElementById("active-filter");
 
-    const loadMoreArea = document.getElementById("load-more-area");
-    const loadMoreButton = document.getElementById("load-more-button");
-    const progressText = document.getElementById("progress-text");
-    const progressFill = document.getElementById("progress-fill");
+const loadMoreArea =
+  document.getElementById("load-more-area");
+const loadMoreButton =
+  document.getElementById("load-more-button");
+const progressText =
+  document.getElementById("progress-text");
+const progressFill =
+  document.getElementById("progress-fill");
 
-    let client;
-    let allItems = [];
-    let filteredItems = [];
-    let visibleCount = 0;
+let client;
+let allItems = [];
+let filteredItems = [];
+let visibleCount = 0;
 
-    let selectedCollection = "all";
-    let selectedMood = "all";
+let selectedCollection = "all";
+let selectedMood = "all";
 
-    let imageObserver = null;
-    let generation = 0;
+let imageObserver = null;
+let generation = 0;
 
-    const imageQueue = [];
-    let activeImages = 0;
+const imageQueue = [];
+let activeImages = 0;
 
-    function normalize(value) {
-      return String(value || "")
-        .normalize("NFKD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\([^)]*\bnew\b[^)]*\)/gi, "")
-        .replace(/\bnew\b/gi, "")
-        .replace(/[^a-zA-Z0-9]+/g, " ")
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ");
+function normalize(value) {
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/\([^)]*\bnew\b[^)]*\)/gi,"")
+    .replace(/\bnew\b/gi,"")
+    .replace(/[^a-zA-Z0-9]+/g," ")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g," ");
+}
+
+const categoryIndex = new Map();
+
+Object.entries(CATEGORY_NAMES).forEach(
+  ([collectionKey,moods]) => {
+    Object.entries(moods).forEach(([mood,names]) => {
+      names.forEach(name => {
+        const key = normalize(name);
+
+        if (!categoryIndex.has(key)) {
+          categoryIndex.set(key,[]);
+        }
+
+        categoryIndex.get(key).push({
+          collection:collectionKey,
+          mood
+        });
+      });
+    });
+  }
+);
+
+function detectCollectionFromSeries(series) {
+  const value = normalize(series);
+
+  if (
+    /\bmale\b|\bmen\b|\bman\b/.test(value) &&
+    !/\bfemale\b/.test(value)
+  ) return "male";
+
+  if (/\bfemale\b|\bwomen\b|\bwoman\b/.test(value)) {
+    return "female";
+  }
+
+  if (/\bcouple\b|\bduo\b|\blovers\b/.test(value)) {
+    return "couple";
+  }
+
+  if (/\bbff\b|\bbesties\b|\bfriends\b/.test(value)) {
+    return "bff";
+  }
+
+  if (/\bbusiness\b/.test(value)) {
+    return "business";
+  }
+
+  return null;
+}
+
+function classifyItem(item) {
+  const title = normalize(item.title);
+  const series = normalize(item.series);
+
+  const matches = [
+    ...(categoryIndex.get(title) || []),
+    ...(categoryIndex.get(series) || [])
+  ];
+
+  const seriesCollection =
+    detectCollectionFromSeries(item.series);
+
+  if (matches.length > 0) {
+    if (seriesCollection) {
+      const matchingCollection = matches.find(
+        entry => entry.collection === seriesCollection
+      );
+
+      if (matchingCollection) return matchingCollection;
     }
 
-    const categoryIndex = new Map();
-
-    Object.entries(CATEGORY_NAMES).forEach(
-      ([collectionKey, moods]) => {
-        Object.entries(moods).forEach(([mood, names]) => {
-          names.forEach(name => {
-            const key = normalize(name);
-
-            if (!categoryIndex.has(key)) {
-              categoryIndex.set(key, []);
-            }
-
-            categoryIndex.get(key).push({
-              collection: collectionKey,
-              mood
-            });
-          });
-        });
-      }
+    const unique = new Map(
+      matches.map(entry => [
+        entry.collection + "|" + entry.mood,
+        entry
+      ])
     );
 
-    function detectCollectionFromSeries(series) {
-      const value = normalize(series);
-
-      if (/\bmale\b|\bmen\b|\bman\b/.test(value) &&
-          !/\bfemale\b/.test(value)) {
-        return "male";
-      }
-
-      if (/\bfemale\b|\bwomen\b|\bwoman\b/.test(value)) {
-        return "female";
-      }
-
-      if (/\bcouple\b|\bduo\b|\blovers\b/.test(value)) {
-        return "couple";
-      }
-
-      if (/\bbff\b|\bbesties\b|\bfriends\b/.test(value)) {
-        return "bff";
-      }
-
-      if (/\bbusiness\b/.test(value)) {
-        return "business";
-      }
-
-      return null;
+    if (unique.size === 1) {
+      return [...unique.values()][0];
     }
 
-    function classifyItem(item) {
-      const title = normalize(item.title);
-      const series = normalize(item.series);
+    return null;
+  }
 
-      const matches = [
-        ...(categoryIndex.get(title) || []),
-        ...(categoryIndex.get(series) || [])
-      ];
+  return null;
+}
 
-      const seriesCollection =
-        detectCollectionFromSeries(item.series);
+function hasVideoPrompt(item) {
+  return (
+    typeof item.video_prompt === "string" &&
+    item.video_prompt.trim().length > 0
+  );
+}
 
-      if (matches.length > 0) {
-        if (seriesCollection) {
-          const matchingCollection = matches.find(
-            entry => entry.collection === seriesCollection
-          );
+function redirectToLogin() {
+  window.location.replace("index.html#login");
+}
 
-          if (matchingCollection) return matchingCollection;
-        }
+function showStatus(message) {
+  status.hidden = false;
+  status.textContent = message;
+}
 
-        // Bei doppelten Namen keine unsichere Zuordnung.
-        const unique = new Map(
-          matches.map(entry => [
-            entry.collection + "|" + entry.mood,
-            entry
-          ])
-        );
+function groupBySeries(items) {
+  const groups = new Map();
 
-        if (unique.size === 1) {
-          return [...unique.values()][0];
-        }
+  items.forEach(item => {
+    const series = item.series || "Other Editorials";
 
-        return null;
-      }
-
-      return null;
+    if (!groups.has(series)) {
+      groups.set(series,[]);
     }
 
-    function redirectToLogin() {
-      window.location.replace("index.html#login");
+    groups.get(series).push(item);
+  });
+
+  return groups;
+}
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+function withTimeout(promise,milliseconds,message) {
+  let timer;
+
+  const timeout = new Promise((resolve,reject) => {
+    timer = setTimeout(
+      () => reject(new Error(message)),
+      milliseconds
+    );
+  });
+
+  return Promise.race([promise,timeout])
+    .finally(() => clearTimeout(timer));
+}
+
+/* ANMELDUNG */
+
+async function verifyAccess() {
+  if (!window.supabase) {
+    authStatus.textContent =
+      "Die Anmeldung konnte nicht geladen werden. Bitte neu laden.";
+    return;
+  }
+
+  client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  try {
+    const {data,error} = await client.auth.getUser();
+
+    if (error || !data.user) {
+      redirectToLogin();
+      return;
     }
 
-    function showStatus(message) {
-      status.hidden = false;
-      status.textContent = message;
-    }
+    authStatus.hidden = true;
+    privateApp.hidden = false;
 
-    function groupBySeries(items) {
-      const groups = new Map();
+    await loadLibrary();
 
-      items.forEach(item => {
-        const series = item.series || "Other Editorials";
+  } catch(error) {
+    console.error(error);
+    authStatus.hidden = false;
+    authStatus.textContent =
+      "Verbindung fehlgeschlagen. Bitte Seite neu laden.";
+  }
+}
 
-        if (!groups.has(series)) {
-          groups.set(series, []);
-        }
+/* EDITORIALS UND VIDEOPROMPTS LADEN */
 
-        groups.get(series).push(item);
-      });
+async function loadLibrary() {
+  showStatus("Deine Editorials werden geladen …");
 
-      return groups;
-    }
+  try {
+    const items = [];
+    const databasePageSize = 500;
 
-    function wait(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    function withTimeout(promise, milliseconds, message) {
-      let timer;
-
-      const timeout = new Promise((resolve, reject) => {
-        timer = setTimeout(
-          () => reject(new Error(message)),
-          milliseconds
-        );
-      });
-
-      return Promise.race([promise, timeout])
-        .finally(() => clearTimeout(timer));
-    }
-
-    async function verifyAccess() {
-      if (!window.supabase) {
-        authStatus.textContent =
-          "Die Anmeldung konnte nicht geladen werden. Bitte neu laden.";
-        return;
-      }
-
-      client = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-      try {
-        const { data, error } = await client.auth.getUser();
-
-        if (error || !data.user) {
-          redirectToLogin();
-          return;
-        }
-
-        authStatus.hidden = true;
-        privateApp.hidden = false;
-
-        await loadLibrary();
-
-      } catch (error) {
-        console.error(error);
-        authStatus.hidden = false;
-        authStatus.textContent =
-          "Verbindung fehlgeschlagen. Bitte Seite neu laden.";
-      }
-    }
-
-    async function loadLibrary() {
-      showStatus("Deine Editorials werden geladen …");
-
-      try {
-        const items = [];
-        const databasePageSize = 500;
-
-        for (let start = 0; ; start += databasePageSize) {
-          const { data, error } = await client
-            .from("editorial_items")
-            .select("id,series,title,image_path,prompt,sort_order")
-            .order("series", { ascending: true })
-            .order("sort_order", { ascending: true })
-            .order("id", { ascending: true })
-            .range(start, start + databasePageSize - 1);
-
-          if (error) throw error;
-
-          items.push(...(data || []));
-
-          if (!data || data.length < databasePageSize) break;
-        }
-
-        allItems = items.map(item => ({
-          ...item,
-          _category: classifyItem(item)
-        }));
-
-        renderCategoryButtons();
-        applyFilters();
-
-      } catch (error) {
-        console.error(error);
-        showStatus(
-          "Die Editorials konnten nicht geladen werden. Bitte prüfe die Supabase-Zugriffsrechte."
-        );
-      }
-    }
-
-    function createFilterButton(label, active, callback) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className =
-        "category-button" + (active ? " active" : "");
-      button.textContent = label;
-      button.setAttribute("aria-pressed", String(active));
-      button.addEventListener("click", callback);
-      return button;
-    }
-
-    function renderCategoryButtons() {
-      collectionButtons.replaceChildren();
-
-      Object.entries(COLLECTIONS).forEach(([key, config]) => {
-        collectionButtons.appendChild(
-          createFilterButton(
-            config.label,
-            selectedCollection === key,
-            () => {
-              selectedCollection = key;
-              selectedMood = "all";
-              renderCategoryButtons();
-              applyFilters();
-            }
-          )
-        );
-      });
-
-      subcategoryButtons.replaceChildren();
-
-      if (selectedCollection === "all") {
-        subcategoryPanel.hidden = true;
-        return;
-      }
-
-      subcategoryPanel.hidden = false;
-
-      subcategoryButtons.appendChild(
-        createFilterButton(
-          "Alle " + COLLECTIONS[selectedCollection].label,
-          selectedMood === "all",
-          () => {
-            selectedMood = "all";
-            renderCategoryButtons();
-            applyFilters();
-          }
+    for (
+      let start = 0;
+      ;
+      start += databasePageSize
+    ) {
+      const {data,error} = await client
+        .from("editorial_items")
+        .select(
+          "id,series,title,image_path,prompt,video_prompt,sort_order"
         )
-      );
-
-      COLLECTIONS[selectedCollection].moods.forEach(mood => {
-        subcategoryButtons.appendChild(
-          createFilterButton(
-            mood,
-            selectedMood === mood,
-            () => {
-              selectedMood = mood;
-              renderCategoryButtons();
-              applyFilters();
-            }
-          )
-        );
-      });
-    }
-
-    function applyFilters() {
-      const query = normalize(search.value);
-
-      filteredItems = allItems.filter(item => {
-        // Die Suche hat Vorrang und durchsucht alle Collections.
-        if (query) {
-          return [
-            item.title,
-            item.series,
-            item._category?.collection,
-            item._category?.mood
-          ].some(value => normalize(value).includes(query));
-        }
-
-        if (selectedCollection === "all") return true;
-
-        if (!item._category) return false;
-
-        if (item._category.collection !== selectedCollection) {
-          return false;
-        }
-
-        if (selectedMood !== "all" &&
-            item._category.mood !== selectedMood) {
-          return false;
-        }
-
-        return true;
-      });
-
-      if (query) {
-        activeFilter.hidden = false;
-        activeFilter.textContent =
-          'Suchergebnisse für „' + search.value.trim() +
-          '“ – alle Collections werden durchsucht.';
-      } else if (selectedCollection === "all") {
-        activeFilter.hidden = false;
-        activeFilter.textContent =
-          "Alle Editorials – inklusive noch nicht zugeordneter Serien.";
-      } else {
-        activeFilter.hidden = false;
-        activeFilter.textContent =
-          COLLECTIONS[selectedCollection].label +
-          (selectedMood === "all" ? "" : " · " + selectedMood);
-      }
-
-      resetAndRender();
-    }
-
-    async function getImageUrl(path) {
-      if (!path) {
-        throw new Error("Kein Bildpfad vorhanden.");
-      }
-
-      const request = client.storage
-        .from(BUCKET_NAME)
-        .createSignedUrl(path, 3600);
-
-      const { data, error } = await withTimeout(
-        request,
-        IMAGE_TIMEOUT_MS,
-        "Zeitüberschreitung beim Erstellen des Bildlinks."
-      );
+        .order("series",{ascending:true})
+        .order("sort_order",{ascending:true})
+        .order("id",{ascending:true})
+        .range(start,start + databasePageSize - 1);
 
       if (error) throw error;
 
-      if (!data || !data.signedUrl) {
-        throw new Error("Kein Bildlink erhalten.");
+      items.push(...(data || []));
+
+      if (!data || data.length < databasePageSize) {
+        break;
       }
-
-      return data.signedUrl;
     }
 
-    function loadImageElement(url) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        let finished = false;
+    allItems = items.map(item => ({
+      ...item,
+      _category:classifyItem(item)
+    }));
 
-        const timer = setTimeout(() => {
-          finish(new Error("Zeitüberschreitung beim Laden des Bildes."));
-        }, IMAGE_TIMEOUT_MS);
+    renderCategoryButtons();
+    applyFilters();
 
-        function finish(error) {
-          if (finished) return;
-          finished = true;
+  } catch(error) {
+    console.error(error);
+    showStatus(
+      "Die Editorials konnten nicht geladen werden: " +
+      (error?.message || "Bitte Supabase-Zugriffsrechte prüfen.")
+    );
+  }
+}
 
-          clearTimeout(timer);
-          img.onload = null;
-          img.onerror = null;
+/* COLLECTIONS */
 
-          if (error) {
-            img.removeAttribute("src");
-            reject(error);
-          } else {
-            resolve(img);
-          }
+function createFilterButton(label,active,callback) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className =
+    "category-button" + (active ? " active" : "");
+  button.textContent = label;
+  button.setAttribute("aria-pressed",String(active));
+  button.addEventListener("click",callback);
+  return button;
+}
+
+function renderCategoryButtons() {
+  collectionButtons.replaceChildren();
+
+  Object.entries(COLLECTIONS).forEach(([key,config]) => {
+    collectionButtons.appendChild(
+      createFilterButton(
+        config.label,
+        selectedCollection === key,
+        () => {
+          selectedCollection = key;
+          selectedMood = "all";
+          renderCategoryButtons();
+          applyFilters();
         }
+      )
+    );
+  });
 
-        img.onload = () => finish(null);
-        img.onerror = () => {
-          finish(new Error("Bilddatei konnte nicht geladen werden."));
-        };
+  subcategoryButtons.replaceChildren();
 
-        img.src = url;
-      });
+  if (
+    selectedCollection === "all" ||
+    selectedCollection === "video"
+  ) {
+    subcategoryPanel.hidden = true;
+    return;
+  }
+
+  subcategoryPanel.hidden = false;
+
+  subcategoryButtons.appendChild(
+    createFilterButton(
+      "Alle " + COLLECTIONS[selectedCollection].label,
+      selectedMood === "all",
+      () => {
+        selectedMood = "all";
+        renderCategoryButtons();
+        applyFilters();
+      }
+    )
+  );
+
+  COLLECTIONS[selectedCollection].moods.forEach(mood => {
+    subcategoryButtons.appendChild(
+      createFilterButton(
+        mood,
+        selectedMood === mood,
+        () => {
+          selectedMood = mood;
+          renderCategoryButtons();
+          applyFilters();
+        }
+      )
+    );
+  });
+}
+
+/* SUCHE UND FILTER */
+
+function applyFilters() {
+  const query = normalize(search.value);
+
+  filteredItems = allItems.filter(item => {
+
+    // Suche durchsucht weiterhin alle Collections.
+    if (query) {
+      return [
+        item.title,
+        item.series,
+        item._category?.collection,
+        item._category?.mood
+      ].some(value => normalize(value).includes(query));
     }
 
-    function taskIsCurrent(task) {
-      return (
-        task.generation === generation &&
-        task.preview.isConnected
+    // Neue übergreifende Videoprompt-Collection.
+    if (selectedCollection === "video") {
+      return hasVideoPrompt(item);
+    }
+
+    if (selectedCollection === "all") {
+      return true;
+    }
+
+    if (!item._category) {
+      return false;
+    }
+
+    if (
+      item._category.collection !== selectedCollection
+    ) {
+      return false;
+    }
+
+    if (
+      selectedMood !== "all" &&
+      item._category.mood !== selectedMood
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+
+  activeFilter.hidden = false;
+
+  if (query) {
+    activeFilter.textContent =
+      'Suchergebnisse für „' +
+      search.value.trim() +
+      '“ – alle Collections werden durchsucht.';
+
+  } else if (selectedCollection === "video") {
+    activeFilter.textContent =
+      "🎬 Video Prompts · " +
+      filteredItems.length +
+      " Editorials mit gespeichertem Videoprompt";
+
+  } else if (selectedCollection === "all") {
+    activeFilter.textContent =
+      "Alle Editorials – inklusive noch nicht zugeordneter Serien.";
+
+  } else {
+    activeFilter.textContent =
+      COLLECTIONS[selectedCollection].label +
+      (selectedMood === "all"
+        ? ""
+        : " · " + selectedMood);
+  }
+
+  resetAndRender();
+}
+
+/* PRIVATE BILDER LADEN */
+
+async function getImageUrl(path) {
+  if (!path) {
+    throw new Error("Kein Bildpfad vorhanden.");
+  }
+
+  const request = client.storage
+    .from(BUCKET_NAME)
+    .createSignedUrl(path,3600);
+
+  const {data,error} = await withTimeout(
+    request,
+    IMAGE_TIMEOUT_MS,
+    "Zeitüberschreitung beim Erstellen des Bildlinks."
+  );
+
+  if (error) throw error;
+
+  if (!data || !data.signedUrl) {
+    throw new Error("Kein Bildlink erhalten.");
+  }
+
+  return data.signedUrl;
+}
+
+function loadImageElement(url) {
+  return new Promise((resolve,reject) => {
+    const img = new Image();
+    let finished = false;
+
+    const timer = setTimeout(() => {
+      finish(
+        new Error("Zeitüberschreitung beim Laden des Bildes.")
       );
-    }
+    },IMAGE_TIMEOUT_MS);
 
-    function enqueueImage(task) {
-      if (
-        !taskIsCurrent(task) ||
-        task.finished ||
-        task.queued ||
-        task.loading
-      ) return;
+    function finish(error) {
+      if (finished) return;
+      finished = true;
 
-      task.queued = true;
-      imageQueue.push(task);
-      processImageQueue();
-    }
+      clearTimeout(timer);
+      img.onload = null;
+      img.onerror = null;
 
-    function processImageQueue() {
-      while (
-        activeImages < MAX_SIMULTANEOUS_IMAGES &&
-        imageQueue.length > 0
-      ) {
-        const task = imageQueue.shift();
-        task.queued = false;
-
-        if (!taskIsCurrent(task) || task.finished) continue;
-
-        activeImages++;
-        task.loading = true;
-
-        loadImageWithRetry(task)
-          .catch(error => {
-            console.error("Unerwarteter Bildfehler:", error);
-          })
-          .finally(() => {
-            task.loading = false;
-            activeImages--;
-            processImageQueue();
-          });
+      if (error) {
+        img.removeAttribute("src");
+        reject(error);
+      } else {
+        resolve(img);
       }
     }
 
-    async function loadImageWithRetry(task) {
-      for (
-        let attempt = 1;
-        attempt <= MAX_ATTEMPTS;
-        attempt++
-      ) {
-        if (!taskIsCurrent(task)) return;
+    img.onload = () => finish(null);
+    img.onerror = () => {
+      finish(
+        new Error("Bilddatei konnte nicht geladen werden.")
+      );
+    };
 
-        try {
-          task.state.hidden = false;
-          task.state.textContent =
-            attempt === 1
-              ? "Bild wird geladen …"
-              : "Bild wird erneut geladen …";
+    img.src = url;
+  });
+}
 
-          const url = await getImageUrl(task.item.image_path);
+function taskIsCurrent(task) {
+  return (
+    task.generation === generation &&
+    task.preview.isConnected
+  );
+}
 
-          if (!taskIsCurrent(task)) return;
+function enqueueImage(task) {
+  if (
+    !taskIsCurrent(task) ||
+    task.finished ||
+    task.queued ||
+    task.loading
+  ) return;
 
-          const loadedImage = await loadImageElement(url);
+  task.queued = true;
+  imageQueue.push(task);
+  processImageQueue();
+}
 
-          if (!taskIsCurrent(task)) return;
+function processImageQueue() {
+  while (
+    activeImages < MAX_SIMULTANEOUS_IMAGES &&
+    imageQueue.length > 0
+  ) {
+    const task = imageQueue.shift();
+    task.queued = false;
 
-          task.img.src = loadedImage.src;
-          task.img.hidden = false;
-          task.state.hidden = true;
-          task.finished = true;
+    if (!taskIsCurrent(task) || task.finished) {
+      continue;
+    }
 
-          return;
+    activeImages++;
+    task.loading = true;
 
-        } catch (error) {
-          console.warn(
-            "Bildladeversuch " + attempt,
-            task.item.title,
-            error
-          );
+    loadImageWithRetry(task)
+      .catch(error => {
+        console.error("Unerwarteter Bildfehler:",error);
+      })
+      .finally(() => {
+        task.loading = false;
+        activeImages--;
+        processImageQueue();
+      });
+  }
+}
 
-          if (attempt < MAX_ATTEMPTS) {
-            await wait(900 * attempt);
-          }
-        }
-      }
+async function loadImageWithRetry(task) {
+  for (
+    let attempt = 1;
+    attempt <= MAX_ATTEMPTS;
+    attempt++
+  ) {
+    if (!taskIsCurrent(task)) return;
+
+    try {
+      task.state.hidden = false;
+      task.state.textContent =
+        attempt === 1
+          ? "Bild wird geladen …"
+          : "Bild wird erneut geladen …";
+
+      const url = await getImageUrl(
+        task.item.image_path
+      );
 
       if (!taskIsCurrent(task)) return;
 
-      task.state.replaceChildren();
+      const loadedImage =
+        await loadImageElement(url);
 
-      const message = document.createElement("span");
-      message.textContent = "Bild konnte nicht geladen werden.";
+      if (!taskIsCurrent(task)) return;
 
-      const retry = document.createElement("button");
-      retry.type = "button";
-      retry.className = "retry-button";
-      retry.textContent = "BILD ERNEUT LADEN";
+      task.img.src = loadedImage.src;
+      task.img.hidden = false;
+      task.state.hidden = true;
+      task.finished = true;
 
-      retry.addEventListener("click", () => {
-        if (!taskIsCurrent(task)) return;
+      return;
 
-        task.finished = false;
-        task.state.textContent = "Bild wird erneut geladen …";
-        enqueueImage(task);
+    } catch(error) {
+      console.warn(
+        "Bildladeversuch " + attempt,
+        task.item.title,
+        error
+      );
+
+      if (attempt < MAX_ATTEMPTS) {
+        await wait(900 * attempt);
+      }
+    }
+  }
+
+  if (!taskIsCurrent(task)) return;
+
+  task.state.replaceChildren();
+
+  const message = document.createElement("span");
+  message.textContent =
+    "Bild konnte nicht geladen werden.";
+
+  const retry = document.createElement("button");
+  retry.type = "button";
+  retry.className = "retry-button";
+  retry.textContent = "BILD ERNEUT LADEN";
+
+  retry.addEventListener("click",() => {
+    if (!taskIsCurrent(task)) return;
+
+    task.finished = false;
+    task.state.textContent =
+      "Bild wird erneut geladen …";
+
+    enqueueImage(task);
+  });
+
+  task.state.append(message,retry);
+}
+
+function setupImageObserver() {
+  if (imageObserver) {
+    imageObserver.disconnect();
+  }
+
+  imageObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        const task = entry.target._imageTask;
+
+        if (task) {
+          enqueueImage(task);
+          imageObserver.unobserve(entry.target);
+        }
       });
+    },
+    {
+      rootMargin:"400px 0px",
+      threshold:0
+    }
+  );
+}
 
-      task.state.append(message, retry);
+/* KOPIERBUTTONS */
+
+function createCopyButton(text,label,isVideo = false) {
+  const copyButton = document.createElement("button");
+
+  copyButton.type = "button";
+  copyButton.className =
+    "copy-button" + (isVideo ? " video-copy" : "");
+  copyButton.textContent = label;
+
+  copyButton.addEventListener("click",async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+
+      copyButton.textContent = "COPIED ✓";
+
+      setTimeout(() => {
+        copyButton.textContent = label;
+      },1800);
+
+    } catch(error) {
+      console.error(error);
+      copyButton.textContent =
+        "KOPIEREN NICHT MÖGLICH";
+
+      setTimeout(() => {
+        copyButton.textContent = label;
+      },2500);
+    }
+  });
+
+  return copyButton;
+}
+
+/* EDITORIAL-KARTEN */
+
+function createCard(item,index) {
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const preview = document.createElement("div");
+  preview.className = "preview";
+
+  if (item.image_path) {
+    const img = document.createElement("img");
+    img.alt =
+      item.title || item.series || "Editorial";
+    img.hidden = true;
+
+    const imageState =
+      document.createElement("div");
+
+    imageState.className = "image-state";
+    imageState.textContent =
+      "Bild wird geladen …";
+
+    preview.append(img,imageState);
+
+    const task = {
+      item,
+      img,
+      state:imageState,
+      preview,
+      generation,
+      queued:false,
+      loading:false,
+      finished:false
+    };
+
+    preview._imageTask = task;
+    imageObserver.observe(preview);
+
+  } else {
+    const imageState =
+      document.createElement("div");
+
+    imageState.className = "image-state";
+    imageState.textContent =
+      "Für dieses Editorial ist kein Bild gespeichert.";
+
+    preview.appendChild(imageState);
+  }
+
+  const body = document.createElement("div");
+  body.className = "card-body";
+
+  const number = document.createElement("div");
+  number.className = "number";
+  number.textContent =
+    "EDITORIAL " + String(index).padStart(3,"0");
+
+  const title = document.createElement("h3");
+  title.textContent =
+    item.title || item.series || "Editorial";
+
+  body.append(number,title);
+
+  if (hasVideoPrompt(item)) {
+    const badge = document.createElement("div");
+    badge.className = "video-badge";
+    badge.textContent = "🎬 VIDEO PROMPT AVAILABLE";
+    body.appendChild(badge);
+  }
+
+  // Bisheriger Bildprompt.
+  const imageLabel = document.createElement("div");
+  imageLabel.className = "prompt-label";
+  imageLabel.textContent = "IMAGE PROMPT";
+
+  const prompt = document.createElement("div");
+  prompt.className = "prompt";
+  prompt.textContent = item.prompt || "";
+
+  const imageCopy = createCopyButton(
+    item.prompt || "",
+    "COPY IMAGE PROMPT →"
+  );
+
+  body.append(
+    imageLabel,
+    prompt,
+    imageCopy
+  );
+
+  // Zusätzlicher Videoprompt, falls gespeichert.
+  if (hasVideoPrompt(item)) {
+    const videoSection =
+      document.createElement("div");
+
+    videoSection.className = "video-section";
+
+    const videoLabel =
+      document.createElement("div");
+
+    videoLabel.className = "video-label";
+    videoLabel.textContent = "🎬 VIDEO PROMPT";
+
+    const videoPrompt =
+      document.createElement("div");
+
+    videoPrompt.className =
+      "prompt video-prompt";
+
+    videoPrompt.textContent =
+      item.video_prompt;
+
+    const videoCopy = createCopyButton(
+      item.video_prompt,
+      "COPY VIDEO PROMPT →",
+      true
+    );
+
+    videoSection.append(
+      videoLabel,
+      videoPrompt,
+      videoCopy
+    );
+
+    body.appendChild(videoSection);
+  }
+
+  card.append(preview,body);
+
+  return card;
+}
+
+/* SERIEN ANZEIGEN */
+
+function appendEditorials(items) {
+  const groups = groupBySeries(items);
+
+  groups.forEach((seriesItems,seriesName) => {
+    let section = [...content.children].find(
+      element =>
+        element.dataset.series === seriesName
+    );
+
+    if (!section) {
+      section = document.createElement("section");
+      section.className = "series-section";
+      section.dataset.series = seriesName;
+
+      const heading = document.createElement("h2");
+      heading.className = "series-heading";
+      heading.textContent = seriesName;
+
+      const count = document.createElement("div");
+      count.className = "series-count";
+
+      const gallery = document.createElement("div");
+      gallery.className = "gallery";
+
+      section.append(heading,count,gallery);
+      content.appendChild(section);
     }
 
-    function setupImageObserver() {
-      if (imageObserver) imageObserver.disconnect();
+    const gallery =
+      section.querySelector(".gallery");
 
-      imageObserver = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
+    const count =
+      section.querySelector(".series-count");
 
-            const task = entry.target._imageTask;
+    seriesItems.forEach(item => {
+      const index =
+        filteredItems.indexOf(item) + 1;
 
-            if (task) {
-              enqueueImage(task);
-              imageObserver.unobserve(entry.target);
-            }
-          });
-        },
-        {
-          rootMargin: "400px 0px",
-          threshold: 0
-        }
+      gallery.appendChild(
+        createCard(item,index)
+      );
+    });
+
+    count.textContent =
+      gallery.children.length + " EDITORIALS";
+  });
+}
+
+/* JEWEILS 24 EDITORIALS LADEN */
+
+function updateLoadMoreArea() {
+  const total = filteredItems.length;
+
+  if (total === 0) {
+    loadMoreArea.hidden = true;
+    return;
+  }
+
+  loadMoreArea.hidden = false;
+
+  progressText.textContent =
+    visibleCount + " von " +
+    total + " Editorials angezeigt";
+
+  progressFill.style.width =
+    ((visibleCount / total) * 100) + "%";
+
+  loadMoreButton.hidden =
+    visibleCount >= total;
+}
+
+function showNextPage() {
+  if (visibleCount >= filteredItems.length) {
+    return;
+  }
+
+  const nextItems = filteredItems.slice(
+    visibleCount,
+    visibleCount + PAGE_SIZE
+  );
+
+  appendEditorials(nextItems);
+
+  visibleCount += nextItems.length;
+
+  updateLoadMoreArea();
+}
+
+function resetAndRender() {
+  generation++;
+
+  if (imageObserver) {
+    imageObserver.disconnect();
+  }
+
+  imageQueue.length = 0;
+  content.replaceChildren();
+
+  setupImageObserver();
+  visibleCount = 0;
+
+  if (filteredItems.length === 0) {
+    if (
+      selectedCollection === "video" &&
+      !search.value.trim()
+    ) {
+      showStatus(
+        "Noch keine Videoprompts vorhanden. " +
+        "Speichere zuerst einen Videoprompt " +
+        "im Admin Dashboard."
+      );
+    } else {
+      showStatus(
+        "Keine passenden Editorials gefunden."
       );
     }
 
-    function createCard(item, index) {
-      const card = document.createElement("article");
-      card.className = "card";
+    loadMoreArea.hidden = true;
+    return;
+  }
 
-      const preview = document.createElement("div");
-      preview.className = "preview";
+  status.hidden = true;
+  showNextPage();
+}
 
-      if (item.image_path) {
-        const img = document.createElement("img");
-        img.alt = item.title || item.series || "Editorial";
-        img.hidden = true;
+/* BUTTONS UND EREIGNISSE */
 
-        const imageState = document.createElement("div");
-        imageState.className = "image-state";
-        imageState.textContent = "Bild wird geladen …";
+search.addEventListener(
+  "input",
+  applyFilters
+);
 
-        preview.append(img, imageState);
+loadMoreButton.addEventListener(
+  "click",
+  showNextPage
+);
 
-        const task = {
-          item,
-          img,
-          state: imageState,
-          preview,
-          generation,
-          queued: false,
-          loading: false,
-          finished: false
-        };
-
-        preview._imageTask = task;
-        imageObserver.observe(preview);
-
-      } else {
-        const imageState = document.createElement("div");
-        imageState.className = "image-state";
-        imageState.textContent =
-          "Für dieses Editorial ist kein Bild gespeichert.";
-        preview.appendChild(imageState);
-      }
-
-      const body = document.createElement("div");
-      body.className = "card-body";
-
-      const number = document.createElement("div");
-      number.className = "number";
-      number.textContent =
-        "EDITORIAL " + String(index).padStart(3, "0");
-
-      const title = document.createElement("h3");
-      title.textContent = item.title || item.series || "Editorial";
-
-      const prompt = document.createElement("div");
-      prompt.className = "prompt";
-      prompt.textContent = item.prompt || "";
-
-      const copyButton = document.createElement("button");
-      copyButton.className = "copy-button";
-      copyButton.type = "button";
-      copyButton.textContent = "COPY PROMPT →";
-
-      copyButton.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(item.prompt || "");
-          copyButton.textContent = "COPIED ✓";
-
-          setTimeout(() => {
-            copyButton.textContent = "COPY PROMPT →";
-          }, 1800);
-
-        } catch (error) {
-          console.error(error);
-          copyButton.textContent = "KOPIEREN NICHT MÖGLICH";
-        }
-      });
-
-      body.append(number, title, prompt, copyButton);
-      card.append(preview, body);
-
-      return card;
+document.getElementById("logout-button")
+  .addEventListener("click",async () => {
+    try {
+      await client.auth.signOut();
+    } finally {
+      redirectToLogin();
     }
+  });
 
-    function appendEditorials(items) {
-      const groups = groupBySeries(items);
-
-      groups.forEach((seriesItems, seriesName) => {
-        let section = [...content.children].find(
-          element => element.dataset.series === seriesName
-        );
-
-        if (!section) {
-          section = document.createElement("section");
-          section.className = "series-section";
-          section.dataset.series = seriesName;
-
-          const heading = document.createElement("h2");
-          heading.className = "series-heading";
-          heading.textContent = seriesName;
-
-          const count = document.createElement("div");
-          count.className = "series-count";
-
-          const gallery = document.createElement("div");
-          gallery.className = "gallery";
-
-          section.append(heading, count, gallery);
-          content.appendChild(section);
-        }
-
-        const gallery = section.querySelector(".gallery");
-        const count = section.querySelector(".series-count");
-
-        seriesItems.forEach(item => {
-          const index = filteredItems.indexOf(item) + 1;
-          gallery.appendChild(createCard(item, index));
-        });
-
-        count.textContent =
-          gallery.children.length + " EDITORIALS";
-      });
-    }
-
-    function updateLoadMoreArea() {
-      const total = filteredItems.length;
-
-      if (total === 0) {
-        loadMoreArea.hidden = true;
-        return;
-      }
-
-      loadMoreArea.hidden = false;
-
-      progressText.textContent =
-        visibleCount + " von " + total + " Editorials angezeigt";
-
-      progressFill.style.width =
-        ((visibleCount / total) * 100) + "%";
-
-      loadMoreButton.hidden = visibleCount >= total;
-    }
-
-    function showNextPage() {
-      if (visibleCount >= filteredItems.length) return;
-
-      const nextItems = filteredItems.slice(
-        visibleCount,
-        visibleCount + PAGE_SIZE
-      );
-
-      appendEditorials(nextItems);
-
-      visibleCount += nextItems.length;
-      updateLoadMoreArea();
-    }
-
-    function resetAndRender() {
-      generation++;
-
-      if (imageObserver) imageObserver.disconnect();
-
-      imageQueue.length = 0;
-      content.replaceChildren();
-
-      setupImageObserver();
-      visibleCount = 0;
-
-      if (filteredItems.length === 0) {
-        showStatus("Keine passenden Editorials gefunden.");
-        loadMoreArea.hidden = true;
-        return;
-      }
-
-      status.hidden = true;
-      showNextPage();
-    }
-
-    search.addEventListener("input", applyFilters);
-
-    loadMoreButton.addEventListener("click", showNextPage);
-
-    document.getElementById("logout-button")
-      .addEventListener("click", async () => {
-        try {
-          await client.auth.signOut();
-        } finally {
-          redirectToLogin();
-        }
-      });
-
-    verifyAccess();
-  </script>
+verifyAccess();
+</script>
 </body>
 </html>
