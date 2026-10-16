@@ -4,31 +4,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Editorial Galerie | NyraAmanda</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Private Editorial Library | NyraAmanda</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --purple: #684583;
       --muted: #826d91;
       --bg: #faf7fc;
+      --lavender: #e8d8f2;
     }
 
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       background: var(--bg);
       color: var(--purple);
-      font-family: "DM Sans", sans-serif;
+      font-family: "DM Sans", Arial, sans-serif;
     }
+
+    button, input { font: inherit; }
+
+    button { cursor: pointer; }
 
     header {
       background: linear-gradient(135deg, #eee1f7, #d9c3eb, #c6a8dd);
-      padding: 25px 5% 75px;
+      padding: 25px 5% 65px;
     }
 
     nav {
@@ -38,19 +46,35 @@
       justify-content: space-between;
       align-items: center;
       gap: 15px;
+      flex-wrap: wrap;
     }
 
-    nav a {
+    .brand {
       color: inherit;
       text-decoration: none;
-      font-size: 11px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .logout {
+      border: 1px solid #795598;
+      background: transparent;
+      color: #684583;
+      padding: 12px 18px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 1px;
     }
 
+    .logout:hover {
+      background: #684583;
+      color: white;
+    }
+
     .hero {
       text-align: center;
-      margin: 85px auto 0;
+      margin: 65px auto 0;
       max-width: 850px;
     }
 
@@ -61,13 +85,13 @@
       text-transform: uppercase;
     }
 
-    h1, h2 {
+    h1, h2, h3 {
       font-family: "Cormorant Garamond", Georgia, serif;
       font-weight: 400;
     }
 
     h1 {
-      font-size: clamp(55px, 10vw, 120px);
+      font-size: clamp(55px, 10vw, 110px);
       line-height: .95;
       margin: 22px 0;
     }
@@ -79,47 +103,88 @@
       margin: 25px auto 0;
     }
 
-    .intro {
-      text-align: center;
-      padding: 65px 5% 35px;
+    .toolbar {
+      max-width: 1350px;
+      margin: auto;
+      padding: 55px 5% 30px;
     }
 
-    .intro h2 {
-      font-size: clamp(35px, 5vw, 65px);
-      margin: 10px 0;
+    .toolbar h2 {
+      font-size: clamp(38px, 6vw, 65px);
+      margin: 12px 0;
+    }
+
+    .toolbar p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .search {
+      width: 100%;
+      max-width: 550px;
+      margin-top: 22px;
+      padding: 16px;
+      border: 1px solid #ccb5dc;
+      background: white;
+      color: var(--purple);
+      font-size: 13px;
+    }
+
+    .status {
+      text-align: center;
+      padding: 35px 15px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .series-section {
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 35px 4% 45px;
+    }
+
+    .series-heading {
+      font-size: clamp(35px, 5vw, 58px);
+      margin: 0 0 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .series-count {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
     }
 
     .gallery {
-      max-width: 1450px;
-      margin: auto;
-      padding: 10px 4% 70px;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 22px;
     }
 
     .card {
-      background: white;
       min-width: 0;
       overflow: hidden;
+      background: white;
       box-shadow: 0 12px 35px rgba(90, 50, 115, .07);
     }
 
     .preview {
-      width: 100%;
       aspect-ratio: 3 / 4;
-      background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
       overflow: hidden;
+      background: linear-gradient(145deg, #e8d7ce, #c5add2, #947bac);
     }
 
     .preview img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       display: block;
+      object-fit: cover;
     }
 
-    .card-body { padding: 22px; }
+    .card-body { padding: 20px; }
 
     .number {
       font-size: 10px;
@@ -128,205 +193,402 @@
       letter-spacing: 1px;
     }
 
-    .card h2 {
-      font-size: 32px;
-      margin: 12px 0 0;
+    .card h3 {
+      font-size: 30px;
       line-height: 1.1;
+      margin: 10px 0 15px;
       overflow-wrap: anywhere;
     }
 
-    .status {
-      text-align: center;
-      padding: 30px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .cta {
-      text-align: center;
-      padding: 20px 5% 90px;
-    }
-
-    .cta h2 {
-      font-size: clamp(38px, 6vw, 70px);
-      margin: 10px 0 15px;
-    }
-
-    .cta p {
-      font-size: 13px;
+    .prompt {
+      font-size: 12px;
       line-height: 1.8;
-      margin-bottom: 30px;
+      color: #5e4c6a;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      max-height: 230px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #faf6fd;
+      border: 1px solid #eee3f5;
     }
 
-    .buy-button {
-      display: inline-block;
-      background: var(--purple);
+    .copy-button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      background: #775095;
       color: white;
-      padding: 18px 35px;
-      text-decoration: none;
-      font-size: 11px;
+      border: 0;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 1.5px;
-      transition: background .2s;
     }
 
-    .buy-button:hover {
-      background: #503367;
+    .copy-button:hover { background: #593474; }
+
+    .copy-button:disabled {
+      opacity: .6;
+      cursor: default;
     }
 
     footer {
       text-align: center;
-      padding: 40px 15px;
+      padding: 45px 15px;
       background: #f0e5f7;
       font-size: 11px;
       letter-spacing: 1px;
     }
 
-    @media (max-width: 650px) {
-      header { padding: 20px 5% 55px; }
-      .hero { margin-top: 65px; }
-      .intro { padding: 45px 4% 25px; }
+    [hidden] { display: none !important; }
 
+    @media (max-width: 800px) {
       .gallery {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-        padding: 10px 3% 50px;
+        gap: 12px;
       }
 
-      .card-body { padding: 12px; }
-      .card h2 { font-size: 21px; }
-      .number { font-size: 9px; }
-      .cta { padding-bottom: 65px; }
+      .card-body { padding: 13px; }
+      .card h3 { font-size: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      header { padding-bottom: 50px; }
+      .hero { margin-top: 50px; }
+
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .series-section { padding: 25px 4% 35px; }
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <nav>
-      <a href="index.html">NYRAAMANDA</a>
-      <a href="index.html">← ZURÜCK</a>
-    </nav>
+  <div id="private-app" hidden>
 
-    <div class="hero">
-      <div class="eyebrow">EDITORIAL PROMPT LIBRARY</div>
-      <h1>Editorial Gallery</h1>
-      <p>
-        A curated world of editorial inspiration.
-        Explore the collections and discover the full library.
-      </p>
-    </div>
-  </header>
+    <header>
+      <nav>
+        <a class="brand" href="index.html">NYRAAMANDA</a>
 
-  <main>
-    <section class="intro">
-      <div class="eyebrow">THE COLLECTIONS</div>
-      <h2>Explore the Editorials</h2>
-      <p>One glimpse into every creative world.</p>
-    </section>
+        <button id="logout-button" class="logout" type="button">
+          LOG OUT →
+        </button>
+      </nav>
 
-    <div id="status" class="status">
-      Galerie wird geladen …
-    </div>
+      <div class="hero">
+        <div class="eyebrow">THE PRIVATE EDITORIAL ARCHIVE</div>
 
-    <section id="gallery" class="gallery"></section>
+        <h1>Editorial<br>Prompt Library</h1>
 
-    <section class="cta">
-      <div class="eyebrow">THE COMPLETE EXPERIENCE</div>
-      <h2>Unlock the Full Library</h2>
-      <p>
-        Discover the complete Editorial Prompt Library
-        and bring your creative visions to life.
-      </p>
-      <a
-        class="buy-button"
-        href="https://aphroditepromt.mytentary.com/p/iGCeyt"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        GET THE FULL LIBRARY →
-      </a>
-    </section>
-  </main>
+        <p>
+          Welcome to your creative world.<br>
+          Explore every editorial and copy your next prompt.
+        </p>
+      </div>
+    </header>
 
-  <footer>
-    NYRAAMANDA · EDITORIAL PROMPT LIBRARY
-  </footer>
+    <main>
+      <section class="toolbar">
+        <div class="eyebrow">YOUR CREATIVE ARCHIVE</div>
+        <h2>Explore the Editorials</h2>
+
+        <p>
+          Suche nach einer Serie oder einem Editorial.
+          Alle vollständigen Prompts findest du direkt unter den Bildern.
+        </p>
+
+        <input
+          id="search"
+          class="search"
+          type="search"
+          placeholder="Editorials durchsuchen …"
+          aria-label="Editorials durchsuchen"
+        >
+      </section>
+
+      <div id="status" class="status" role="status">
+        Deine private Library wird geladen …
+      </div>
+
+      <div id="library-content"></div>
+    </main>
+
+    <footer>
+      NYRAAMANDA · PRIVATE EDITORIAL PROMPT LIBRARY
+    </footer>
+  </div>
+
+  <div id="auth-status" class="status" role="status">
+    Zugang wird überprüft …
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <script>
-    const gallery = document.getElementById("gallery");
+    const SUPABASE_URL =
+      "https://pcakhkkvpmcmimyblav.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
+
+    const BUCKET_NAME = "editorial-images";
+
+    const privateApp = document.getElementById("private-app");
+    const authStatus = document.getElementById("auth-status");
     const status = document.getElementById("status");
+    const content = document.getElementById("library-content");
+    const search = document.getElementById("search");
 
-    async function loadGallery() {
+    let client;
+    let allItems = [];
+
+    function redirectToLogin() {
+      window.location.replace("index.html#login");
+    }
+
+    function showError(message) {
+      status.hidden = false;
+      status.textContent = message;
+    }
+
+    async function verifyAccess() {
+      if (!window.supabase) {
+        authStatus.textContent =
+          "Die Anmeldung konnte nicht geladen werden. Bitte neu laden.";
+        return;
+      }
+
+      client = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
       try {
-        const response = await fetch("editorials.json");
+        // getUser prüft den Benutzer beim Auth-Server.
+        const { data, error } = await client.auth.getUser();
 
-        if (!response.ok) {
-          throw new Error("editorials.json nicht gefunden");
-        }
-
-        const collections = await response.json();
-
-        if (!Array.isArray(collections)) {
-          throw new Error("Ungültiges Datenformat");
-        }
-
-        const params = new URLSearchParams(window.location.search);
-        const selectedSeries = params.get("serie");
-
-        const visibleCollections = selectedSeries
-          ? collections.filter(item => item.slug === selectedSeries)
-          : collections;
-
-        if (visibleCollections.length === 0) {
-          status.textContent = "Keine Editorial-Serien gefunden.";
+        if (error || !data.user) {
+          redirectToLogin();
           return;
         }
 
-        status.style.display = "none";
+        authStatus.hidden = true;
+        privateApp.hidden = false;
 
-        visibleCollections.forEach((collection, index) => {
-          const card = document.createElement("article");
-          card.className = "card";
-
-          const preview = document.createElement("div");
-          preview.className = "preview";
-
-          const firstImage = collection.images?.[0];
-
-          if (firstImage?.src) {
-            const img = document.createElement("img");
-            img.src = firstImage.src;
-            img.alt = firstImage.alt || collection.title;
-            img.loading = "lazy";
-            preview.appendChild(img);
-          }
-
-          const body = document.createElement("div");
-          body.className = "card-body";
-
-          const number = document.createElement("div");
-          number.className = "number";
-          number.textContent =
-            "COLLECTION " + String(index + 1).padStart(2, "0");
-
-          const heading = document.createElement("h2");
-          heading.textContent = collection.title || "Editorial";
-
-          body.append(number, heading);
-          card.append(preview, body);
-          gallery.appendChild(card);
-        });
+        await loadLibrary();
 
       } catch (error) {
         console.error(error);
-        status.textContent =
-          "Die Galerie konnte noch nicht geladen werden.";
+        authStatus.textContent =
+          "Verbindung fehlgeschlagen. Bitte Seite neu laden.";
       }
     }
 
-    loadGallery();
+    async function loadLibrary() {
+      showError("Deine Editorials werden geladen …");
+
+      try {
+        // Supabase liefert standardmäßig höchstens 1000 Zeilen.
+        // Deshalb laden wir alle Editorials in mehreren Paketen.
+        const items = [];
+        const pageSize = 500;
+
+        for (let start = 0; ; start += pageSize) {
+          const { data, error } = await client
+            .from("editorial_items")
+            .select("id,series,title,image_path,prompt,sort_order")
+            .order("series", { ascending: true })
+            .order("sort_order", { ascending: true })
+            .order("id", { ascending: true })
+            .range(start, start + pageSize - 1);
+
+          if (error) throw error;
+
+          items.push(...(data || []));
+
+          if (!data || data.length < pageSize) break;
+        }
+
+        allItems = items;
+
+        if (allItems.length === 0) {
+          showError(
+            "Deine Library ist bereit. Die Editorial-Bilder und Prompts müssen jetzt noch importiert werden."
+          );
+          return;
+        }
+
+        status.hidden = true;
+        await renderLibrary(allItems);
+
+      } catch (error) {
+        console.error(error);
+        showError(
+          "Die Editorials konnten nicht geladen werden. Bitte prüfe die Supabase-Zugriffsrechte."
+        );
+      }
+    }
+
+    function groupBySeries(items) {
+      const groups = new Map();
+
+      items.forEach(function(item) {
+        const series = item.series || "Other Editorials";
+
+        if (!groups.has(series)) {
+          groups.set(series, []);
+        }
+
+        groups.get(series).push(item);
+      });
+
+      return groups;
+    }
+
+    async function getImageUrl(path) {
+      if (!path) return null;
+
+      // Private Bilder erhalten nur angemeldete Nutzer
+      // über zeitlich begrenzte Links.
+      const { data, error } = await client.storage
+        .from(BUCKET_NAME)
+        .createSignedUrl(path, 3600);
+
+      if (error) {
+        console.warn("Bild konnte nicht geladen werden:", path, error);
+        return null;
+      }
+
+      return data.signedUrl;
+    }
+
+    function createCard(item, index) {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      const preview = document.createElement("div");
+      preview.className = "preview";
+
+      if (item.image_path) {
+        const img = document.createElement("img");
+        img.alt = item.title || item.series || "Editorial";
+        img.loading = "lazy";
+
+        getImageUrl(item.image_path).then(function(url) {
+          if (url) img.src = url;
+        });
+
+        preview.appendChild(img);
+      }
+
+      const body = document.createElement("div");
+      body.className = "card-body";
+
+      const number = document.createElement("div");
+      number.className = "number";
+      number.textContent =
+        "EDITORIAL " + String(index + 1).padStart(3, "0");
+
+      const title = document.createElement("h3");
+      title.textContent = item.title || item.series || "Editorial";
+
+      const prompt = document.createElement("div");
+      prompt.className = "prompt";
+      prompt.textContent = item.prompt || "";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = "copy-button";
+      copyButton.type = "button";
+      copyButton.textContent = "COPY PROMPT →";
+
+      copyButton.addEventListener("click", async function() {
+        try {
+          await navigator.clipboard.writeText(item.prompt || "");
+
+          copyButton.textContent = "COPIED ✓";
+
+          setTimeout(function() {
+            copyButton.textContent = "COPY PROMPT →";
+          }, 1800);
+
+        } catch (error) {
+          console.error(error);
+          copyButton.textContent = "KOPIEREN NICHT MÖGLICH";
+        }
+      });
+
+      body.append(number, title, prompt, copyButton);
+      card.append(preview, body);
+
+      return card;
+    }
+
+    async function renderLibrary(items) {
+      content.replaceChildren();
+
+      const groups = groupBySeries(items);
+      let overallIndex = 0;
+
+      groups.forEach(function(seriesItems, seriesName) {
+        const section = document.createElement("section");
+        section.className = "series-section";
+
+        const heading = document.createElement("h2");
+        heading.className = "series-heading";
+        heading.textContent = seriesName;
+
+        const count = document.createElement("div");
+        count.className = "series-count";
+        count.textContent =
+          seriesItems.length + " EDITORIALS";
+
+        const gallery = document.createElement("div");
+        gallery.className = "gallery";
+
+        seriesItems.forEach(function(item) {
+          overallIndex++;
+          gallery.appendChild(createCard(item, overallIndex));
+        });
+
+        section.append(heading, count, gallery);
+        content.appendChild(section);
+      });
+
+      if (items.length === 0) {
+        showError("Keine passenden Editorials gefunden.");
+      } else {
+        status.hidden = true;
+      }
+    }
+
+    search.addEventListener("input", function() {
+      const query = search.value.trim().toLowerCase();
+
+      const filtered = allItems.filter(function(item) {
+        return [
+          item.series,
+          item.title
+        ].some(function(value) {
+          return String(value || "").toLowerCase().includes(query);
+        });
+      });
+
+      renderLibrary(filtered);
+    });
+
+    document.getElementById("logout-button")
+      .addEventListener("click", async function() {
+        try {
+          await client.auth.signOut();
+        } finally {
+          redirectToLogin();
+        }
+      });
+
+    verifyAccess();
   </script>
 
 </body>
