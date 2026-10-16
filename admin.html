@@ -364,6 +364,7 @@ async function checkAdmin() {
       return;
     }
 
+
     const { data, error } = await db
       .from("library_admins")
       .select("user_id")
@@ -395,12 +396,13 @@ async function loadItems() {
 
     for (let start = 0; ; start += pageSize) {
       const { data, error } = await db
-        .select("id,series,title,image_path,prompt,video_prompt,sort_order")
         .from("editorial_items")
+        .select("id,series,title,image_path,prompt,video_prompt,sort_order")
         .order("series")
         .order("sort_order")
         .order("id")
         .range(start, start + pageSize - 1);
+
 
       if (error) throw error;
 
