@@ -700,6 +700,33 @@ footer p {
   EPL bereits gekauft? Zugang aktivieren
 </a>
 
+    
+<form id="signup-form" class="auth-form" hidden>
+
+  <input
+    id="signup-email"
+    type="email"
+    placeholder="E-Mail-Adresse deines Tentary-Kaufs"
+    autocomplete="email"
+    required
+  >
+
+  <input
+    id="signup-password"
+    type="password"
+    placeholder="Passwort erstellen (mindestens 8 Zeichen)"
+    autocomplete="new-password"
+    minlength="8"
+    required
+  >
+
+  <button class="button" type="submit">
+    ZUGANG AKTIVIEREN →
+  </button>
+
+</form>
+
+    
 <a
   href="#login"
   class="auth-link"
@@ -1119,6 +1146,61 @@ loginForm.addEventListener(
   }
 );
 
+  
+/* EPL-ZUGANG SELBST AKTIVIEREN */
+
+const signupForm =
+  document.getElementById("signup-form");
+
+const signupLink =
+  document.getElementById("show-signup");
+
+signupLink.addEventListener("click", event => {
+  event.preventDefault();
+
+  document.getElementById("signup-email").value =
+    document.getElementById("login-email").value;
+
+  showMode("signup");
+});
+
+signupForm.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const email =
+    document.getElementById("signup-email")
+      .value.trim();
+
+  const password =
+    document.getElementById("signup-password")
+      .value;
+
+  loginMessage.textContent =
+    "Dein Zugang wird vorbereitet …";
+
+  const { error } =
+    await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: SITE_URL
+      }
+    });
+
+  if (error) {
+    loginMessage.textContent =
+      "Die Registrierung konnte nicht abgeschlossen werden. " +
+      error.message;
+    return;
+  }
+
+  signupForm.reset();
+
+  loginMessage.textContent =
+    "Bitte prüfe dein E-Mail-Postfach und bestätige deine Adresse. Danach kannst du dich anmelden.";
+});
+
+  
 forgotLink.addEventListener("click", event => {
   event.preventDefault();
 
