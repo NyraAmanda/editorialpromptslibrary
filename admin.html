@@ -1433,7 +1433,7 @@ async function prepareImport() {
         continue;
       }
 
-      if (!entry.originalPath.startsWith("images/")) {
+      if (!entry.originalPath.includes("/")) {
         problems.push(
           "Ungültiger JSON-Pfad: " + entry.originalPath
         );
