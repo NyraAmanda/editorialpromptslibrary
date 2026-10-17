@@ -1301,14 +1301,20 @@ async function saveItem(event) {
       path = uploadedPath;
     }
 
-    const payload = {
-      series,
-      title: $("title").value.trim(),
-      prompt,
-      video_prompt: $("video-prompt").value.trim() || null,
-      sort_order: Number($("sort-order").value) || 0,
-      image_path: path
-    };
+    
+const payload = {
+  series,
+  title: $("title").value.trim(),
+  prompt,
+  video_prompt: $("video-prompt").value.trim() || null,
+  sort_order: Number($("sort-order").value) || 0,
+  image_path: path
+};
+
+// Nur neue Editorials als NEW markieren
+if (!id) {
+  payload.new_since = new Date().toISOString();
+}
 
     const result = id
       ? await db.from("editorial_items")
