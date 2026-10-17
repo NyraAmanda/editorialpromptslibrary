@@ -758,10 +758,20 @@ function detectCollectionFromSeries(series) {
   return null;
 }
 
+
 function classifyItem(item) {
   const title = normalize(item.title);
   const series = normalize(item.series);
 
+  // Business-Serien automatisch zuordnen
+  if (series.includes("business")) {
+    return {
+      collection:"business",
+      mood:"Business Aesthetics"
+    };
+  }
+
+  // Alle bisherigen Kategorien bleiben erhalten
   const matches = [
     ...(categoryIndex.get(title) || []),
     ...(categoryIndex.get(series) || [])
