@@ -3,7 +3,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Notion JSON Generator | NyraAmanda</title>
 
@@ -15,7 +15,10 @@
   --light:#faf7fc;
   --muted:#826d91;
   --border:#e4d5ed;
+  --green:#276c42;
+  --red:#922d48;
 }
+
 * { box-sizing:border-box; }
 
 body {
@@ -26,8 +29,14 @@ body {
 }
 
 button,input { font:inherit; }
+
 button { cursor:pointer; }
-button:disabled { opacity:.5;cursor:not-allowed; }
+
+button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
 [hidden] { display:none!important; }
 
 header {
@@ -58,7 +67,7 @@ h1,h2 {
 }
 
 h1 {
-  font-size:clamp(46px,9vw,84px);
+  font-size:clamp(45px,9vw,82px);
   text-align:center;
   margin:55px 0 8px;
   line-height:1;
@@ -97,7 +106,7 @@ label {
   display:block;
   font-size:12px;
   font-weight:700;
-  margin:22px 0 8px;
+  margin:18px 0 8px;
 }
 
 input {
@@ -156,12 +165,12 @@ input[type=file] { padding:12px; }
 
 #message.error {
   background:#ffe5e8;
-  color:#922d48;
+  color:var(--red);
 }
 
 #message.success {
   background:#e8f4eb;
-  color:#276c42;
+  color:var(--green);
 }
 
 .stats {
@@ -186,12 +195,12 @@ input[type=file] { padding:12px; }
 
 .stat.good {
   background:#e8f4eb;
-  color:#276c42;
+  color:var(--green);
 }
 
 .stat.bad {
   background:#ffe5e8;
-  color:#922d48;
+  color:var(--red);
 }
 
 #report {
@@ -204,6 +213,28 @@ input[type=file] { padding:12px; }
   line-height:1.8;
   max-height:380px;
   overflow:auto;
+}
+
+.item {
+  border:1px solid var(--border);
+  padding:16px;
+  margin:14px 0;
+  background:#fff;
+}
+
+.item-title {
+  font-size:12px;
+  font-weight:700;
+  overflow-wrap:anywhere;
+}
+
+.item-status {
+  font-size:11px;
+  color:var(--green);
+}
+
+.item .small {
+  overflow-wrap:anywhere;
 }
 
 @media(max-width:650px) {
@@ -236,7 +267,6 @@ EDITORIAL PROMPT LIBRARY · PRIVATE TOOL
 <main>
 
 <section class="panel">
-
 <h2>Notion-Dateien vorbereiten</h2>
 
 <p>
@@ -246,18 +276,22 @@ Deine Originalprompts bleiben vollständig erhalten.
 </p>
 
 <div class="note">
-<strong>So funktioniert es:</strong>
+<strong>Unterstütztes Notion-Format:</strong>
 <ol>
-<li>Wähle deinen Bilderordner aus.</li>
-<li>Wähle deine Markdown-Datei aus.</li>
-<li>Tippe auf <strong>ZUORDNUNG PRÜFEN</strong>.</li>
-<li>Lade die fertige JSON herunter.</li>
+<li>Überschrift mit Bildtitel (optional)</li>
+<li>Bild</li>
+<li>Bildprompt im Codeblock</li>
+<li>Videoprompt im zweiten Codeblock (optional)</li>
+<li>Trennlinie</li>
+<li>Nächstes Bild</li>
 </ol>
-Deine Dateien werden lokal in deinem Browser verarbeitet.
+Die zusätzliche Überschrift „Bildprompt“ ist nicht nötig.
+Auch deine bisherigen Halloween-Dateien werden unterstützt.
 </div>
 
 <label for="images">1. Bilderordner auswählen</label>
 <input id="images" type="file" webkitdirectory directory multiple>
+
 <p id="image-info" class="small">
 Noch kein Bilderordner ausgewählt.
 </p>
@@ -269,6 +303,7 @@ Noch kein Bilderordner ausgewählt.
   accept=".md,.markdown,text/markdown,text/plain"
   multiple
 >
+
 <p id="markdown-info" class="small">
 Noch keine Markdown-Datei ausgewählt.
 </p>
@@ -277,7 +312,7 @@ Noch keine Markdown-Datei ausgewählt.
 <input
   id="series-name"
   type="text"
-  placeholder="z. B. Halloween Makeup"
+  placeholder="z. B. Business Clean"
 >
 
 <p class="small">
@@ -294,11 +329,9 @@ ZUORDNUNG PRÜFEN
 JSON HERUNTERLADEN
 </button>
 </div>
-
 </section>
 
 <section class="panel">
-
 <h2>Prüfergebnis</h2>
 
 <div class="stats">
@@ -321,14 +354,22 @@ JSON HERUNTERLADEN
 <div id="report">
 Bitte zuerst Dateien auswählen und die Zuordnung prüfen.
 </div>
+</section>
 
-<p class="small">
-Die JSON wird nur erstellt, wenn alle ausgewählten Bilder
-eindeutig einem vollständigen Prompt zugeordnet sind.
-Der eigentliche Import erfolgt weiterhin über dein
-Admin Dashboard.
+<section class="panel" id="preview-panel" hidden>
+<h2>Bildtitel kontrollieren</h2>
+
+<p>
+Hier kannst du die erkannten Titel ändern.
+Die Prompts bleiben dabei unverändert.
 </p>
 
+<div id="preview"></div>
+
+<p class="small">
+Die Bildtitel müssen innerhalb einer Serie eindeutig sein.
+Änderungen werden beim JSON-Download übernommen.
+</p>
 </section>
 
 </main>
@@ -367,6 +408,12 @@ function normalize(value) {
     .replace(/\\/g,"/");
 }
 
+function normalizePath(value) {
+  return normalize(value)
+    .replace(/^\.\/+/,"")
+    .replace(/^\/+/,"");
+}
+
 function baseName(path) {
   return String(path || "")
     .replace(/\\/g,"/")
@@ -375,7 +422,8 @@ function baseName(path) {
 }
 
 function withoutExtension(name) {
-  return String(name || "").replace(/\.[^.]+$/,"");
+  return String(name || "")
+    .replace(/\.[^.]+$/,"");
 }
 
 function isImage(file) {
@@ -384,14 +432,19 @@ function isImage(file) {
 
 function resetResult() {
   generatedJson = null;
+
   $("download").disabled = true;
+  $("preview-panel").hidden = true;
+  $("preview").replaceChildren();
+
   $("count-matched").textContent = "0";
   $("count-errors").textContent = "0";
+
   $("report").textContent =
     "Dateien geändert. Bitte die Zuordnung erneut prüfen.";
 }
 
-/* ADMIN-ANMELDUNG */
+/* ADMIN-ZUGANG */
 
 async function checkAdmin() {
   if (!window.supabase) {
@@ -412,7 +465,10 @@ async function checkAdmin() {
       await db.auth.getUser();
 
     if (userError || !userData.user) {
-      location.replace("index.html#login");
+      showMessage(
+        "Bitte zuerst im Admin Dashboard anmelden.",
+        "error"
+      );
       return;
     }
 
@@ -433,6 +489,7 @@ async function checkAdmin() {
     }
 
     $("app").hidden = false;
+
     showMessage(
       "Admin-Zugang bestätigt.",
       "success"
@@ -447,79 +504,189 @@ async function checkAdmin() {
   }
 }
 
-/* MARKDOWN AUS NOTION LESEN */
+/* NOTION-MARKDOWN AUSLESEN */
+
+/*
+ * Jede Markdown-Bildreferenz startet einen Eintrag.
+ * Der erste Codeblock danach ist der Bildprompt.
+ * Der zweite Codeblock danach ist der Videoprompt.
+ *
+ * Optional darf "Bildprompt" oder "Videoprompt"
+ * als Überschrift vor dem jeweiligen Codeblock stehen.
+ *
+ * Ein Abschnitt endet bei einer Trennlinie
+ * oder beim nächsten Bild.
+ */
 
 function extractMarkdownEntries(text,sourceName) {
   const entries = [];
   const problems = [];
 
-  const imageRegex =
-    /!\[([^\]]*)\]\(([^)\r\n]+)\)/g;
+  const lines = text.replace(/\r\n?/g,"\n").split("\n");
 
-  const images = [...text.matchAll(imageRegex)];
+  let currentTitle = "";
+  let active = null;
+  let blocks = [];
+  let codeOpen = false;
+  let codeLines = [];
+  let codeFence = "";
+  let inVideoSection = false;
 
-  if (!images.length) {
+  function finishEntry() {
+    if (!active) return;
+
+    if (!active.prompt) {
+      problems.push(
+        "Bildprompt fehlt für: " + active.filename +
+        " (" + sourceName + ")"
+      );
+    } else {
+      entries.push(active);
+    }
+
+    active = null;
+    blocks = [];
+    inVideoSection = false;
+  }
+
+  function storeCodeBlock() {
+    if (!active) return;
+
+    const content = codeLines.join("\n").trim();
+
+    if (!content) return;
+
+    if (inVideoSection) {
+      if (active.videoPrompt) {
+        problems.push(
+          "Mehrere Videoprompts für: " +
+          active.filename
+        );
+      } else {
+        active.videoPrompt = content;
+      }
+    } else if (!active.prompt) {
+      active.prompt = content;
+    } else if (!active.videoPrompt) {
+      active.videoPrompt = content;
+    } else {
+      problems.push(
+        "Mehr als zwei Prompt-Codeblöcke für: " +
+        active.filename
+      );
+    }
+  }
+
+  for (let i=0;i<lines.length;i++) {
+    const line = lines[i];
+
+    const fenceMatch = line.match(
+      /^\s*(`{3,}|~{3,})(.*)$/
+    );
+
+    if (codeOpen) {
+      if (
+        fenceMatch &&
+        fenceMatch[1][0] === codeFence[0] &&
+        fenceMatch[1].length >= codeFence.length &&
+        fenceMatch[2].trim() === ""
+      ) {
+        storeCodeBlock();
+
+        codeOpen = false;
+        codeLines = [];
+        codeFence = "";
+      } else {
+        codeLines.push(line);
+      }
+      continue;
+    }
+
+    if (fenceMatch) {
+      codeOpen = true;
+      codeFence = fenceMatch[1];
+      codeLines = [];
+      continue;
+    }
+
+    const imageMatch = line.match(
+      /!\[([^\]]*)\]\(([^)\r\n]+)\)/
+    );
+
+    if (imageMatch) {
+      finishEntry();
+
+      let rawPath = imageMatch[2]
+        .trim()
+        .replace(/^<|>$/g,"")
+        .split(/\s+"/)[0];
+
+      try {
+        rawPath = decodeURIComponent(rawPath);
+      } catch(error) {
+        // Ursprünglichen Pfad beibehalten.
+      }
+
+      const filename = baseName(rawPath);
+
+      if (!/\.(png|jpe?g|webp)$/i.test(filename)) {
+        problems.push(
+          "Ungültiger Bildverweis: " + filename
+        );
+        continue;
+      }
+
+      active = {
+        filename,
+        title:currentTitle || withoutExtension(filename),
+        prompt:"",
+        videoPrompt:"",
+        source:sourceName
+      };
+
+      inVideoSection = false;
+      continue;
+    }
+
+    if (/^\s*(---+|\*\s*\*\s*\*+|___+)\s*$/.test(line)) {
+      finishEntry();
+      currentTitle = "";
+      continue;
+    }
+
+    const heading = line.match(
+      /^\s*#{1,6}\s+(.+?)\s*$/
+    );
+
+    if (heading) {
+      const headingText = heading[1].trim();
+
+      if (/^bildprompt\s*:?$/i.test(headingText)) {
+        inVideoSection = false;
+        continue;
+      }
+
+      if (/^videoprompt\s*:?$/i.test(headingText)) {
+        inVideoSection = true;
+        continue;
+      }
+
+      if (active && active.prompt) {
+        finishEntry();
+      }
+
+      currentTitle = headingText;
+    }
+  }
+
+  if (codeOpen) {
     problems.push(
-      "Keine Bildverweise gefunden in: " + sourceName
+      "Nicht geschlossener Codeblock in: " +
+      sourceName
     );
-    return {entries,problems};
   }
 
-  for (let i=0;i<images.length;i++) {
-    const match = images[i];
-    const next = images[i+1];
-
-    const start = match.index + match[0].length;
-    const end = next ? next.index : text.length;
-
-    const section = text.slice(start,end);
-
-    const promptMatch = section.match(
-      /(?:^|\n)\s*#{1,6}\s*Bildprompt\s*\r?\n\s*```[^\r\n]*\r?\n([\s\S]*?)\r?\n\s*```/i
-    );
-
-    let rawPath = match[2]
-      .trim()
-      .replace(/^<|>$/g,"")
-      .split(/\s+"/)[0];
-
-    try {
-      rawPath = decodeURIComponent(rawPath);
-    } catch(error) {
-      // Originalpfad beibehalten.
-    }
-
-    const filename = baseName(rawPath);
-
-    if (!/\.(png|jpe?g|webp)$/i.test(filename)) {
-      problems.push(
-        "Ungültiger Bildverweis: " + filename
-      );
-      continue;
-    }
-
-    if (!promptMatch) {
-      problems.push(
-        "Bildprompt fehlt für: " + filename
-      );
-      continue;
-    }
-
-    const prompt = promptMatch[1].trim();
-
-    if (!prompt) {
-      problems.push(
-        "Leerer Bildprompt: " + filename
-      );
-      continue;
-    }
-
-    entries.push({
-      filename,
-      prompt,
-      source:sourceName
-    });
-  }
+  finishEntry();
 
   return {entries,problems};
 }
@@ -541,11 +708,98 @@ function getFolderName(files) {
     .split("/")[0];
 }
 
-/* JSON PRÜFEN UND ERSTELLEN */
+/* VORSCHAU */
+
+function renderPreview() {
+  $("preview").replaceChildren();
+
+  if (!generatedJson) {
+    $("preview-panel").hidden = true;
+    return;
+  }
+
+  const images = generatedJson.series[0].images;
+
+  images.forEach((image,index) => {
+    const item = document.createElement("div");
+    item.className = "item";
+
+    const title = document.createElement("div");
+    title.className = "item-title";
+    title.textContent = image.filename;
+
+    const label = document.createElement("label");
+    label.textContent = "Bildtitel";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = image.displayName;
+    input.dataset.index = String(index);
+
+    input.addEventListener("input",() => {
+      image.displayName = input.value.trim();
+      validateTitles();
+    });
+
+    const status = document.createElement("p");
+    status.className = "item-status";
+
+    status.textContent =
+      "✓ Bildprompt erkannt" +
+      (image.videoPrompt
+        ? " · ✓ Videoprompt erkannt"
+        : " · Kein Videoprompt");
+
+    item.appendChild(title);
+    item.appendChild(label);
+    item.appendChild(input);
+    item.appendChild(status);
+
+    $("preview").appendChild(item);
+  });
+
+  $("preview-panel").hidden = false;
+  validateTitles();
+}
+
+function validateTitles() {
+  if (!generatedJson) return;
+
+  const images = generatedJson.series[0].images;
+  const names = new Set();
+
+  let valid = true;
+
+  for (const image of images) {
+    const name = normalize(image.displayName);
+
+    if (!name || names.has(name)) {
+      valid = false;
+    }
+
+    names.add(name);
+  }
+
+  $("download").disabled = !valid;
+
+  if (!valid) {
+    showMessage(
+      "Bitte eindeutige Bildtitel eingeben.",
+      "error"
+    );
+  } else {
+    showMessage(
+      "Alle Bilder erkannt. JSON ist bereit.",
+      "success"
+    );
+  }
+}
+
+/* JSON PRÜFEN */
 
 async function prepareJson() {
-  generatedJson = null;
-  $("download").disabled = true;
+  resetResult();
+
   $("report").textContent = "Prüfung läuft …";
 
   const imageFiles = [...$("images").files]
@@ -559,14 +813,12 @@ async function prepareJson() {
   $("count-images").textContent =
     imageFiles.length;
 
-  const problems = [];
-  const notes = [];
-
   if (!imageFiles.length) {
     showMessage(
       "Bitte einen Bilderordner auswählen.",
       "error"
     );
+
     $("report").textContent =
       "Kein Bilderordner ausgewählt.";
     return;
@@ -574,13 +826,17 @@ async function prepareJson() {
 
   if (!markdownFiles.length) {
     showMessage(
-      "Bitte mindestens eine Markdown-Datei auswählen.",
+      "Bitte eine Markdown-Datei auswählen.",
       "error"
     );
+
     $("report").textContent =
       "Keine Markdown-Datei ausgewählt.";
     return;
   }
+
+  const problems = [];
+  const notes = [];
 
   try {
     const imageMap = new Map();
@@ -590,7 +846,8 @@ async function prepareJson() {
 
       if (imageMap.has(name)) {
         problems.push(
-          "Doppelter Bilddateiname: " + file.name
+          "Doppelter Bilddateiname: " +
+          file.name
         );
       } else {
         imageMap.set(name,file);
@@ -633,8 +890,7 @@ async function prepareJson() {
     for (const file of imageFiles) {
       if (!entryMap.has(normalize(file.name))) {
         problems.push(
-          "Bild ohne zugehörigen Prompt: " +
-          file.name
+          "Bild ohne Prompt: " + file.name
         );
       }
     }
@@ -642,7 +898,7 @@ async function prepareJson() {
     for (const entry of extracted) {
       if (!imageMap.has(normalize(entry.filename))) {
         problems.push(
-          "Prompt ohne vorhandenes Bild: " +
+          "Prompt ohne Bilddatei: " +
           entry.filename
         );
       }
@@ -655,9 +911,9 @@ async function prepareJson() {
         normalize(entry.filename)
       );
 
-      if (!file) continue;
-
-      matched.push({file,entry});
+      if (file) {
+        matched.push({file,entry});
+      }
     }
 
     const folderName = getFolderName(imageFiles);
@@ -673,16 +929,10 @@ async function prepareJson() {
 
     if (!folderName) {
       problems.push(
-        "Der Browser hat keinen Ordnerpfad geliefert. " +
-        "Bitte den gesamten Bilderordner auswählen."
+        "Kein Bilderordner-Pfad gefunden. " +
+        "Bitte den gesamten Ordner auswählen."
       );
     }
-
-    /*
-     * Den tatsächlichen relativen Dateipfad verwenden.
-     * So passen die Pfade zur Prüfung in admin.html,
-     * auch wenn Bilder in Unterordnern liegen.
-     */
 
     const images = matched.map(({file,entry}) => ({
       originalPath:
@@ -690,8 +940,9 @@ async function prepareJson() {
           ? file.webkitRelativePath.replace(/\\/g,"/")
           : folderName + "/" + file.name,
       filename:file.name,
-      displayName:withoutExtension(file.name),
-      prompt:entry.prompt
+      displayName:entry.title,
+      prompt:entry.prompt,
+      videoPrompt:entry.videoPrompt
     }));
 
     $("count-images").textContent =
@@ -706,17 +957,21 @@ async function prepareJson() {
     notes.push("Serie: " + seriesName);
     notes.push("Bilder: " + imageFiles.length);
     notes.push("Erkannte Prompts: " + extracted.length);
-    notes.push("Sicher zugeordnet: " + matched.length);
+    notes.push("Zugeordnet: " + matched.length);
     notes.push("Probleme: " + problems.length);
     notes.push("");
 
-    for (const {file} of matched) {
-      notes.push("✓ " + file.name);
+    for (const {file,entry} of matched) {
+      notes.push(
+        "✓ " + file.name +
+        " → " + entry.title +
+        (entry.videoPrompt ? " (mit Videoprompt)" : "")
+      );
     }
 
     if (problems.length) {
       notes.push("");
-      notes.push("JSON NICHT FREIGEGEBEN:");
+      notes.push("BITTE PRÜFEN:");
 
       for (const problem of problems) {
         notes.push("! " + problem);
@@ -726,10 +981,11 @@ async function prepareJson() {
         notes.join("\n");
 
       showMessage(
-        "Bitte " + problems.length +
-        " Zuordnungsprobleme prüfen.",
+        problems.length +
+        " Zuordnungsprobleme gefunden.",
         "error"
       );
+
       return;
     }
 
@@ -752,36 +1008,33 @@ async function prepareJson() {
     $("report").textContent =
       notes.join("\n") +
       "\n\n✓ Alle Bilder eindeutig zugeordnet." +
-      "\n✓ Alle Originalprompts vorhanden." +
-      "\n✓ JSON kann heruntergeladen werden.";
+      "\n✓ Alle Bildprompts vorhanden." +
+      "\n✓ Videoprompts übernommen, falls vorhanden.";
 
-    $("download").disabled = false;
-
-    showMessage(
-      "Erfolgreich: " + matched.length +
-      " Bilder und Prompts zugeordnet.",
-      "success"
-    );
+    renderPreview();
 
   } catch(error) {
     generatedJson = null;
+
     $("download").disabled = true;
 
     $("report").textContent =
       "FEHLER: " + errorText(error);
 
     showMessage(
-      "JSON-Prüfung fehlgeschlagen: " +
+      "Prüfung fehlgeschlagen: " +
       errorText(error),
       "error"
     );
   }
 }
 
-/* JSON HERUNTERLADEN */
+/* JSON-DOWNLOAD */
 
 function downloadJson() {
-  if (!generatedJson) return;
+  if (!generatedJson || $("download").disabled) {
+    return;
+  }
 
   const text = JSON.stringify(
     generatedJson,null,2
@@ -813,12 +1066,12 @@ function downloadJson() {
   },30000);
 
   showMessage(
-    "JSON-Datei erstellt. Bitte Downloads prüfen.",
+    "JSON erstellt. Bitte Downloads prüfen.",
     "success"
   );
 }
 
-/* BUTTONS UND EREIGNISSE */
+/* BEDIENUNG */
 
 $("images").addEventListener("change",() => {
   resetResult();
