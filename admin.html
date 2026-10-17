@@ -854,20 +854,9 @@ async function makePublicPreview(imagePath) {
   }
 }
 
+
 async function addHomePreview(editorialId) {
   if (homeBusy) return;
-
-  if (homePreviews.some(
-    x => String(x.editorial_id) === String(editorialId)
-  )) return;
-
-  if (homePreviews.length >= 10) {
-    message(
-      "Du kannst maximal 10 Startseitenbilder auswählen.",
-      "error"
-    );
-    return;
-  }
 
   const item = allItems.find(
     x => String(x.id) === String(editorialId)
@@ -875,20 +864,87 @@ async function addHomePreview(editorialId) {
 
   if (!item) return;
 
+  const existingPreview = homePreviews.find(
+    x => String(x.editorial_id) === String(editorialId)
+  );
+
+  // Bereits ausgewähltes Bild wieder nach vorne holen.
+  if (existingPreview) {
+    if (homePreviews[0]?.id === existingPreview.id) {
+      message("Dieses Bild steht bereits auf Platz 1.", "success");
+      return;
+    }
+
+    homeBusy = true;
+
+    try {
+      const reordered = [
+        existingPreview,
+        ...homePreviews.filter(
+          x => x.id !== existingPreview.id
+        )
+      ];
+
+      // Vorhandene Reihenfolge zunächst auf freie
+      // Positionsnummern verschieben.
+      for (let i = 0; i < reordered.length; i++) {
+        const { error } = await db
+          .from("homepage_previews")
+          .update({ sort_order: 1000 + i })
+          .eq("id", reordered[i].id);
+
+        if (error) throw error;
+      }
+
+      for (let i = 0; i < reordered.length; i++) {
+        const { error } = await db
+          .from("homepage_previews")
+          .update({ sort_order: i + 1 })
+          .eq("id", reordered[i].id);
+
+        if (error) throw error;
+      }
+
+      await loadHomePreviews();
+      renderItems();
+
+      message(
+        "Bild wurde auf Platz 1 verschoben. ✓",
+        "success"
+      );
+
+    } catch (error) {
+      message(
+        "Reihenfolge konnte nicht geändert werden: " +
+        errorText(error),
+        "error"
+      );
+
+    } finally {
+      homeBusy = false;
+    }
+
+    return;
+  }
+
   const confirmed = confirm(
     "Dieses Bild als öffentliche Startseiten-Vorschau freigeben?\n\n" +
     (item.title || item.series) +
+    "\n\nDas neue Bild kommt auf Platz 1." +
+    "\nBei 10 Bildern fällt das bisher letzte automatisch raus." +
     "\n\nDer Prompt wird nicht veröffentlicht."
   );
 
   if (!confirmed) return;
 
   homeBusy = true;
-  message("Öffentliches Vorschaubild wird erstellt …");
+  message("Neues Startseitenbild wird vorbereitet …");
 
   let uploadedPath = null;
+  let insertedPreviewId = null;
 
   try {
+    // Neues öffentliches Vorschaubild erstellen.
     const blob = await makePublicPreview(item.image_path);
 
     uploadedPath =
@@ -909,36 +965,121 @@ async function addHomePreview(editorialId) {
 
     const imageUrl = urlData.publicUrl;
 
-    const { error: insertError } = await db
-      .from("homepage_previews")
-      .insert({
-        editorial_id: item.id,
-        title: item.title || item.series || "Editorial",
-        image_url: imageUrl,
-        sort_order: homePreviews.length + 1
-      });
+    // Aktuelle Auswahl frisch laden.
+    await loadHomePreviews();
+
+    // Neues Bild zunächst auf eine freie Position setzen.
+    const { data: inserted, error: insertError } =
+      await db
+        .from("homepage_previews")
+        .insert({
+          editorial_id: item.id,
+          title: item.title || item.series || "Editorial",
+          image_url: imageUrl,
+          sort_order: 9999
+        })
+        .select("id")
+        .single();
 
     if (insertError) throw insertError;
 
+    insertedPreviewId = inserted.id;
     uploadedPath = null;
+
+    const oldPreviews = [...homePreviews];
+
+    // Bestehende Bilder vorübergehend auf freie
+    // Positionsnummern setzen.
+    for (let i = 0; i < oldPreviews.length; i++) {
+      const { error } = await db
+        .from("homepage_previews")
+        .update({ sort_order: 1000 + i })
+        .eq("id", oldPreviews[i].id);
+
+      if (error) throw error;
+    }
+
+    // Neues Bild wird Platz 1.
+    const { error: firstError } = await db
+      .from("homepage_previews")
+      .update({ sort_order: 1 })
+      .eq("id", insertedPreviewId);
+
+    if (firstError) throw firstError;
+
+    // Bisherige Bilder rutschen nach hinten.
+    // Nur die ersten neun bleiben erhalten.
+    for (
+      let i = 0;
+      i < Math.min(oldPreviews.length, 9);
+      i++
+    ) {
+      const { error } = await db
+        .from("homepage_previews")
+        .update({ sort_order: i + 2 })
+        .eq("id", oldPreviews[i].id);
+
+      if (error) throw error;
+    }
+
+    // Bei voller Auswahl fällt das bisher letzte Bild raus.
+    if (oldPreviews.length >= 10) {
+      const lastPreview = oldPreviews[9];
+
+      const { error: deleteError } = await db
+        .from("homepage_previews")
+        .delete()
+        .eq("id", lastPreview.id);
+
+      if (deleteError) throw deleteError;
+
+      // Nur die öffentliche Vorschaudatei entfernen,
+      // niemals das eigentliche Editorial.
+      const oldPath =
+        previewStoragePath(lastPreview.image_url);
+
+      if (oldPath) {
+        const { error: storageError } = await db.storage
+          .from(HOME_BUCKET)
+          .remove([oldPath]);
+
+        if (storageError) {
+          console.warn(
+            "Alte Vorschaudatei konnte nicht entfernt werden:",
+            storageError
+          );
+        }
+      }
+    }
 
     await loadHomePreviews();
     renderItems();
 
     message(
-      "Bild wurde zur öffentlichen Startseite hinzugefügt. ✓",
+      "Neues Bild steht auf Platz 1. " +
+      "Die Top 10 wurden automatisch aktualisiert. ✓",
       "success"
     );
 
   } catch (error) {
+    // Nur eine noch nicht verwendete Upload-Datei
+    // bei einem Fehler wieder entfernen.
     if (uploadedPath) {
       await db.storage
         .from(HOME_BUCKET)
         .remove([uploadedPath]);
     }
 
+    try {
+      await loadHomePreviews();
+      renderItems();
+    } catch (refreshError) {
+      console.warn(refreshError);
+    }
+
     message(
-      "Startseiten-Auswahl fehlgeschlagen: " +
+      "Startseiten-Auswahl konnte nicht vollständig " +
+      "aktualisiert werden: " +
       errorText(error),
       "error"
     );
