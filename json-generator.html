@@ -1,0 +1,864 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Notion JSON Generator | NyraAmanda</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --purple:#684583;
+  --light:#faf7fc;
+  --muted:#826d91;
+  --border:#e4d5ed;
+}
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--light);
+  color:var(--purple);
+  font-family:"DM Sans",sans-serif;
+}
+
+button,input { font:inherit; }
+button { cursor:pointer; }
+button:disabled { opacity:.5;cursor:not-allowed; }
+[hidden] { display:none!important; }
+
+header {
+  background:linear-gradient(135deg,#eee1f7,#d9c3eb,#c6a8dd);
+  padding:22px 5% 55px;
+}
+
+nav {
+  max-width:950px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+nav a {
+  color:var(--purple);
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none;
+}
+
+h1,h2 {
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-weight:500;
+}
+
+h1 {
+  font-size:clamp(46px,9vw,84px);
+  text-align:center;
+  margin:55px 0 8px;
+  line-height:1;
+}
+
+.subtitle {
+  text-align:center;
+  font-size:11px;
+  letter-spacing:2px;
+}
+
+main {
+  max-width:950px;
+  margin:auto;
+  padding:35px 5% 90px;
+}
+
+.panel {
+  background:white;
+  border:1px solid var(--border);
+  padding:26px;
+  margin-bottom:24px;
+}
+
+.panel h2 {
+  font-size:38px;
+  margin:0 0 12px;
+}
+
+p {
+  font-size:13px;
+  line-height:1.8;
+}
+
+label {
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  margin:22px 0 8px;
+}
+
+input {
+  display:block;
+  width:100%;
+  padding:13px;
+  border:1px solid #cbb4d9;
+  background:white;
+  color:#503367;
+}
+
+input[type=file] { padding:12px; }
+
+.btn {
+  border:0;
+  padding:14px 19px;
+  background:var(--purple);
+  color:white;
+  font-size:11px;
+  font-weight:700;
+}
+
+.btn.secondary {
+  background:#f1e8f6;
+  color:var(--purple);
+}
+
+.actions {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:22px;
+}
+
+.note {
+  padding:15px;
+  background:#f4edf8;
+  font-size:12px;
+  line-height:1.8;
+}
+
+.small {
+  font-size:11px;
+  color:var(--muted);
+}
+
+#message {
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#eee1f7;
+  padding:14px;
+  text-align:center;
+  font-size:12px;
+}
+
+#message.error {
+  background:#ffe5e8;
+  color:#922d48;
+}
+
+#message.success {
+  background:#e8f4eb;
+  color:#276c42;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:22px 0;
+}
+
+.stat {
+  background:#f4edf8;
+  padding:16px;
+  text-align:center;
+}
+
+.stat strong {
+  display:block;
+  font-size:27px;
+}
+
+.stat span { font-size:11px; }
+
+.stat.good {
+  background:#e8f4eb;
+  color:#276c42;
+}
+
+.stat.bad {
+  background:#ffe5e8;
+  color:#922d48;
+}
+
+#report {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  background:#faf7fc;
+  border:1px solid var(--border);
+  padding:14px;
+  font-size:12px;
+  line-height:1.8;
+  max-height:380px;
+  overflow:auto;
+}
+
+@media(max-width:650px) {
+  .panel { padding:18px; }
+  .stats { grid-template-columns:1fr; }
+  .panel h2 { font-size:32px; }
+  .actions .btn { width:100%; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="message">Admin-Zugang wird geprüft …</div>
+
+<div id="app" hidden>
+
+<header>
+<nav>
+<a href="index.html">NYRAAMANDA</a>
+<a href="admin.html">ADMIN DASHBOARD ↗</a>
+</nav>
+
+<h1>Notion JSON Generator</h1>
+<div class="subtitle">
+EDITORIAL PROMPT LIBRARY · PRIVATE TOOL
+</div>
+</header>
+
+<main>
+
+<section class="panel">
+
+<h2>Notion-Dateien vorbereiten</h2>
+
+<p>
+Erstelle aus deinen Notion-Markdown-Dateien und deinem
+Bilderordner eine passende Import-JSON.
+Deine Originalprompts bleiben vollständig erhalten.
+</p>
+
+<div class="note">
+<strong>So funktioniert es:</strong>
+<ol>
+<li>Wähle deinen Bilderordner aus.</li>
+<li>Wähle deine Markdown-Datei aus.</li>
+<li>Tippe auf <strong>ZUORDNUNG PRÜFEN</strong>.</li>
+<li>Lade die fertige JSON herunter.</li>
+</ol>
+Deine Dateien werden lokal in deinem Browser verarbeitet.
+</div>
+
+<label for="images">1. Bilderordner auswählen</label>
+<input id="images" type="file" webkitdirectory directory multiple>
+<p id="image-info" class="small">
+Noch kein Bilderordner ausgewählt.
+</p>
+
+<label for="markdown">2. Notion-Markdown-Dateien auswählen</label>
+<input
+  id="markdown"
+  type="file"
+  accept=".md,.markdown,text/markdown,text/plain"
+  multiple
+>
+<p id="markdown-info" class="small">
+Noch keine Markdown-Datei ausgewählt.
+</p>
+
+<label for="series-name">3. Serienname (optional)</label>
+<input
+  id="series-name"
+  type="text"
+  placeholder="z. B. Halloween Makeup"
+>
+
+<p class="small">
+Wenn du keinen Namen eingibst, verwendet das Tool
+die erste Überschrift aus deiner Markdown-Datei.
+</p>
+
+<div class="actions">
+<button class="btn secondary" id="check" type="button">
+ZUORDNUNG PRÜFEN
+</button>
+
+<button class="btn" id="download" type="button" disabled>
+JSON HERUNTERLADEN
+</button>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>Prüfergebnis</h2>
+
+<div class="stats">
+<div class="stat">
+<strong id="count-images">0</strong>
+<span>Bilder ausgewählt</span>
+</div>
+
+<div class="stat good">
+<strong id="count-matched">0</strong>
+<span>Sicher zugeordnet</span>
+</div>
+
+<div class="stat bad">
+<strong id="count-errors">0</strong>
+<span>Probleme</span>
+</div>
+</div>
+
+<div id="report">
+Bitte zuerst Dateien auswählen und die Zuordnung prüfen.
+</div>
+
+<p class="small">
+Die JSON wird nur erstellt, wenn alle ausgewählten Bilder
+eindeutig einem vollständigen Prompt zugeordnet sind.
+Der eigentliche Import erfolgt weiterhin über dein
+Admin Dashboard.
+</p>
+
+</section>
+
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+"use strict";
+
+const URL_SUPABASE =
+  "https://pcakhkkvpmcmimybjlav.supabase.co";
+
+const KEY_SUPABASE =
+  "sb_publishable_KetG0flqlo11oTV9dv51vw_rbmFZZky";
+
+const $ = id => document.getElementById(id);
+
+let db = null;
+let generatedJson = null;
+
+function showMessage(text,kind="") {
+  $("message").textContent = text;
+  $("message").className = kind;
+}
+
+function errorText(error) {
+  return error?.message || String(error);
+}
+
+function normalize(value) {
+  return String(value || "")
+    .normalize("NFKC")
+    .trim()
+    .toLowerCase()
+    .replace(/\\/g,"/");
+}
+
+function baseName(path) {
+  return String(path || "")
+    .replace(/\\/g,"/")
+    .split("/")
+    .pop();
+}
+
+function withoutExtension(name) {
+  return String(name || "").replace(/\.[^.]+$/,"");
+}
+
+function isImage(file) {
+  return /\.(png|jpe?g|webp)$/i.test(file.name);
+}
+
+function resetResult() {
+  generatedJson = null;
+  $("download").disabled = true;
+  $("count-matched").textContent = "0";
+  $("count-errors").textContent = "0";
+  $("report").textContent =
+    "Dateien geändert. Bitte die Zuordnung erneut prüfen.";
+}
+
+/* ADMIN-ANMELDUNG */
+
+async function checkAdmin() {
+  if (!window.supabase) {
+    showMessage(
+      "Supabase konnte nicht geladen werden.",
+      "error"
+    );
+    return;
+  }
+
+  db = window.supabase.createClient(
+    URL_SUPABASE,
+    KEY_SUPABASE
+  );
+
+  try {
+    const {data:userData,error:userError} =
+      await db.auth.getUser();
+
+    if (userError || !userData.user) {
+      location.replace("index.html#login");
+      return;
+    }
+
+    const {data,error} = await db
+      .from("library_admins")
+      .select("user_id")
+      .eq("user_id",userData.user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      showMessage(
+        "Zugriff verweigert: kein Admin-Konto.",
+        "error"
+      );
+      return;
+    }
+
+    $("app").hidden = false;
+    showMessage(
+      "Admin-Zugang bestätigt.",
+      "success"
+    );
+
+  } catch(error) {
+    showMessage(
+      "Anmeldung konnte nicht geprüft werden: " +
+      errorText(error),
+      "error"
+    );
+  }
+}
+
+/* MARKDOWN AUS NOTION LESEN */
+
+function extractMarkdownEntries(text,sourceName) {
+  const entries = [];
+  const problems = [];
+
+  const imageRegex =
+    /!\[([^\]]*)\]\(([^)\r\n]+)\)/g;
+
+  const images = [...text.matchAll(imageRegex)];
+
+  if (!images.length) {
+    problems.push(
+      "Keine Bildverweise gefunden in: " + sourceName
+    );
+    return {entries,problems};
+  }
+
+  for (let i=0;i<images.length;i++) {
+    const match = images[i];
+    const next = images[i+1];
+
+    const start = match.index + match[0].length;
+    const end = next ? next.index : text.length;
+
+    const section = text.slice(start,end);
+
+    const promptMatch = section.match(
+      /(?:^|\n)\s*#{1,6}\s*Bildprompt\s*\r?\n\s*```[^\r\n]*\r?\n([\s\S]*?)\r?\n\s*```/i
+    );
+
+    let rawPath = match[2]
+      .trim()
+      .replace(/^<|>$/g,"")
+      .split(/\s+"/)[0];
+
+    try {
+      rawPath = decodeURIComponent(rawPath);
+    } catch(error) {
+      // Originalpfad beibehalten.
+    }
+
+    const filename = baseName(rawPath);
+
+    if (!/\.(png|jpe?g|webp)$/i.test(filename)) {
+      problems.push(
+        "Ungültiger Bildverweis: " + filename
+      );
+      continue;
+    }
+
+    if (!promptMatch) {
+      problems.push(
+        "Bildprompt fehlt für: " + filename
+      );
+      continue;
+    }
+
+    const prompt = promptMatch[1].trim();
+
+    if (!prompt) {
+      problems.push(
+        "Leerer Bildprompt: " + filename
+      );
+      continue;
+    }
+
+    entries.push({
+      filename,
+      prompt,
+      source:sourceName
+    });
+  }
+
+  return {entries,problems};
+}
+
+function getMarkdownTitle(text) {
+  const match = text.match(/^#\s+(.+?)\s*$/m);
+  return match ? match[1].trim() : "";
+}
+
+function getFolderName(files) {
+  const first = files.find(
+    file => file.webkitRelativePath
+  );
+
+  if (!first) return "";
+
+  return first.webkitRelativePath
+    .replace(/\\/g,"/")
+    .split("/")[0];
+}
+
+/* JSON PRÜFEN UND ERSTELLEN */
+
+async function prepareJson() {
+  generatedJson = null;
+  $("download").disabled = true;
+  $("report").textContent = "Prüfung läuft …";
+
+  const imageFiles = [...$("images").files]
+    .filter(isImage);
+
+  const markdownFiles = [...$("markdown").files]
+    .filter(file =>
+      /\.(md|markdown)$/i.test(file.name)
+    );
+
+  $("count-images").textContent =
+    imageFiles.length;
+
+  const problems = [];
+  const notes = [];
+
+  if (!imageFiles.length) {
+    showMessage(
+      "Bitte einen Bilderordner auswählen.",
+      "error"
+    );
+    $("report").textContent =
+      "Kein Bilderordner ausgewählt.";
+    return;
+  }
+
+  if (!markdownFiles.length) {
+    showMessage(
+      "Bitte mindestens eine Markdown-Datei auswählen.",
+      "error"
+    );
+    $("report").textContent =
+      "Keine Markdown-Datei ausgewählt.";
+    return;
+  }
+
+  try {
+    const imageMap = new Map();
+
+    for (const file of imageFiles) {
+      const name = normalize(file.name);
+
+      if (imageMap.has(name)) {
+        problems.push(
+          "Doppelter Bilddateiname: " + file.name
+        );
+      } else {
+        imageMap.set(name,file);
+      }
+    }
+
+    const extracted = [];
+    let detectedTitle = "";
+
+    for (const file of markdownFiles) {
+      const text = await file.text();
+
+      if (!detectedTitle) {
+        detectedTitle = getMarkdownTitle(text);
+      }
+
+      const result = extractMarkdownEntries(
+        text,file.name
+      );
+
+      extracted.push(...result.entries);
+      problems.push(...result.problems);
+    }
+
+    const entryMap = new Map();
+
+    for (const entry of extracted) {
+      const name = normalize(entry.filename);
+
+      if (entryMap.has(name)) {
+        problems.push(
+          "Doppelter Prompt für Bild: " +
+          entry.filename
+        );
+      } else {
+        entryMap.set(name,entry);
+      }
+    }
+
+    for (const file of imageFiles) {
+      if (!entryMap.has(normalize(file.name))) {
+        problems.push(
+          "Bild ohne zugehörigen Prompt: " +
+          file.name
+        );
+      }
+    }
+
+    for (const entry of extracted) {
+      if (!imageMap.has(normalize(entry.filename))) {
+        problems.push(
+          "Prompt ohne vorhandenes Bild: " +
+          entry.filename
+        );
+      }
+    }
+
+    const matched = [];
+
+    for (const entry of extracted) {
+      const file = imageMap.get(
+        normalize(entry.filename)
+      );
+
+      if (!file) continue;
+
+      matched.push({file,entry});
+    }
+
+    const folderName = getFolderName(imageFiles);
+
+    const seriesName =
+      $("series-name").value.trim() ||
+      detectedTitle ||
+      folderName;
+
+    if (!seriesName) {
+      problems.push("Serienname fehlt.");
+    }
+
+    if (!folderName) {
+      problems.push(
+        "Der Browser hat keinen Ordnerpfad geliefert. " +
+        "Bitte den gesamten Bilderordner auswählen."
+      );
+    }
+
+    /*
+     * Den tatsächlichen relativen Dateipfad verwenden.
+     * So passen die Pfade zur Prüfung in admin.html,
+     * auch wenn Bilder in Unterordnern liegen.
+     */
+
+    const images = matched.map(({file,entry}) => ({
+      originalPath:
+        file.webkitRelativePath
+          ? file.webkitRelativePath.replace(/\\/g,"/")
+          : folderName + "/" + file.name,
+      filename:file.name,
+      displayName:withoutExtension(file.name),
+      prompt:entry.prompt
+    }));
+
+    $("count-images").textContent =
+      imageFiles.length;
+
+    $("count-matched").textContent =
+      matched.length;
+
+    $("count-errors").textContent =
+      problems.length;
+
+    notes.push("Serie: " + seriesName);
+    notes.push("Bilder: " + imageFiles.length);
+    notes.push("Erkannte Prompts: " + extracted.length);
+    notes.push("Sicher zugeordnet: " + matched.length);
+    notes.push("Probleme: " + problems.length);
+    notes.push("");
+
+    for (const {file} of matched) {
+      notes.push("✓ " + file.name);
+    }
+
+    if (problems.length) {
+      notes.push("");
+      notes.push("JSON NICHT FREIGEGEBEN:");
+
+      for (const problem of problems) {
+        notes.push("! " + problem);
+      }
+
+      $("report").textContent =
+        notes.join("\n");
+
+      showMessage(
+        "Bitte " + problems.length +
+        " Zuordnungsprobleme prüfen.",
+        "error"
+      );
+      return;
+    }
+
+    if (
+      matched.length !== imageFiles.length ||
+      matched.length !== extracted.length
+    ) {
+      throw new Error(
+        "Bild- und Prompt-Anzahl stimmen nicht überein."
+      );
+    }
+
+    generatedJson = {
+      series:[{
+        displayName:seriesName,
+        images
+      }]
+    };
+
+    $("report").textContent =
+      notes.join("\n") +
+      "\n\n✓ Alle Bilder eindeutig zugeordnet." +
+      "\n✓ Alle Originalprompts vorhanden." +
+      "\n✓ JSON kann heruntergeladen werden.";
+
+    $("download").disabled = false;
+
+    showMessage(
+      "Erfolgreich: " + matched.length +
+      " Bilder und Prompts zugeordnet.",
+      "success"
+    );
+
+  } catch(error) {
+    generatedJson = null;
+    $("download").disabled = true;
+
+    $("report").textContent =
+      "FEHLER: " + errorText(error);
+
+    showMessage(
+      "JSON-Prüfung fehlgeschlagen: " +
+      errorText(error),
+      "error"
+    );
+  }
+}
+
+/* JSON HERUNTERLADEN */
+
+function downloadJson() {
+  if (!generatedJson) return;
+
+  const text = JSON.stringify(
+    generatedJson,null,2
+  );
+
+  const blob = new Blob([text],{
+    type:"application/json;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  const seriesName =
+    generatedJson.series[0].displayName
+      .trim()
+      .replace(/[^\p{L}\p{N}-]+/gu,"-")
+      .replace(/^-+|-+$/g,"")
+      .toLowerCase() || "editorial";
+
+  link.href = url;
+  link.download = seriesName + "-import.json";
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  },30000);
+
+  showMessage(
+    "JSON-Datei erstellt. Bitte Downloads prüfen.",
+    "success"
+  );
+}
+
+/* BUTTONS UND EREIGNISSE */
+
+$("images").addEventListener("change",() => {
+  resetResult();
+
+  const files = [...$("images").files]
+    .filter(isImage);
+
+  $("image-info").textContent =
+    files.length + " Bilder ausgewählt.";
+
+  $("count-images").textContent =
+    files.length;
+});
+
+$("markdown").addEventListener("change",() => {
+  resetResult();
+
+  const files = [...$("markdown").files]
+    .filter(file =>
+      /\.(md|markdown)$/i.test(file.name)
+    );
+
+  $("markdown-info").textContent =
+    files.length + " Markdown-Dateien ausgewählt.";
+});
+
+$("series-name").addEventListener(
+  "input",resetResult
+);
+
+$("check").addEventListener(
+  "click",prepareJson
+);
+
+$("download").addEventListener(
+  "click",downloadJson
+);
+
+checkAdmin();
+
+</script>
+</body>
+</html>
