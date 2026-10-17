@@ -1410,7 +1410,7 @@ async function prepareImport() {
     for (const file of files) {
       const path = localImagePath(file);
 
-      if (!path.startsWith("images/")) {
+      if (!path.includes("/")) {
         problems.push(
           "Falscher Bilderordner: " + path +
           " – bitte direkt den Ordner images auswählen."
