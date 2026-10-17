@@ -1848,13 +1848,15 @@ async function startImport() {
 
         const { error: insertError } = await db
           .from("editorial_items")
-          .insert({
-            series: row.series,
-            title: row.title,
-            prompt: row.prompt,
-            image_path: uploadedPath,
-            sort_order: row.sort_order
-          });
+          
+.insert({
+  series: row.series,
+  title: row.title,
+  prompt: row.prompt,
+  image_path: uploadedPath,
+  sort_order: row.sort_order,
+  new_since: new Date().toISOString()
+});
 
         if (insertError) throw insertError;
 
